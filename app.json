@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "PushMe",
+    "slug": "pushme",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/inout.png",
+    "userInterfaceStyle": "automatic",
+    "scheme": "pushme",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/inout.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "net.tgxn.pushme"
+    },
+    "web": {
+      "favicon": "./assets/inout.png"
+    }
+  }
+}
