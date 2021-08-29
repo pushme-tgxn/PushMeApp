@@ -4,9 +4,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AppReducer } from "../const";
-import apiService from "../service/backend";
-
 import PushScreen from "../screens/PushScreen";
 import TokenScreen from "../screens/TokenScreen";
 import ConfigScreen from "../screens/ConfigScreen";
@@ -14,9 +11,6 @@ import ConfigScreen from "../screens/ConfigScreen";
 const Tab = createBottomTabNavigator();
 
 const AppTabView = () => {
-  const { state } = useContext(AppReducer);
-  apiService.setAccessToken(state.accessToken);
-
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
