@@ -2,6 +2,7 @@ import React, { useReducer, useEffect, useRef } from "react";
 
 import { Platform, useColorScheme } from "react-native";
 
+import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import Constants from "expo-constants";
@@ -100,14 +101,14 @@ const App = () => {
 
   useEffect(() => {
     async function prepare() {
-      let loggedInUser;
+      let loggedInUser, expoToken;
       try {
         await SplashScreen.preventAutoHideAsync();
 
         await registerNotificationCategories();
 
-        const token = await registerForPushNotificationsAsync();
-        dispatch(setExpoPushToken(token));
+        expoToken = await registerForPushNotificationsAsync();
+        dispatch(setExpoPushToken(expoToken));
 
         // attempt to load user
         const storedUserData = await AsyncStorage.getItem("userData");
@@ -131,6 +132,11 @@ const App = () => {
       } finally {
         if (loggedInUser) {
           dispatch(setUserData(loggedInUser));
+
+          apiService.setAccessToken(loggedInUser.token);
+          apiService.upsertTokenRegistration({
+            token: expoToken,
+          });
 
           startState.current = "AppView";
         } else {

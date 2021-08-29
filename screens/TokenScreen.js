@@ -87,7 +87,7 @@ const TokenList = ({ navigation }) => {
               }}
               style={buttonStyle}
             >
-              {item.id}: {item.name ? item.name : item.token}
+              {item.id}: {item.name ? item.name : item.createdAt}
             </CustomButton>
           );
         }}

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import * as Device from "expo-device";
+
 import {
   SafeAreaView,
   Text,
@@ -36,6 +38,25 @@ const ViewToken = ({ navigation, route }) => {
   const [body, setBody] = useState("");
   const [data, setData] = useState({});
 
+  const [deviceName, setDeviceName] = useState(tokenData.name);
+
+  const createUpdateRegistration = async () => {
+    const fetchResponse = await apiService.upsertTokenRegistration({
+      token: tokenData.token,
+      name: deviceName,
+    });
+
+    alert(JSON.stringify(fetchResponse));
+  };
+
+  const deleteRegistration = async () => {
+    const fetchResponse = await apiService.deleteTokenRegistration(
+      tokenData.token
+    );
+
+    alert(JSON.stringify(fetchResponse));
+  };
+
   const onSend = async () => {
     await apiService.pushToToken(tokenData.id, {
       categoryId,
@@ -61,7 +82,27 @@ const ViewToken = ({ navigation, route }) => {
         <Text style={themedStyles.baseText}>
           Created: {tokenData.createdAt}
         </Text>
+        <Separator />
 
+        <Text style={themedStyles.baseText}>Device Name:</Text>
+        <TextInput
+          style={themedStyles.inputStyle}
+          onChangeText={setDeviceName}
+          value={deviceName}
+          placeholder="Device Name"
+        />
+
+        <CustomButton
+          onPress={createUpdateRegistration}
+          title="Save name"
+          style={{ backgroundColor: "green" }}
+        />
+
+        <CustomButton
+          onPress={deleteRegistration}
+          title="Unregister device"
+          style={{ backgroundColor: "red" }}
+        />
         <Separator />
         <Text style={themedStyles.headerText}>Test Push</Text>
 
