@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export function setAppReadyState(isAppReady) {
   console.info("setAppReadyState", isAppReady);
   return {
@@ -65,6 +67,8 @@ export function reducer(state, action) {
       return { ...state, appIsReady: action.payload.isAppReady };
 
     case "setUserData":
+      AsyncStorage.setItem("userData", JSON.stringify(action.payload.userData));
+
       if (action.payload.userData !== null) {
         return {
           ...state,

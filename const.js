@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export const PUSH_ENDPOINT = "https://pushme.glitch.me";
+export const PUSH_ENDPOINT = "http://10.1.1.20:3000";
 
 // contexts
 export const AppReducer = createContext(null);

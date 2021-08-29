@@ -14,8 +14,6 @@ import {
 
 import Loader from "../components/Loader";
 
-import { PUSH_ENDPOINT } from "../const";
-
 import styles from "../styles";
 
 const RegisterScreen = (props) => {
@@ -23,7 +21,7 @@ const RegisterScreen = (props) => {
   const themedStyles = styles(colorScheme);
 
   const [loading, setLoading] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = useState(false);
 
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
 
@@ -35,38 +33,32 @@ const RegisterScreen = (props) => {
   const passwordInputRef = createRef();
 
   const handleSubmitButton = async () => {
-    setErrorText("");
+    setErrorText(false);
+
+    if (!userName) {
+      alert("Please enter a Username!");
+      return;
+    }
 
     if (!userEmail) {
-      alert("Please fill Email");
+      alert("Please enter an Email!");
       return;
     }
 
     if (!userPassword) {
-      alert("Please fill Password");
+      alert("Please enter a Password!");
       return;
     }
+
     setLoading(true);
 
     try {
-      const fetchResponse = await fetch(`${PUSH_ENDPOINT}/user/register`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: userName,
-          email: userEmail,
-          password: userPassword,
-        }),
-      });
+      const responseJson = await apiService.userRegister(
+        userName,
+        userEmail,
+        userPassword
+      );
 
-      const responseJson = await fetchResponse.json();
-      setLoading(false);
-      console.log(responseJson);
-
-      // If server response message same as Data Matched
       if (responseJson.success) {
         setIsRegistraionSuccess(true);
         console.log("Registration Successful. Please Login to proceed");
@@ -74,9 +66,10 @@ const RegisterScreen = (props) => {
         setErrorText(responseJson.message);
       }
     } catch (error) {
-      setLoading(false);
       setErrorText(error);
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 

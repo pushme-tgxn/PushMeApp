@@ -13,6 +13,14 @@ class APIService {
     });
   }
 
+  userRegister(userName, userEmail, userPassword) {
+    return this._callApi("/user/register", "POST", {
+      username: userName,
+      email: userEmail,
+      password: userPassword,
+    });
+  }
+
   getCurrentUser() {
     return this._callApi("/user/current", "GET");
   }
@@ -31,6 +39,10 @@ class APIService {
   }
 
   // PUSH
+
+  getPushList() {
+    return this._callApi("/push", "GET");
+  }
 
   pushToAll({ title, body, category, data }) {
     return this._callApi(`/push/all`, "POST", {

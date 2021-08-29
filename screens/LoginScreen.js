@@ -40,36 +40,32 @@ const LoginScreen = ({ navigation }) => {
   const passwordInputRef = createRef();
 
   const handleSubmitPress = async () => {
-    setErrorText("");
+    setErrorText(false);
 
     if (!userName) {
-      alert("Please fill Username");
+      alert("Please enter your Username!");
       return;
     }
 
     if (!userPassword) {
-      alert("Please fill Password");
+      alert("Please enter your Password!");
       return;
     }
+
     setLoading(true);
 
     try {
       const responseJson = await apiService.userLogin(userName, userPassword);
-      console.log(responseJson);
-      setLoading(false);
 
       if (responseJson.token) {
         dispatch(setUserData(responseJson));
-        AsyncStorage.setItem("userData", JSON.stringify(responseJson));
-
-        // navigation.replace("AppView");
       } else {
         setErrorText(responseJson.message);
-        // console.log("not success", responseJson);
       }
     } catch (error) {
-      setLoading(false);
       console.error("@34234e", error);
+    } finally {
+      setLoading(false);
     }
   };
 

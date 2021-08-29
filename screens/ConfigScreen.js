@@ -92,31 +92,6 @@ const ConfigScreen = () => {
   return (
     <SafeAreaView style={themedStyles.screenContainer}>
       <ScrollView>
-        <Text style={themedStyles.headerText}>Account</Text>
-
-        <Text style={themedStyles.baseText}>
-          Username: {state.user.username}
-        </Text>
-        <Text style={themedStyles.baseText}>
-          Registered: {state.user.createdAt}
-        </Text>
-        <Text style={themedStyles.baseText}>Email: {state.user.email}</Text>
-
-        <Separator />
-
-        <CustomButton
-          onPress={async () => {
-            await AsyncStorage.removeItem("userData");
-            dispatch(setUserData(null));
-
-            // navigation.replace("Auth");
-          }}
-          title="Logout"
-          style={{ backgroundColor: "red" }}
-        />
-
-        <Separator />
-
         <Text style={themedStyles.headerText}>Configuration</Text>
 
         <Text style={themedStyles.baseText}>Device Token:</Text>
@@ -163,6 +138,31 @@ const ConfigScreen = () => {
           onPress={pushLocal}
           title="Push Me (Local)"
           style={{ backgroundColor: "blue" }}
+        />
+
+        <Separator />
+
+        <Text style={themedStyles.headerText}>Account</Text>
+
+        <Text style={themedStyles.baseText}>
+          Username: {state.user.username}
+        </Text>
+        <Text style={themedStyles.baseText}>
+          Registered: {state.user.createdAt}
+        </Text>
+        <Text style={themedStyles.baseText}>Email: {state.user.email}</Text>
+
+        <Separator />
+
+        <CustomButton
+          onPress={async () => {
+            await AsyncStorage.removeItem("userData");
+            dispatch(setUserData(null));
+
+            // navigation.replace("Auth");
+          }}
+          title="Logout"
+          style={{ backgroundColor: "red" }}
         />
       </ScrollView>
     </SafeAreaView>
