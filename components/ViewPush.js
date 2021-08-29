@@ -13,38 +13,39 @@ import { AppReducer } from "../const";
 import styles from "../styles";
 
 const ViewPush = ({ navigation, route }) => {
-  const { pushData } = route.params;
+  const { pushId } = route.params;
+
+  const { state } = useContext(AppReducer);
+  const thisPush = state.pushList[pushId];
 
   useEffect(() => {
     navigation.setOptions({
-      title: `View Push: ${pushData.id}`,
+      title: `View Push: ${pushId}`,
     });
-  }, [pushData]);
+  }, [thisPush]);
 
   const colorScheme = useColorScheme();
   const themedStyles = styles(colorScheme);
-
-  const { state } = useContext(AppReducer);
 
   return (
     <SafeAreaView style={themedStyles.paneContainer}>
       <ScrollView>
         <Text style={themedStyles.headerText}>Push Recieved</Text>
 
-        <Text style={themedStyles.baseText}>ID: {pushData.id}</Text>
+        <Text style={themedStyles.baseText}>ID: {thisPush.id}</Text>
         <Text style={themedStyles.baseText}>
           Request:
-          {pushData.request}
+          {thisPush.request}
         </Text>
         <Text style={themedStyles.baseText}>
           Data:
-          {pushData.pushPayload && JSON.stringify(pushData.pushPayload)}
+          {thisPush.pushPayload && JSON.stringify(thisPush.pushPayload)}
         </Text>
 
         <Text style={themedStyles.headerText}>Push Response</Text>
 
         <Text style={themedStyles.baseText}>
-          Response: {pushData.response && JSON.stringify(pushData.response)}
+          Response: {thisPush.response && JSON.stringify(thisPush.response)}
         </Text>
       </ScrollView>
     </SafeAreaView>

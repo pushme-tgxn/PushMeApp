@@ -88,7 +88,7 @@ const PushList = ({ navigation }) => {
           return (
             <CustomButton
               onPress={async () => {
-                navigation.navigate("PushView", { pushData: item });
+                navigation.navigate("PushView", { pushId: item.id });
               }}
               style={themedStyles.listItem}
             >

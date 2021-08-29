@@ -12,6 +12,8 @@ import {
 
 import { Separator, CustomButton } from "./Shared.js";
 
+import { NotificationCategories } from "../const";
+
 import RNPickerSelect from "react-native-picker-select";
 import apiService from "../service/backend";
 
@@ -43,6 +45,12 @@ const ViewToken = ({ navigation, route }) => {
     });
   };
 
+  let clientCategoryList = [];
+  NotificationCategories;
+  for (const index in NotificationCategories) {
+    clientCategoryList.push({ label: index, value: index });
+  }
+
   return (
     <SafeAreaView style={themedStyles.paneContainer}>
       <ScrollView>
@@ -73,24 +81,26 @@ const ViewToken = ({ navigation, route }) => {
             placeholder="Body"
           />
         </View>
+
         <View style={themedStyles.inputContainerView}>
           <RNPickerSelect
             onValueChange={setCategory}
+            selectedValue={{ label: categoryId, value: categoryId }}
             placeholder={{
               label: "Select a category...",
-              value: null,
-              color: "#9EA0A4",
+              value: "default",
             }}
+            // useNativeAndroidPickerStyle={false}
             style={pickerSelectStyles}
             items={[
               { label: "Default", value: "default" },
-              { label: "testMe", value: "testMe" },
-              { label: "buttonOpenApp", value: "buttonOpenApp" },
-              { label: "buttonOpenLink", value: "buttonOpenLink" },
-              { label: "textReplyMessage", value: "textReplyMessage" },
+              ...clientCategoryList,
             ]}
-          />
-
+          >
+            <Text>{categoryId}</Text>
+          </RNPickerSelect>
+        </View>
+        <View style={themedStyles.inputContainerView}>
           <CustomButton
             onPress={onSend}
             title="Push!"
@@ -107,22 +117,41 @@ export default ViewToken;
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    borderWidth: 0,
+    flex: 1, // This flex is optional, but probably desired
+    alignItems: "center",
+    flexDirection: "row",
+    width: "100%",
     borderColor: "gray",
     borderRadius: 4,
     color: "black",
     paddingRight: 30, // to ensure the text is never behind the icon
   },
+  icon: {
+    position: "absolute",
+    backgroundColor: "transparent",
+    borderTopWidth: 5,
+    borderTopColor: "#00000099",
+    borderRightWidth: 5,
+    borderRightColor: "transparent",
+    borderLeftWidth: 5,
+    borderLeftColor: "transparent",
+    width: 0,
+    height: 0,
+    top: 20,
+    right: 15,
+  },
   inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: "purple",
-    borderRadius: 8,
+    fontSize: 30,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderWidth: 10,
+    borderColor: "red",
+    borderRadius: 5,
+
     color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 0, // to ensure the text is never behind the icon
   },
 });
