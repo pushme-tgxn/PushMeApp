@@ -1,6 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 
-import { SafeAreaView, Text, View, useColorScheme } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  useColorScheme,
+} from "react-native";
+
+import { AppReducer } from "../const";
 
 import styles from "../styles";
 
@@ -16,17 +24,29 @@ const ViewPush = ({ navigation, route }) => {
   const colorScheme = useColorScheme();
   const themedStyles = styles(colorScheme);
 
-  return (
-    <SafeAreaView style={themedStyles.screenContainer}>
-      <Text style={themedStyles.headerText}>Push Recieved</Text>
+  const { state } = useContext(AppReducer);
 
-      <View>
+  return (
+    <SafeAreaView style={themedStyles.paneContainer}>
+      <ScrollView>
+        <Text style={themedStyles.headerText}>Push Recieved</Text>
+
         <Text style={themedStyles.baseText}>ID: {pushData.id}</Text>
+        <Text style={themedStyles.baseText}>
+          Request:
+          {pushData.request}
+        </Text>
         <Text style={themedStyles.baseText}>
           Data:
           {pushData.pushPayload}
         </Text>
-      </View>
+
+        <Text style={themedStyles.headerText}>Push Response</Text>
+
+        <Text style={themedStyles.baseText}>
+          {state.response && JSON.stringify(state.response)}
+        </Text>
+      </ScrollView>
     </SafeAreaView>
   );
 };

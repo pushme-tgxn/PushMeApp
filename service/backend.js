@@ -44,21 +44,18 @@ class APIService {
     return this._callApi("/push", "GET");
   }
 
-  pushToAll({ title, body, category, data }) {
-    return this._callApi(`/push/all`, "POST", {
+  pushToToken(pushToken, { categoryId, title, body, data }) {
+    return this._callApi(`/push/${pushToken}`, "POST", {
+      categoryId,
       title,
-      desc: body,
-      cat: category,
+      body,
       data,
     });
   }
 
-  pushToToken(pushToken, { title, body, category, data }) {
-    return this._callApi(`/push/${pushToken}`, "POST", {
-      title,
-      desc: body,
-      cat: category,
-      data,
+  respondToPush(pushToken, responseData) {
+    return this._callApi(`/push/${pushToken}/response`, "POST", {
+      response: responseData,
     });
   }
 
@@ -67,7 +64,7 @@ class APIService {
     if (this.accessToken) {
       authorization = `Bearer ${this.accessToken}`;
     }
-    console.log("_callApi", path, method, payload);
+    // console.log("_callApi", path, method, payload);
     const fetchResponse = await fetch(`${PUSH_ENDPOINT}${path}`, {
       method,
       headers: {
@@ -78,7 +75,7 @@ class APIService {
       body: payload ? JSON.stringify(payload) : null,
     });
     const jsonResponse = await fetchResponse.json();
-    console.log(jsonResponse);
+    // console.log(jsonResponse);
     return jsonResponse;
   }
 }
