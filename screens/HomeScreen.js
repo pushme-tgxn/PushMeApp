@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { SafeAreaView, FlatList, Text, useColorScheme } from "react-native";
 
-import { Separator, CustomButton } from "./Shared.js";
+import { Separator, CustomButton } from "../components/Shared";
 
-import PushInputModal from "./PushInputModal.js";
+import PushInputModal from "../components/PushInputModal";
 
 import { AppReducer } from "../const";
 
-import apiService from "../service/api";
+import apiService from "../service/backend";
 
 import styles from "../styles";
 

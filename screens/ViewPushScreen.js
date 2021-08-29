@@ -6,7 +6,7 @@ import { AppReducer } from "../const";
 
 import styles from "../styles";
 
-const AccountScreen = () => {
+const NotifyScreen = () => {
   const colorScheme = useColorScheme();
   const themedStyles = styles(colorScheme);
 
@@ -44,4 +44,4 @@ const AccountScreen = () => {
   );
 };
 
-export default AccountScreen;
+export default NotifyScreen;

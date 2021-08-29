@@ -15,9 +15,9 @@ import {
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 
-import apiService from "../service/api";
+import apiService from "../service/backend";
 
 import { AppReducer } from "../const";
 

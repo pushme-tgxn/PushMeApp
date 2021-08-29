@@ -1,14 +1,55 @@
-# Sample Snack app
+# Push Me
 
-Open the `App.js` file to start writing some code. You can preview the changes directly on your phone or tablet by clicking the **Run** button or use the simulator by clicking **Tap to Play**. When you're done, click **Save** and share the link!
+A simple application + web server to push interactive notifications to yourself or others.
 
-When you're ready to see everything that Expo provides (or if you want to use your own editor) you can **Export** your project and use it with [expo-cli](https://docs.expo.io/versions/latest/introduction/installation.html).
+## Installation
 
-All projects created in Snack are publicly available, so you can easily share the link to this project via link, or embed it on a web page with the **Embed** button.
-
-If you're having problems, you can tweet to us [@expo](https://twitter.com/expo) or ask in our [forums](https://forums.expo.io).
-
-Snack is Open Source. You can find the code on the [GitHub repo](https://github.com/expo/snack-web).
+Install APK from somewhere...
 
 
-<div>Icons made by <a href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+## Usage
+
+This app does nothing on it's own, only allowing registration and enrolment.
+
+Use the web service along with your username to choose a device and push a notification to it.
+
+API Docs can be found on the server.
+
+## Features
+
+Push Types:
+
+### Simple Push
+
+Simple push just has a message and a title.
+No action will be performed on click.
+
+```json
+{
+    title: "",
+    description: "",
+}
+```
+
+### Interactive Push
+
+Interactive push requires a type pre-defined within the application, the following actions are inbuilt and provide an action for each of the options listed.
+
+This can call an outbound web service to acknowledge or action noticiations.
+
+#### Buttons
+button.yes_no - Yes / No
+button.approve_deny - Approve / Deny
+button.acknowledge - Acknowledge
+button.open_link - Open Link
+
+### Input Field Plus..
+input.submit - "Submit"
+input.reply - "Reply"
+input.approve_deny - "Approve" & "Deny"
+
+
+## License
+
+MIT
+

@@ -63,6 +63,7 @@ export function reducer(state, action) {
   switch (action.type) {
     case "setAppReadyState":
       return { ...state, appIsReady: action.payload.isAppReady };
+
     case "setUserData":
       if (action.payload.userData !== null) {
         return {
@@ -77,13 +78,16 @@ export function reducer(state, action) {
           accessToken: null,
         };
       }
+
     case "setExpoPushToken":
       return { ...state, expoPushToken: action.payload.pushToken };
 
     case "setNotification":
       return { ...state, notification: action.payload.notification };
+
     case "setNotificationResponse":
       return { ...state, response: action.payload.response };
+
     default:
       throw new Error(`Unhandled action: ${action.type}`);
   }

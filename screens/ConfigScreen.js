@@ -4,19 +4,21 @@ import {
   SafeAreaView,
   TextInput,
   Text,
-  View,
+  ScrollView,
   useColorScheme,
 } from "react-native";
 
 import * as Device from "expo-device";
-
 import * as Notifications from "expo-notifications";
 
-import { Separator, CustomButton } from "./Shared.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import apiService from "../service/backend";
 
 import { AppReducer } from "../const";
+import { setUserData } from "../reducers/app";
 
-import apiService from "../service/api";
+import { Separator, CustomButton } from "../components/Shared";
 
 import styles from "../styles";
 
@@ -89,7 +91,32 @@ const ConfigScreen = () => {
 
   return (
     <SafeAreaView style={themedStyles.screenContainer}>
-      <View>
+      <ScrollView>
+        <Text style={themedStyles.headerText}>Account</Text>
+
+        <Text style={themedStyles.baseText}>
+          Username: {state.user.username}
+        </Text>
+        <Text style={themedStyles.baseText}>
+          Registered: {state.user.createdAt}
+        </Text>
+        <Text style={themedStyles.baseText}>Email: {state.user.email}</Text>
+
+        <Separator />
+
+        <CustomButton
+          onPress={async () => {
+            await AsyncStorage.removeItem("userData");
+            dispatch(setUserData(null));
+
+            // navigation.replace("Auth");
+          }}
+          title="Logout"
+          style={{ backgroundColor: "red" }}
+        />
+
+        <Separator />
+
         <Text style={themedStyles.headerText}>Configuration</Text>
 
         <Text style={themedStyles.baseText}>Device Token:</Text>
@@ -137,7 +164,7 @@ const ConfigScreen = () => {
           title="Push Me (Local)"
           style={{ backgroundColor: "blue" }}
         />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -12,7 +12,7 @@ import {
   useColorScheme,
 } from "react-native";
 
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 
 import { PUSH_ENDPOINT } from "../const";
 

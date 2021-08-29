@@ -4,10 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import HomeScreen from "../components/HomeScreen";
-import NotifyScreen from "../components/NotifyScreen";
-import AccountScreen from "../components/AccountScreen";
-import ConfigScreen from "../components/ConfigScreen";
+import HomeScreen from "../screens/HomeScreen";
+import ConfigScreen from "../screens/ConfigScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,23 +20,13 @@ const AppTabView = () => {
             iconName = "home";
           } else if (route.name === "Settings") {
             iconName = "settings";
-          } else if (route.name === "Account") {
-            iconName = "person";
-          } else if (route.name === "Notify") {
-            iconName = "alarm";
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
-      // tabBarOptions={{
-      //   activeTintColor: "black",
-      //   inactiveTintColor: "gray",
-      // }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Notify" component={NotifyScreen} />
-      <Tab.Screen name="Account" component={AccountScreen} />
       <Tab.Screen name="Settings" component={ConfigScreen} />
     </Tab.Navigator>
   );

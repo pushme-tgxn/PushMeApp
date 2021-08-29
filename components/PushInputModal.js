@@ -9,15 +9,10 @@ import {
   StyleSheet,
 } from "react-native";
 
-import * as Device from "expo-device";
-
-import * as Notifications from "expo-notifications";
-
 import { Separator, CustomButton } from "./Shared.js";
 
-import { AppReducer } from "../const";
 import RNPickerSelect from "react-native-picker-select";
-import apiService from "../service/api";
+import apiService from "../service/backend";
 
 import styles from "../styles";
 
@@ -46,9 +41,7 @@ const PushInputModal = ({ openTokenId, onClose }) => {
       transparent={true}
       animationType={"none"}
       visible={openTokenId !== false}
-      onRequestClose={() => {
-        console.log("close modal");
-      }}
+      onRequestClose={onClose}
     >
       <View style={themedStyles.modalBackground}>
         <View style={themedStyles.pushModalWrapper}>

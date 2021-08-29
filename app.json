@@ -4,7 +4,7 @@
     "slug": "pushme",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/inout.png",
+    "icon": "./assets/8467602271547546494-512.png",
     "userInterfaceStyle": "automatic",
     "scheme": "pushme",
     "splash": {
@@ -23,13 +23,13 @@
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/inout.png",
+        "foregroundImage": "./assets/8467602271547546494-512.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "net.tgxn.pushme"
     },
     "web": {
-      "favicon": "./assets/inout.png"
+      "favicon": "./assets/8467602271547546494-512.png"
     }
   }
 }

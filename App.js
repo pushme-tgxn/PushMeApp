@@ -11,13 +11,13 @@ import {
   DefaultTheme,
   DarkTheme,
 } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { StatusBar } from "expo-status-bar";
 
 import { initialState, reducer } from "./reducers/app";
+
 import {
   setAppReadyState,
   setUserData,
@@ -26,12 +26,12 @@ import {
   setNotificationResponse,
 } from "./reducers/app";
 
-import AuthView from "./view/AuthView";
-import AppTabView from "./view/AppTabView";
+import AuthView from "./views/AuthView";
+import AppTabView from "./views/AppTabView";
 
-import { AppReducer } from "./const";
+import { AppReducer, NotificationCategories } from "./const";
 
-import apiService from "./service/api";
+import apiService from "./service/backend";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -40,8 +40,6 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
-
-const Stack = createStackNavigator();
 
 const App = () => {
   const scheme = useColorScheme();
@@ -53,70 +51,17 @@ const App = () => {
   const responseListener = useRef();
 
   const registerNotificationCategories = async () => {
-    await Notifications.setNotificationCategoryAsync("testMe", [
-      {
-        identifier: "one",
-        buttonTitle: "Button One",
-        options: {
-          isDestructive: true,
-          isAuthenticationRequired: false,
-        },
-      },
-      {
-        identifier: "two",
-        buttonTitle: "Button Two",
-        options: {
-          isDestructive: false,
-          isAuthenticationRequired: true,
-        },
-      },
-      {
-        identifier: "three",
-        buttonTitle: "Three",
-        textInput: {
-          submitButtonTitle: "Three",
-          placeholder: "Type Something",
-        },
-        options: {
-          isAuthenticationRequired: false,
-        },
-      },
-    ]);
-
-    await Notifications.setNotificationCategoryAsync("buttonOpenApp", [
-      {
-        identifier: "openapp",
-        buttonTitle: "Open App",
-        options: {
-          isDestructive: false,
-          isAuthenticationRequired: true,
-        },
-      },
-    ]);
-
-    await Notifications.setNotificationCategoryAsync("buttonOpenLink", [
-      {
-        identifier: "openlink",
-        buttonTitle: "Open Link",
-        options: {
-          isDestructive: false,
-        },
-      },
-    ]);
-
-    await Notifications.setNotificationCategoryAsync("textReplyMessage", [
-      {
-        identifier: "reply",
-        buttonTitle: "Reply",
-        textInput: {
-          submitButtonTitle: "Send",
-          placeholder: "Type a reply",
-        },
-        options: {
-          isAuthenticationRequired: true,
-        },
-      },
-    ]);
+    for (const index in NotificationCategories) {
+      console.log(
+        "add notification category",
+        index,
+        NotificationCategories[index]
+      );
+      await Notifications.setNotificationCategoryAsync(
+        index,
+        NotificationCategories[index]
+      );
+    }
   };
 
   const registerForPushNotificationsAsync = async () => {
