@@ -6,6 +6,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { Separator, CustomButton } from "../components/Shared";
 
+import { setPushList } from "../reducers/app";
+
 import ViewPush from "../components/ViewPush";
 
 import { AppReducer } from "../const";
@@ -34,9 +36,8 @@ const PushList = ({ navigation }) => {
   const colorScheme = useColorScheme();
   const themedStyles = styles(colorScheme);
 
-  const { state } = useContext(AppReducer);
+  const { state, dispatch } = useContext(AppReducer);
 
-  const [pushList, setPushList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   // const [pushModalOpen, setPushModalOpen] = useState(false);
@@ -44,11 +45,11 @@ const PushList = ({ navigation }) => {
   const onRefresh = useCallback(() => {
     async function prepare() {
       setRefreshing(true);
-      setPushList([]);
+      dispatch(setPushList([]));
       try {
         const response = await apiService.getPushList();
 
-        setPushList(response);
+        dispatch(setPushList(response));
       } catch (error) {
         alert(error);
         console.error(error);
@@ -61,6 +62,12 @@ const PushList = ({ navigation }) => {
 
   useEffect(onRefresh, []);
 
+  const pushArray = [];
+  Object.keys(state.pushList).map((pushId) => {
+    pushArray.push(state.pushList[pushId]);
+  });
+  pushArray.reverse();
+
   return (
     <SafeAreaView style={themedStyles.screenContainer}>
       <FlatList
@@ -68,12 +75,12 @@ const PushList = ({ navigation }) => {
           <Text style={themedStyles.headerText}>
             {refreshing
               ? "List Loading..."
-              : pushList.length == 0
+              : pushArray.length == 0
               ? "No History!"
               : "Push History"}
           </Text>
         )}
-        data={pushList}
+        data={pushArray}
         onRefresh={onRefresh}
         refreshing={refreshing}
         keyExtractor={(item) => item.id.toString()}
@@ -85,7 +92,7 @@ const PushList = ({ navigation }) => {
               }}
               style={themedStyles.listItem}
             >
-              {item.id}: {item.name ? item.name : item.token}
+              {item.id}: {item.createdAt}
             </CustomButton>
           );
         }}

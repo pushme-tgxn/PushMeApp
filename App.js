@@ -22,8 +22,8 @@ import {
   setAppReadyState,
   setUserData,
   setExpoPushToken,
-  setNotification,
-  setNotificationResponse,
+  pushRecieved,
+  setPushResponse,
 } from "./reducers/app";
 
 import AuthView from "./views/AuthView";
@@ -50,6 +50,7 @@ const App = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  // register notification categories from client-side
   const registerNotificationCategories = async () => {
     for (const index in NotificationCategories) {
       console.log(
@@ -64,6 +65,7 @@ const App = () => {
     }
   };
 
+  // register app for notifications
   const registerForPushNotificationsAsync = async () => {
     let token;
 
@@ -145,13 +147,13 @@ const App = () => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log("addNotificationReceivedListener", notification);
-        dispatch(setNotification(notification));
+        dispatch(pushRecieved(notification));
       });
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log("addNotificationResponseReceivedListener", response);
-        dispatch(setNotificationResponse(response));
+        dispatch(setPushResponse(response));
 
         Notifications.dismissNotificationAsync(
           response.notification.request.identifier

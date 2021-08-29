@@ -7,6 +7,7 @@ import {
   useColorScheme,
   TextInput,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 
 import { Separator, CustomButton } from "./Shared.js";
@@ -28,73 +29,75 @@ const ViewToken = ({ navigation, route }) => {
   const colorScheme = useColorScheme();
   const themedStyles = styles(colorScheme);
 
-  const [title, setTitle] = useState("test");
-  const [body, setBody] = useState("body");
-  const [category, setCategory] = useState("default");
-
-  const [data, setData] = useState({ foo: "bar" });
+  const [categoryId, setCategory] = useState("default");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [data, setData] = useState({});
 
   const onSend = async () => {
     await apiService.pushToToken(tokenData.id, {
+      categoryId,
       title,
       body,
-      category,
       data,
     });
   };
 
   return (
-    <SafeAreaView style={themedStyles.container}>
-      <Text style={themedStyles.headerText}>Token</Text>
+    <SafeAreaView style={themedStyles.paneContainer}>
+      <ScrollView>
+        <Text style={themedStyles.headerText}>Token</Text>
 
-      <View>
         <Text style={themedStyles.baseText}>ID: {tokenData.id}</Text>
         <Text style={themedStyles.baseText}>Name: {tokenData.name}</Text>
         <Text style={themedStyles.baseText}>
           Created: {tokenData.createdAt}
         </Text>
-      </View>
-      <Text style={themedStyles.headerText}>Push Something</Text>
-      <View style={themedStyles.inputContainerView}>
-        <TextInput
-          style={themedStyles.inputStyle}
-          onChangeText={setTitle}
-          value={title}
-          placeholder="Title"
-        />
-      </View>
-      <View style={themedStyles.inputContainerView}>
-        <TextInput
-          style={themedStyles.inputStyle}
-          onChangeText={setBody}
-          value={body}
-          placeholder="Body"
-        />
-      </View>
-      <View style={themedStyles.inputContainerView}>
-        <RNPickerSelect
-          onValueChange={setCategory}
-          placeholder={{
-            label: "Select a sport...",
-            value: null,
-            color: "#9EA0A4",
-          }}
-          style={pickerSelectStyles}
-          items={[
-            { label: "Default", value: "default" },
-            { label: "testMe", value: "testMe" },
-            { label: "buttonOpenApp", value: "buttonOpenApp" },
-            { label: "buttonOpenLink", value: "buttonOpenLink" },
-            { label: "textReplyMessage", value: "textReplyMessage" },
-          ]}
-        />
 
-        <CustomButton
-          onPress={onSend}
-          title="Push!"
-          style={{ backgroundColor: "green" }}
-        />
-      </View>
+        <Separator />
+        <Text style={themedStyles.headerText}>Test Push</Text>
+
+        <View style={themedStyles.inputContainerView}>
+          <TextInput
+            style={themedStyles.inputStyle}
+            onChangeText={setTitle}
+            value={title}
+            placeholder="Title"
+          />
+        </View>
+        <View style={themedStyles.inputContainerView}>
+          <TextInput
+            style={themedStyles.inputStyle}
+            onChangeText={setBody}
+            value={body}
+            placeholder="Body"
+          />
+        </View>
+        <View style={themedStyles.inputContainerView}>
+          <RNPickerSelect
+            onValueChange={setCategory}
+            placeholder={{
+              label: "Select a category...",
+              value: null,
+              color: "#9EA0A4",
+            }}
+            style={pickerSelectStyles}
+            items={[
+              { label: "Default", value: "default" },
+              { label: "testMe", value: "testMe" },
+              { label: "buttonOpenApp", value: "buttonOpenApp" },
+              { label: "buttonOpenLink", value: "buttonOpenLink" },
+              { label: "textReplyMessage", value: "textReplyMessage" },
+            ]}
+          />
+
+          <CustomButton
+            onPress={onSend}
+            title="Push!"
+            style={{ backgroundColor: "green" }}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -1,5 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import apiService from "../service/backend";
+
 export function setAppReadyState(isAppReady) {
   console.info("setAppReadyState", isAppReady);
   return {
@@ -30,22 +32,32 @@ export function setExpoPushToken(pushToken) {
   };
 }
 
-export function setNotification(notification) {
-  console.info("setNotification", notification);
+export function setPushList(pushList) {
+  // console.info("setPushList", pushList);
   return {
-    type: "setNotification",
+    type: "setPushList",
     payload: {
-      notification,
+      pushList,
     },
   };
 }
 
-export function setNotificationResponse(response) {
-  console.info("setNotificationResponse", response);
+export function pushRecieved(push) {
+  console.info("pushRecieved", push);
   return {
-    type: "setNotificationResponse",
+    type: "pushRecieved",
     payload: {
-      response,
+      push,
+    },
+  };
+}
+
+export function setPushResponse(pushResponse) {
+  console.info("setPushResponse", pushResponse);
+  return {
+    type: "setPushResponse",
+    payload: {
+      pushResponse,
     },
   };
 }
@@ -56,6 +68,8 @@ export const initialState = {
 
   user: null,
   accessToken: null,
+
+  pushList: {},
 
   notification: false,
   response: false,
@@ -86,11 +100,157 @@ export function reducer(state, action) {
     case "setExpoPushToken":
       return { ...state, expoPushToken: action.payload.pushToken };
 
-    case "setNotification":
-      return { ...state, notification: action.payload.notification };
+    case "setPushList":
+      const pushList = {};
+      action.payload.pushList.map((pushItem) => {
+        pushList[pushItem.id] = pushItem;
+      });
+      return { ...state, pushList };
 
-    case "setNotificationResponse":
-      return { ...state, response: action.payload.response };
+    case "pushRecieved":
+      /**
+      Object {
+        "date": 1630230256230,
+        "request": Object {
+          "content": Object {
+            "autoDismiss": true,
+            "badge": null,
+            "body": "",
+            "categoryIdentifier": "default",
+            "data": Object {
+              "pushId": 19,
+            },
+            "sound": "default",
+            "sticky": false,
+            "subtitle": null,
+            "title": "",
+          },
+          "identifier": "0:1630230256233655%0ac519e6f9fd7ecd",
+          "trigger": Object {
+            "channelId": null,
+            "remoteMessage": Object {
+              "collapseKey": null,
+              "data": Object {
+                "body": "{\"pushId\":19}",
+                "categoryId": "default",
+                "experienceId": "@tgxn/pushme",
+                "message": "",
+                "projectId": "dc94d550-9538-48ff-b051-43562cdcf34e",
+                "scopeKey": "@tgxn/pushme",
+                "title": "",
+              },
+              "from": "367315174693",
+              "messageId": "0:1630230256233655%0ac519e6f9fd7ecd",
+              "messageType": null,
+              "notification": null,
+              "originalPriority": 2,
+              "priority": 2,
+              "sentTime": 1630230256230,
+              "to": null,
+              "ttl": 2419200,
+            },
+            "type": "push",
+          },
+        },
+      }
+       */
+
+      // all pushes should have id
+      try {
+        const pushId = action.payload.push.request.content.data.pushId;
+        const pushList = state.pushList;
+
+        // update this push details
+        pushList[pushId] = {
+          id: pushId,
+          pushPayload: {
+            categoryId:
+              action.payload.push.request.content.data.categoryIdentifier,
+            title: action.payload.push.request.content.title,
+            body: action.payload.push.request.content.body,
+            data: action.payload.push.request.content.data,
+          },
+        };
+
+        return { ...state, pushList };
+      } catch (e) {
+        console.error("cannot gather pushId", action.payload.push, e);
+      }
+
+      return state;
+
+    case "setPushResponse":
+      /**
+      Object {
+        "actionIdentifier": "expo.modules.notifications.actions.DEFAULT",
+        "notification": Object {
+          "date": 1630234055767,
+          "request": Object {
+            "content": Object {
+              "autoDismiss": true,
+              "badge": null,
+              "body": "",
+              "categoryIdentifier": "default",
+              "data": Object {
+                "pushId": 30,
+              },
+              "sound": "default",
+              "sticky": false,
+              "subtitle": null,
+              "title": "",
+            },
+            "identifier": "0:1630234055770633%0ac519e6f9fd7ecd",
+            "trigger": Object {
+              "channelId": null,
+              "remoteMessage": Object {
+                "collapseKey": null,
+                "data": Object {
+                  "body": "{\"pushId\":30}",
+                  "categoryId": "default",
+                  "experienceId": "@tgxn/pushme",
+                  "message": "",
+                  "projectId": "dc94d550-9538-48ff-b051-43562cdcf34e",
+                  "scopeKey": "@tgxn/pushme",
+                  "title": "",
+                },
+                "from": "367315174693",
+                "messageId": "0:1630234055770633%0ac519e6f9fd7ecd",
+                "messageType": null,
+                "notification": null,
+                "originalPriority": 2,
+                "priority": 2,
+                "sentTime": 1630234055767,
+                "to": null,
+                "ttl": 2419200,
+              },
+              "type": "push",
+            },
+          },
+        },
+      }
+       */
+      try {
+        const pushId =
+          action.payload.pushResponse.notification.request.content.data.pushId;
+
+        apiService.respondToPush(pushId, action.payload.pushResponse);
+
+        const pushList = state.pushList;
+
+        // update this push details
+        pushList[pushId] = {
+          ...pushList[pushId],
+          response: action.payload.pushResponse,
+        };
+
+        console.log("RESPONSE", pushList[pushId]);
+
+        return { ...state, pushList };
+      } catch (e) {
+        console.error("cannot gather pushId", action.payload.push, e);
+      }
+
+      return state;
 
     default:
       throw new Error(`Unhandled action: ${action.type}`);

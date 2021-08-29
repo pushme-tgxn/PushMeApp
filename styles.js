@@ -15,6 +15,12 @@ const baseStyles = {
     marginTop: 10,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+  paneContainer: {
+    flex: 1,
+    alignContent: "center",
+    color: baseColors.textColor,
+    paddingHorizontal: 16,
+  },
   authScreenContainer: {
     flex: 1,
     justifyContent: "center",
@@ -29,7 +35,8 @@ const baseStyles = {
   headerText: {
     color: baseColors.textColor,
     fontSize: 30,
-    margin: 10,
+    margin: 0,
+    marginTop: 10,
     height: 44,
   },
 
@@ -46,6 +53,7 @@ const baseStyles = {
 
   separator: {
     marginVertical: 8,
+    paddingTop: 10,
     borderBottomColor: "#737373",
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
