@@ -38,13 +38,13 @@ const ViewPush = ({ navigation, route }) => {
         </Text>
         <Text style={themedStyles.baseText}>
           Data:
-          {pushData.pushPayload}
+          {pushData.pushPayload && JSON.stringify(pushData.pushPayload)}
         </Text>
 
         <Text style={themedStyles.headerText}>Push Response</Text>
 
         <Text style={themedStyles.baseText}>
-          {state.response && JSON.stringify(state.response)}
+          Response: {pushData.response && JSON.stringify(pushData.response)}
         </Text>
       </ScrollView>
     </SafeAreaView>

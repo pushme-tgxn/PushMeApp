@@ -64,7 +64,7 @@ class APIService {
     if (this.accessToken) {
       authorization = `Bearer ${this.accessToken}`;
     }
-    // console.log("_callApi", path, method, payload);
+    console.log("_callApi", path, method, payload);
     const fetchResponse = await fetch(`${PUSH_ENDPOINT}${path}`, {
       method,
       headers: {

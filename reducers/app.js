@@ -1,5 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import apiService from "../service/backend";
+
 export function setAppReadyState(isAppReady) {
   console.info("setAppReadyState", isAppReady);
   return {
@@ -50,12 +52,12 @@ export function pushRecieved(push) {
   };
 }
 
-export function setPushResponse(response) {
-  console.info("setPushResponse", response);
+export function setPushResponse(pushResponse) {
+  console.info("setPushResponse", pushResponse);
   return {
     type: "setPushResponse",
     payload: {
-      response,
+      pushResponse,
     },
   };
 }
@@ -154,13 +156,8 @@ export function reducer(state, action) {
        */
 
       // all pushes should have id
-      let pushId = false;
       try {
-        pushId = action.payload.push.request.content.data.pushId;
-      } catch (e) {
-        console.error("cannot gather pushId", action.payload.push, e);
-      }
-      if (pushId) {
+        const pushId = action.payload.push.request.content.data.pushId;
         const pushList = state.pushList;
 
         // update this push details
@@ -176,12 +173,84 @@ export function reducer(state, action) {
         };
 
         return { ...state, pushList };
+      } catch (e) {
+        console.error("cannot gather pushId", action.payload.push, e);
       }
 
       return state;
 
     case "setPushResponse":
-      return { ...state, response: action.payload.response };
+      /**
+      Object {
+        "actionIdentifier": "expo.modules.notifications.actions.DEFAULT",
+        "notification": Object {
+          "date": 1630234055767,
+          "request": Object {
+            "content": Object {
+              "autoDismiss": true,
+              "badge": null,
+              "body": "",
+              "categoryIdentifier": "default",
+              "data": Object {
+                "pushId": 30,
+              },
+              "sound": "default",
+              "sticky": false,
+              "subtitle": null,
+              "title": "",
+            },
+            "identifier": "0:1630234055770633%0ac519e6f9fd7ecd",
+            "trigger": Object {
+              "channelId": null,
+              "remoteMessage": Object {
+                "collapseKey": null,
+                "data": Object {
+                  "body": "{\"pushId\":30}",
+                  "categoryId": "default",
+                  "experienceId": "@tgxn/pushme",
+                  "message": "",
+                  "projectId": "dc94d550-9538-48ff-b051-43562cdcf34e",
+                  "scopeKey": "@tgxn/pushme",
+                  "title": "",
+                },
+                "from": "367315174693",
+                "messageId": "0:1630234055770633%0ac519e6f9fd7ecd",
+                "messageType": null,
+                "notification": null,
+                "originalPriority": 2,
+                "priority": 2,
+                "sentTime": 1630234055767,
+                "to": null,
+                "ttl": 2419200,
+              },
+              "type": "push",
+            },
+          },
+        },
+      }
+       */
+      try {
+        const pushId =
+          action.payload.pushResponse.notification.request.content.data.pushId;
+
+        apiService.respondToPush(pushId, action.payload.pushResponse);
+
+        const pushList = state.pushList;
+
+        // update this push details
+        pushList[pushId] = {
+          ...pushList[pushId],
+          response: action.payload.pushResponse,
+        };
+
+        console.log("RESPONSE", pushList[pushId]);
+
+        return { ...state, pushList };
+      } catch (e) {
+        console.error("cannot gather pushId", action.payload.push, e);
+      }
+
+      return state;
 
     default:
       throw new Error(`Unhandled action: ${action.type}`);
