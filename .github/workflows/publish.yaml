@@ -3,9 +3,10 @@ on:
   push:
     branches:
       - master
+
 jobs:
   publish:
-    name: Install and publish
+    name: Build and Publish Android
     runs-on: ubuntu-latest
     steps:
       
@@ -28,7 +29,12 @@ jobs:
           expo-version: 4.x
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - run: npm install
-      - run: npm run build:apk
-      - run: npm run build:bundle
+      - name: Install NPM Packages
+        run: npm install
+
+      - name: Expo Android APK Build
+        run: npm run build:apk
+
+      - name: Expo Android Bundle Build
+        run: npm run build:bundle
       
