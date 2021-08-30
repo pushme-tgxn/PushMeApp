@@ -53,3 +53,4 @@ input.approve_deny - "Approve" & "Deny"
 
 MIT
 
+Icon: https://thenounproject.com/term/notification/315894/
