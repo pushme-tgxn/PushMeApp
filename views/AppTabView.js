@@ -27,6 +27,7 @@ const AppTabView = () => {
 
           return <FontAwesome5 name={iconName} size={size} color={color} />;
         },
+        headerShown: false,
       })}
     >
       <Tab.Screen name="Push History" component={PushScreen} />

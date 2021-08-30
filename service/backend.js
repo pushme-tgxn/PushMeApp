@@ -60,11 +60,19 @@ class APIService {
   }
 
   async _callApi(path, method, payload = null) {
-    let authorization = null;
-    if (this.accessToken) {
-      authorization = `Bearer ${this.accessToken}`;
+    if (!this.accessToken) {
+      throw new Error("Invalid Access Token");
     }
-    console.log("_callApi", path, method, payload);
+
+    let authorization = (authorization = `Bearer ${this.accessToken}`);
+
+    console.log(
+      "_callApi",
+      `${PUSH_ENDPOINT}${path}`,
+      method,
+      payload,
+      authorization
+    );
     const fetchResponse = await fetch(`${PUSH_ENDPOINT}${path}`, {
       method,
       headers: {
@@ -76,6 +84,11 @@ class APIService {
     });
     const jsonResponse = await fetchResponse.json();
     // console.log(jsonResponse);
+
+    if (jsonResponse.message == "Unauthorized") {
+      throw new Error("Unauthorized");
+    }
+
     return jsonResponse;
   }
 }
