@@ -32,8 +32,8 @@ jobs:
       - name: Install NPM Packages
         run: npm install
 
-      - name: Expo Android APK Build
-        run: npm run build:apk
+      # - name: Expo Android APK Build
+      #   run: npm run build:apk
 
       - name: Expo Android Bundle Build
         run: npm run build:bundle

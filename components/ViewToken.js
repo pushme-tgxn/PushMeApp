@@ -38,7 +38,9 @@ const ViewToken = ({ navigation, route }) => {
   const [body, setBody] = useState("");
   const [data, setData] = useState({});
 
-  const [deviceName, setDeviceName] = useState(tokenData.name);
+  const [deviceName, setDeviceName] = useState(
+    tokenData.name || Device.deviceName
+  );
 
   const createUpdateRegistration = async () => {
     const fetchResponse = await apiService.upsertTokenRegistration({

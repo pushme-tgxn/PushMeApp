@@ -33,7 +33,7 @@ export function setExpoPushToken(pushToken) {
 }
 
 export function setPushList(pushList) {
-  // console.info("setPushList", pushList);
+  console.info("setPushList", pushList);
   return {
     type: "setPushList",
     payload: {

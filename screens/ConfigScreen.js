@@ -8,7 +8,6 @@ import {
   useColorScheme,
 } from "react-native";
 
-import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -27,26 +26,6 @@ const ConfigScreen = () => {
   const themedStyles = styles(colorScheme);
 
   const { state, dispatch } = useContext(AppReducer);
-  apiService.setAccessToken(state.accessToken);
-
-  const [deviceName, setDeviceName] = useState(Device.modelName);
-
-  const createUpdateRegistration = async () => {
-    const fetchResponse = await apiService.upsertTokenRegistration({
-      token: state.expoPushToken,
-      name: deviceName,
-    });
-
-    alert(JSON.stringify(fetchResponse));
-  };
-
-  const deleteRegistration = async () => {
-    const fetchResponse = await apiService.deleteTokenRegistration(
-      state.expoPushToken
-    );
-
-    alert(JSON.stringify(fetchResponse));
-  };
 
   return (
     <SafeAreaView style={themedStyles.screenContainer}>
@@ -79,28 +58,6 @@ const ConfigScreen = () => {
           Token:
           {state.expoPushToken ? state.expoPushToken : "Loading..."}
         </Text>
-
-        <Separator />
-
-        <Text style={themedStyles.baseText}>Device Name:</Text>
-        <TextInput
-          style={themedStyles.inputStyle}
-          onChangeText={setDeviceName}
-          value={deviceName}
-          placeholder="Device Name"
-        />
-
-        <CustomButton
-          onPress={createUpdateRegistration}
-          title="Save name"
-          style={{ backgroundColor: "green" }}
-        />
-
-        <CustomButton
-          onPress={deleteRegistration}
-          title="Unregister device"
-          style={{ backgroundColor: "red" }}
-        />
       </ScrollView>
     </SafeAreaView>
   );
