@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export const PUSH_ENDPOINT = "http://10.1.1.20:3000";
+export const PUSH_ENDPOINT = "https://pushme-server.herokuapp.com/";
 
 // contexts
 export const AppReducer = createContext(null);
