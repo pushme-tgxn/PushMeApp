@@ -28,6 +28,7 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFFFF"
       },
+      "versionCode": 2,
       "permissions": [],
       "package": "net.tgxn.pushme"
     },
