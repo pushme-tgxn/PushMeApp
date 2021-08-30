@@ -8,17 +8,27 @@ jobs:
     name: Install and publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
       - name: Decode google-services.json
         env:
           GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
         run: echo $GOOGLE_SERVICES > $GITHUB_WORKSPACE/google-services.json
-      - uses: actions/setup-node@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - uses: expo/expo-github-action@v6
+
+      - name: Install Expo CLI
+        uses: expo/expo-github-action@v6
         with:
           expo-version: 4.x
           token: ${{ secrets.EXPO_TOKEN }}
+
       - run: npm install
-      - run: npm run build
+      - run: npm run build:apk
+      - run: npm run build:bundle
+      
