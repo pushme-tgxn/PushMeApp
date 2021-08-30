@@ -26,6 +26,7 @@
         "foregroundImage": "./assets/8467602271547546494-512.png",
         "backgroundColor": "#FFFFFF"
       },
+      "permissions": [],
       "package": "net.tgxn.pushme"
     },
     "web": {
