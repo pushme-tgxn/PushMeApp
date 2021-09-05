@@ -24,10 +24,11 @@ Push Types:
 Simple push just has a message and a title.
 No action will be performed on click.
 
+**Webhook Payload**
 ```json
 {
-    title: "",
-    description: "",
+    title: "Notification Title",
+    description: "Desc / Body",
 }
 ```
 
@@ -49,9 +50,19 @@ input.reply - "Reply"
 input.approve_deny - "Approve" & "Deny"
 
 
+**Webhook Payload**
+```json
+{
+    title: "Notification Title",
+    description: "Desc / Body",
+    intent: "button.yes_no",
+}
+```
+
 ## License
 
 MIT
 
 Icon `notification by Viktor Ostrovsky from the Noun Project`
 https://thenounproject.com/term/notification/315894/
+

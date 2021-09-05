@@ -38,6 +38,14 @@ class APIService {
     return this._callApi(`/token/${pushToken}`, "DELETE");
   }
 
+  createWebhook(tokenId) {
+    return this._callApi(`/webhook`, "POST", { tokenId });
+  }
+
+  updateWebhook(webhookId, updateData) {
+    return this._callApi(`/webhook/${webhookId}`, "POST", updateData);
+  }
+
   // PUSH
 
   getPushList() {
