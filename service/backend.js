@@ -91,7 +91,7 @@ class APIService {
       body: payload ? JSON.stringify(payload) : null,
     });
     const jsonResponse = await fetchResponse.json();
-    // console.log(jsonResponse);
+    console.log(jsonResponse);
 
     if (jsonResponse.message == "Unauthorized") {
       throw new Error("Unauthorized");

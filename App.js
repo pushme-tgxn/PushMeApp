@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, useRef } from "react";
 
 import { Platform, useColorScheme } from "react-native";
 
-import * as Device from "expo-device";
+import * as TaskManager from "expo-task-manager";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import Constants from "expo-constants";
@@ -33,6 +33,18 @@ import AppTabView from "./views/AppTabView";
 import { AppReducer, NotificationCategories } from "./const";
 
 import apiService from "./service/backend";
+
+const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
+
+TaskManager.defineTask(
+  BACKGROUND_NOTIFICATION_TASK,
+  ({ data, error, executionInfo }) => {
+    console.log("Received a notification in the background!");
+    // Do something with the notification data
+  }
+);
+
+Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

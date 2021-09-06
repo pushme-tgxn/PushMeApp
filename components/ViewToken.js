@@ -151,42 +151,37 @@ const ViewToken = ({ navigation, route }) => {
             style={{ backgroundColor: "green" }}
           />
         </View>
-
         <Separator />
 
-        <FlatList
-          ListHeaderComponent={() => (
-            <Text style={themedStyles.headerText}>
-              {tokenData.webhooks.length == 0 ? "No Webhooks!" : "Webhooks"}
-            </Text>
-          )}
-          data={tokenData.webhooks}
-          refreshing={false}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => {
-            let buttonStyle = themedStyles.listItem;
-            return (
-              <CustomButton
-                // onPress={async () => {
-                //   navigation.navigate("TokenView", { tokenData: item });
-                // }}
-                style={buttonStyle}
-              >
-                {item.id} : {item.secretKey}
-              </CustomButton>
-            );
-          }}
-        />
+        <Text style={themedStyles.headerText}>
+          {tokenData.webhooks.length == 0 ? "No Webhooks!" : "Webhooks"}
+        </Text>
+
+        {tokenData.webhooks.map((item) => {
+          let buttonStyle = themedStyles.listItem;
+          return (
+            <CustomButton
+              key={item.id}
+              // onPress={async () => {
+              //   navigation.navigate("TokenView", { tokenData: item });
+              // }}
+              style={buttonStyle}
+            >
+              {item.id} : {item.secretKey}
+            </CustomButton>
+          );
+        })}
+
+        <View style={themedStyles.inputContainerView}>
+          <CustomButton
+            onPress={async () => {
+              await apiService.createWebhook(tokenData.id);
+            }}
+            title="Create Token!"
+            style={{ backgroundColor: "green" }}
+          />
+        </View>
       </ScrollView>
-      <View style={themedStyles.inputContainerView}>
-        <CustomButton
-          onPress={async () => {
-            await apiService.createWebhook(tokenData.id);
-          }}
-          title="Create Token!"
-          style={{ backgroundColor: "green" }}
-        />
-      </View>
     </SafeAreaView>
   );
 };
