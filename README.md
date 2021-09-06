@@ -28,7 +28,8 @@ No action will be performed on click.
 ```json
 {
     title: "Notification Title",
-    description: "Desc / Body",
+    body: "Desc / Body",
+    data: {},
 }
 ```
 
@@ -54,8 +55,9 @@ input.approve_deny - "Approve" & "Deny"
 ```json
 {
     title: "Notification Title",
-    description: "Desc / Body",
+    body: "Desc / Body",
     intent: "button.yes_no",
+    data: {},
 }
 ```
 
