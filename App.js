@@ -114,6 +114,7 @@ const App = () => {
   useEffect(() => {
     async function prepare() {
       let loggedInUser, expoToken;
+
       try {
         await SplashScreen.preventAutoHideAsync();
 
@@ -122,18 +123,46 @@ const App = () => {
         expoToken = await registerForPushNotificationsAsync();
         dispatch(setExpoPushToken(expoToken));
 
-        // attempt to load user
+        notificationListener.current =
+          Notifications.addNotificationReceivedListener((notification) => {
+            console.log("addNotificationReceivedListener", notification);
+            dispatch(pushRecieved(notification));
+          });
+
+        responseListener.current =
+          Notifications.addNotificationResponseReceivedListener((response) => {
+            console.log("addNotificationResponseReceivedListener", response);
+            dispatch(setPushResponse(response));
+
+            Notifications.dismissNotificationAsync(
+              response.notification.request.identifier
+            );
+          });
+
+        return () => {
+          Notifications.removeNotificationSubscription(
+            notificationListener.current
+          );
+          Notifications.removeNotificationSubscription(
+            responseListener.current
+          );
+        };
+      } catch (error) {
+        console.log("error setting app up", error);
+        alert("error setting app up: " + error.toString());
+      }
+
+      // attempt to load user
+      try {
         const storedUserData = await AsyncStorage.getItem("userData");
         if (storedUserData !== null) {
           console.log("loaded storedUserData", storedUserData);
 
           const userData = JSON.parse(storedUserData);
 
-          // test access token
           apiService.setAccessToken(userData.token);
           const currentUser = await apiService.getCurrentUser();
-
-          if (currentUser && currentUser.id == userData.id) {
+          if (currentUser && currentUser.user.id == userData.id) {
             loggedInUser = userData;
           } else {
             console.log("not a valid token", currentUser, userData);
@@ -143,9 +172,11 @@ const App = () => {
         console.warn(e);
       } finally {
         if (loggedInUser) {
+          // only if a valid token was found
+
           dispatch(setUserData(loggedInUser));
 
-          apiService.setAccessToken(loggedInUser.token);
+          apiService.setAccessToken(userData.token);
           apiService.upsertTokenRegistration({
             token: expoToken,
           });
@@ -156,34 +187,11 @@ const App = () => {
         }
 
         dispatch(setAppReadyState(true));
-        await SplashScreen.hideAsync();
       }
+      await SplashScreen.hideAsync();
     }
 
     prepare();
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("addNotificationReceivedListener", notification);
-        dispatch(pushRecieved(notification));
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("addNotificationResponseReceivedListener", response);
-        dispatch(setPushResponse(response));
-
-        Notifications.dismissNotificationAsync(
-          response.notification.request.identifier
-        );
-      });
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
   }, []);
 
   if (!state.appIsReady) {
