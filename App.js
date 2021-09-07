@@ -66,11 +66,6 @@ const App = () => {
   // register notification categories from client-side
   const registerNotificationCategories = async () => {
     for (const index in NotificationCategories) {
-      console.log(
-        "add notification category",
-        index,
-        NotificationCategories[index]
-      );
       await Notifications.setNotificationCategoryAsync(
         index,
         NotificationCategories[index]
@@ -113,40 +108,14 @@ const App = () => {
 
   useEffect(() => {
     async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
       let loggedInUser, expoToken;
 
       try {
-        await SplashScreen.preventAutoHideAsync();
-
         await registerNotificationCategories();
 
         expoToken = await registerForPushNotificationsAsync();
         dispatch(setExpoPushToken(expoToken));
-
-        notificationListener.current =
-          Notifications.addNotificationReceivedListener((notification) => {
-            console.log("addNotificationReceivedListener", notification);
-            dispatch(pushRecieved(notification));
-          });
-
-        responseListener.current =
-          Notifications.addNotificationResponseReceivedListener((response) => {
-            console.log("addNotificationResponseReceivedListener", response);
-            dispatch(setPushResponse(response));
-
-            Notifications.dismissNotificationAsync(
-              response.notification.request.identifier
-            );
-          });
-
-        return () => {
-          Notifications.removeNotificationSubscription(
-            notificationListener.current
-          );
-          Notifications.removeNotificationSubscription(
-            responseListener.current
-          );
-        };
       } catch (error) {
         console.log("error setting app up", error);
         alert("error setting app up: " + error.toString());
@@ -154,11 +123,11 @@ const App = () => {
 
       // attempt to load user
       try {
-        const storedUserData = await AsyncStorage.getItem("userData");
-        if (storedUserData !== null) {
-          console.log("loaded storedUserData", storedUserData);
+        const serializedUserData = await AsyncStorage.getItem("userData");
+        if (serializedUserData !== null) {
+          console.log("loaded serializedUserData", serializedUserData);
 
-          const userData = JSON.parse(storedUserData);
+          const userData = JSON.parse(serializedUserData);
 
           apiService.setAccessToken(userData.token);
           const currentUser = await apiService.getCurrentUser();
@@ -175,8 +144,7 @@ const App = () => {
           // only if a valid token was found
 
           dispatch(setUserData(loggedInUser));
-
-          apiService.setAccessToken(userData.token);
+          apiService.setAccessToken(loggedInUser.token);
           apiService.upsertTokenRegistration({
             token: expoToken,
           });
@@ -185,13 +153,36 @@ const App = () => {
         } else {
           startState.current = "Auth";
         }
-
         dispatch(setAppReadyState(true));
       }
+
       await SplashScreen.hideAsync();
     }
 
     prepare();
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log("addNotificationReceivedListener", notification);
+        dispatch(pushRecieved(notification));
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("addNotificationResponseReceivedListener", response);
+        dispatch(setPushResponse(response));
+
+        Notifications.dismissNotificationAsync(
+          response.notification.request.identifier
+        );
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
 
   if (!state.appIsReady) {
