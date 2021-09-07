@@ -4,7 +4,7 @@
     "description": "Simple Push Notifications & Approvals",
     "primaryColor": "#5f5f5f",
     "slug": "pushme",
-    "version": "1.6.0",
+    "version": "1.7.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "automatic",
@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/logo-smol.png",
         "backgroundColor": "#FFFFFF"
       },
-      "versionCode": 6,
+      "versionCode": 7,
       "permissions": [],
       "package": "net.tgxn.pushme"
     },
