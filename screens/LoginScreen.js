@@ -58,14 +58,16 @@ const LoginScreen = ({ navigation }) => {
       const responseJson = await apiService.userLogin(userName, userPassword);
 
       if (responseJson.token) {
+        setLoading(false);
         dispatch(setUserData(responseJson));
       } else {
         setErrorText(responseJson.message);
+        setLoading(false);
       }
     } catch (error) {
       console.error("@34234e", error);
-    } finally {
       setLoading(false);
+      setErrorText(error.toString());
     }
   };
 
