@@ -25,7 +25,7 @@
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/logo-smol.png",
         "backgroundColor": "#FFFFFF"
       },
       "versionCode": 6,

@@ -65,6 +65,5 @@ input.approve_deny - "Approve" & "Deny"
 
 MIT
 
-Icon `notification by Viktor Ostrovsky from the Noun Project`
-https://thenounproject.com/term/notification/315894/
-
+Icon `notification by Musket from the Noun Project`
+https://thenounproject.com/term/notification/125756/
