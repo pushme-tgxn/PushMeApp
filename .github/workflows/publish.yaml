@@ -5,7 +5,7 @@ on:
       - master
 
 jobs:
-  publish:
+  publish-apk:
     name: Build and Publish Android
     runs-on: ubuntu-latest
     steps:
@@ -34,6 +34,33 @@ jobs:
 
       - name: Expo Android APK Build
         run: npm run build:apk
+
+  publish-aab:
+    name: Build and Publish Android
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Decode google-services.json
+        env:
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        run: echo $GOOGLE_SERVICES > $GITHUB_WORKSPACE/google-services.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install Expo CLI
+        uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install NPM Packages
+        run: npm install
 
       - name: Expo Android Bundle Build
         run: npm run build:bundle

@@ -28,7 +28,7 @@
       "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#A845FF"
+        "backgroundImage": "./assets/adaptive-icon-bg.png"
       },
       "googleServicesFile": "./google-services.json"
     },
