@@ -61,6 +61,12 @@ input.approve_deny - "Approve" & "Deny"
 }
 ```
 
+## Colors
+
+Primary: #a845ff
+
+
+
 ## License
 
 MIT

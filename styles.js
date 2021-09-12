@@ -71,6 +71,13 @@ const baseStyles = {
     margin: 10,
   },
 
+  pickerContainerView: {
+    height: 40,
+    margin: 10,
+    borderWidth: 1,
+    borderColor: "#737373",
+  },
+
   inputStyle: {
     flexGrow: 1,
     color: baseColors.textColor,

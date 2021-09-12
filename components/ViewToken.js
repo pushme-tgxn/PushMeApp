@@ -13,11 +13,12 @@ import {
   ScrollView,
 } from "react-native";
 
+import { Picker } from "@react-native-picker/picker";
+
 import { Separator, CustomButton } from "./Shared.js";
 
 import { NotificationCategories } from "../const";
 
-import RNPickerSelect from "react-native-picker-select";
 import apiService from "../service/backend";
 
 import styles from "../styles";
@@ -35,8 +36,8 @@ const ViewToken = ({ navigation, route }) => {
   const themedStyles = styles(colorScheme);
 
   const [categoryId, setCategory] = useState("default");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, setTitle] = useState("Test notification title!");
+  const [body, setBody] = useState("Test body.");
   const [data, setData] = useState({});
 
   const [deviceName, setDeviceName] = useState(
@@ -126,8 +127,21 @@ const ViewToken = ({ navigation, route }) => {
           />
         </View>
 
-        <View style={themedStyles.inputContainerView}>
-          <RNPickerSelect
+        <View style={themedStyles.pickerContainerView}>
+          <Picker
+            selectedValue={categoryId}
+            onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}
+          >
+            <Picker.Item key={"default"} label="Default" value="default" />
+            {clientCategoryList.map((item) => (
+              <Picker.Item
+                key={item.label}
+                label={item.label}
+                value={item.value}
+              />
+            ))}
+          </Picker>
+          {/* <RNPickerSelect
             onValueChange={setCategory}
             selectedValue={{ label: categoryId, value: categoryId }}
             placeholder={{
@@ -142,7 +156,7 @@ const ViewToken = ({ navigation, route }) => {
             ]}
           >
             <Text>{categoryId}</Text>
-          </RNPickerSelect>
+          </RNPickerSelect> */}
         </View>
         <View style={themedStyles.inputContainerView}>
           <CustomButton

@@ -9,7 +9,10 @@ const Stack = createStackNavigator();
 
 const AuthView = () => {
   return (
-    <Stack.Navigator initialRouteName="LoginScreen">
+    <Stack.Navigator
+      initialRouteName="LoginScreen"
+      detachInactiveScreens={true}
+    >
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}

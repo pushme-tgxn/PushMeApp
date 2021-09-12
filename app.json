@@ -27,7 +27,7 @@
       "useNextNotificationsApi": true,
       "permissions": [],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/ic_launcher_foreground-hq.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#A845FF"
       },
       "googleServicesFile": "./google-services.json"
