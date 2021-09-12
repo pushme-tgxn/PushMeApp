@@ -1,12 +1,12 @@
-name: Expo Publish
+name: Build Expo App
 on:
   push:
     branches:
       - master
 
 jobs:
-  publish-apk:
-    name: Build and Publish Android
+  build-apk:
+    name: Build Android APK
     runs-on: ubuntu-latest
     steps:
       
@@ -35,8 +35,8 @@ jobs:
       - name: Expo Android APK Build
         run: npm run build:apk
 
-  publish-aab:
-    name: Build and Publish Android
+  build-aab:
+    name: Build Android App Bundle
     runs-on: ubuntu-latest
     steps:
       
