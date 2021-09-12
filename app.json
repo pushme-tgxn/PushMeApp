@@ -4,7 +4,7 @@
     "description": "Simple Push Notifications & Approvals",
     "primaryColor": "#5f5f5f",
     "slug": "pushme",
-    "version": "1.7.0",
+    "version": "1.8.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "automatic",
@@ -22,15 +22,15 @@
       "supportsTablet": true
     },
     "android": {
-      "googleServicesFile": "./google-services.json",
+      "package": "net.tgxn.pushme",
+      "versionCode": 8,
       "useNextNotificationsApi": true,
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/logo-smol.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "versionCode": 7,
       "permissions": [],
-      "package": "net.tgxn.pushme"
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/ic_launcher_foreground-hq.png",
+        "backgroundColor": "#A845FF"
+      },
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/logo.png"

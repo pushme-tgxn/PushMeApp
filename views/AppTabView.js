@@ -27,6 +27,8 @@ const AppTabView = () => {
 
           return <FontAwesome5 name={iconName} size={size} color={color} />;
         },
+        tabBarActiveTintColor: "#a845ff",
+        tabBarInactiveTintColor: "gray",
         headerShown: false,
       })}
     >
