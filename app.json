@@ -2,7 +2,7 @@
   "expo": {
     "name": "PushMe",
     "description": "Simple Push Notifications & Approvals",
-    "primaryColor": "#5f5f5f",
+    "primaryColor": "#A845FF",
     "slug": "pushme",
     "version": "1.8.1",
     "orientation": "portrait",
