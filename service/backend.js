@@ -1,8 +1,13 @@
 import { PUSH_ENDPOINT } from "../const";
 
 class APIService {
+  constructor() {
+    this.authorization = null;
+  }
+
   setAccessToken(accessToken) {
     this.accessToken = accessToken;
+    this.authorization = `Bearer ${accessToken}`;
   }
 
   //// USER
@@ -68,26 +73,23 @@ class APIService {
   }
 
   async _callApi(path, method, payload = null) {
-    if (!this.accessToken) {
-      throw new Error("Invalid Access Token");
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    if (this.authorization) {
+      headers.Authorization = this.authorization;
     }
-
-    let authorization = (authorization = `Bearer ${this.accessToken}`);
-
     console.log(
       "_callApi",
       `${PUSH_ENDPOINT}${path}`,
       method,
       payload,
-      authorization
+      this.authorization
     );
     const fetchResponse = await fetch(`${PUSH_ENDPOINT}${path}`, {
       method,
-      headers: {
-        Authorization: authorization,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
+      headers,
       body: payload ? JSON.stringify(payload) : null,
     });
     const jsonResponse = await fetchResponse.json();
