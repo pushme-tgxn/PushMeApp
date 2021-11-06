@@ -18,6 +18,12 @@ class APIService {
     });
   }
 
+  authWithGoogle(accessToken) {
+    return this._callApi("/auth/google/token", "POST", {
+      accessToken,
+    });
+  }
+
   userRegister(userName, userEmail, userPassword) {
     return this._callApi("/user/register", "POST", {
       username: userName,

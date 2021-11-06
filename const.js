@@ -1,6 +1,11 @@
 import { createContext } from "react";
 
-export const PUSH_ENDPOINT = "https://pushme.tgxn.net";
+// export const PUSH_ENDPOINT = "https://pushme.tgxn.net";
+export const PUSH_ENDPOINT = "http://10.1.1.21:3000";
+
+// export const GOOGLE_WEBCLIENT_ID = null;
+export const GOOGLE_WEBCLIENT_ID =
+  "496431691586-9g6qno92idps781s2sto66ar863c8jr4.apps.googleusercontent.com";
 
 // contexts
 export const AppReducer = createContext(null);

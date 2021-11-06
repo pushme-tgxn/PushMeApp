@@ -128,13 +128,16 @@ const App = () => {
           console.log("loaded serializedUserData", serializedUserData);
 
           const userData = JSON.parse(serializedUserData);
-
-          apiService.setAccessToken(userData.token);
-          const currentUser = await apiService.getCurrentUser();
-          if (currentUser && currentUser.user.id == userData.id) {
-            loggedInUser = userData;
+          if (userData) {
+            apiService.setAccessToken(userData.token);
+            const currentUser = await apiService.getCurrentUser();
+            if (currentUser && currentUser.user.id == userData.id) {
+              loggedInUser = userData;
+            } else {
+              console.log("not a valid token", currentUser, userData);
+            }
           } else {
-            console.log("not a valid token", currentUser, userData);
+            console.log("not valid userData", userData);
           }
         }
       } catch (e) {
