@@ -1,4 +1,4 @@
-import React, { useState, createRef, useContext } from "react";
+import React, { useState, createRef, useContext, useEffect } from "react";
 
 import {
   StyleSheet,
@@ -13,13 +13,13 @@ import {
   useColorScheme,
 } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Google from "expo-auth-session/providers/google";
 
 import Loader from "../components/Loader";
 
 import apiService from "../service/backend";
 
-import { AppReducer } from "../const";
+import { AppReducer, GOOGLE_WEBCLIENT_ID } from "../const";
 
 import { setUserData } from "../reducers/app";
 
@@ -38,6 +38,46 @@ const LoginScreen = ({ navigation }) => {
   const [userPassword, setUserPassword] = useState("");
 
   const passwordInputRef = createRef();
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: GOOGLE_WEBCLIENT_ID,
+    iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+    androidClientId: GOOGLE_WEBCLIENT_ID,
+    webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    async function fetchData(authentication) {
+      try {
+        // const responseJson = await apiService.userLogin(userName, userPassword);
+
+        const responseJson = await apiService.authWithGoogle(
+          authentication.accessToken
+        );
+
+        console.log(responseJson);
+
+        if (responseJson.user.token) {
+          setLoading(false);
+          dispatch(setUserData(responseJson.user));
+        } else {
+          setErrorText(responseJson.message);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("@34234e", error);
+        setLoading(false);
+        setErrorText(error.toString());
+      }
+    }
+
+    if (response?.type === "success") {
+      const { authentication } = response;
+      console.log(authentication);
+
+      fetchData(authentication);
+    }
+  }, [response]);
 
   const handleSubmitPress = async () => {
     setErrorText(false);
@@ -71,6 +111,12 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
+  const loginFlowGoogle = async () => {
+    setLoading(true);
+
+    promptAsync();
+  };
+
   return (
     <View
       style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}
@@ -99,6 +145,19 @@ const LoginScreen = ({ navigation }) => {
               />
             </View>
 
+            {GOOGLE_WEBCLIENT_ID && (
+              <TouchableOpacity
+                style={themedStyles.buttonStyle}
+                activeOpacity={0.5}
+                disabled={!request}
+                onPress={loginFlowGoogle}
+              >
+                <Text style={themedStyles.buttonTextStyle}>
+                  Login with Google
+                </Text>
+              </TouchableOpacity>
+            )}
+
             <View style={themedStyles.inputContainerView}>
               <TextInput
                 style={themedStyles.inputStyle}
@@ -126,11 +185,9 @@ const LoginScreen = ({ navigation }) => {
                 blurOnSubmit={false}
               />
             </View>
-
             {errorText ? (
               <Text style={themedStyles.errorTextStyle}>{errorText}</Text>
             ) : null}
-
             <TouchableOpacity
               style={themedStyles.buttonStyle}
               activeOpacity={0.5}
@@ -138,7 +195,6 @@ const LoginScreen = ({ navigation }) => {
             >
               <Text style={themedStyles.buttonTextStyle}>LOGIN</Text>
             </TouchableOpacity>
-
             <Text
               style={themedStyles.actionTextStyle}
               onPress={() => navigation.navigate("RegisterScreen")}
