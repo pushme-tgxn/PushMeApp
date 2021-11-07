@@ -81,9 +81,17 @@ export function reducer(state, action) {
       return { ...state, appIsReady: action.payload.isAppReady };
 
     case "setUserData":
-      AsyncStorage.setItem("userData", JSON.stringify(action.payload.userData));
-
       if (action.payload.userData !== null) {
+        AsyncStorage.setItem(
+          "userData",
+          JSON.stringify(action.payload.userData)
+        );
+
+        apiService.setAccessToken(action.payload.userData.token);
+        apiService.upsertTokenRegistration({
+          token: state.expoPushToken,
+        });
+
         return {
           ...state,
           user: action.payload.userData,

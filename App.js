@@ -147,10 +147,6 @@ const App = () => {
           // only if a valid token was found
 
           dispatch(setUserData(loggedInUser));
-          apiService.setAccessToken(loggedInUser.token);
-          apiService.upsertTokenRegistration({
-            token: expoToken,
-          });
 
           startState.current = "AppView";
         } else {

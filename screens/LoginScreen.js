@@ -48,12 +48,29 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     async function fetchData(authentication) {
-      const tesult = await apiService.authWithGoogle(
-        authentication.accessToken
-      );
+      try {
+        // const responseJson = await apiService.userLogin(userName, userPassword);
 
-      console.log(tesult);
+        const responseJson = await apiService.authWithGoogle(
+          authentication.accessToken
+        );
+
+        console.log(responseJson);
+
+        if (responseJson.user.token) {
+          setLoading(false);
+          dispatch(setUserData(responseJson.user));
+        } else {
+          setErrorText(responseJson.message);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("@34234e", error);
+        setLoading(false);
+        setErrorText(error.toString());
+      }
     }
+
     if (response?.type === "success") {
       const { authentication } = response;
       console.log(authentication);
