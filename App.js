@@ -59,8 +59,6 @@ const App = () => {
     // register notification categories from client-side
     const registerNotificationCategories = async () => {
         for (const index in NotificationCategories) {
-            console.log(index, NotificationCategories[index]);
-
             await Notifications.setNotificationCategoryAsync(index, NotificationCategories[index]);
         }
     };
