@@ -61,7 +61,7 @@ const App = () => {
         for (const index in NotificationCategories) {
             console.log(index, NotificationCategories[index]);
 
-            await Notifications.setNotificationCategoryAsync(index, NotificationCategories[index]),
+            await Notifications.setNotificationCategoryAsync(index, NotificationCategories[index]);
         }
     };
 
