@@ -70,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
         try {
             const responseJson = await apiService.userLogin(userName, userPassword);
 
-            if (responseJson.user.token) {
+            if (responseJson.success) {
                 setLoading(false);
                 dispatch(setUserData(responseJson.user));
             } else {
@@ -93,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
             if (type === "success") {
                 const responseJson = await apiService.authWithGoogle(user.auth.accessToken);
 
-                if (responseJson.user.token) {
+                if (responseJson.success) {
                     setLoading(false);
                     dispatch(setUserData(responseJson.user));
                 } else {
