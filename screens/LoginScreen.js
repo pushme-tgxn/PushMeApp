@@ -13,13 +13,13 @@ import {
     useColorScheme,
 } from "react-native";
 
-import * as Google from "expo-auth-session/providers/google";
+import * as GoogleSignIn from "expo-google-sign-in";
 
 import Loader from "../components/Loader";
 
 import apiService from "../service/backend";
 
-import { AppReducer, GOOGLE_WEBCLIENT_ID } from "../const";
+import { AppReducer } from "../const";
 
 import { setUserData } from "../reducers/app";
 
@@ -39,46 +39,11 @@ const LoginScreen = ({ navigation }) => {
 
     const passwordInputRef = createRef();
 
-    let request, response, promptAsync;
-    if (GOOGLE_WEBCLIENT_ID) {
-        [request, response, promptAsync] = Google.useAuthRequest({
-            expoClientId: GOOGLE_WEBCLIENT_ID,
-            iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-            androidClientId: GOOGLE_WEBCLIENT_ID,
-            webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-        });
-    }
-
     useEffect(() => {
-        async function fetchData(authentication) {
-            try {
-                // const responseJson = await apiService.userLogin(userName, userPassword);
-
-                const responseJson = await apiService.authWithGoogle(authentication.accessToken);
-
-                console.log(responseJson);
-
-                if (responseJson.user.token) {
-                    setLoading(false);
-                    dispatch(setUserData(responseJson.user));
-                } else {
-                    setErrorText(responseJson.message);
-                    setLoading(false);
-                }
-            } catch (error) {
-                console.error("@34234e", error);
-                setLoading(false);
-                setErrorText(error.toString());
-            }
-        }
-
-        if (response?.type === "success") {
-            const { authentication } = response;
-            console.log(authentication);
-
-            fetchData(authentication);
-        }
-    }, [response]);
+        (async function () {
+            await GoogleSignIn.initAsync({});
+        })();
+    });
 
     const handleSubmitPress = async () => {
         setErrorText(false);
@@ -115,7 +80,18 @@ const LoginScreen = ({ navigation }) => {
     const loginFlowGoogle = async () => {
         setLoading(true);
 
-        promptAsync();
+        try {
+            await GoogleSignIn.askForPlayServicesAsync();
+            const { type, user } = await GoogleSignIn.signInAsync();
+            if (type === "success") {
+                console.log(type, user);
+                alert(type);
+                alert(user);
+                // _syncUserWithStateAsync();
+            }
+        } catch ({ message }) {
+            alert("login: Error:" + message);
+        }
     };
 
     return (
@@ -144,16 +120,13 @@ const LoginScreen = ({ navigation }) => {
                             />
                         </View>
 
-                        {GOOGLE_WEBCLIENT_ID && (
-                            <TouchableOpacity
-                                style={themedStyles.buttonStyle}
-                                activeOpacity={0.5}
-                                disabled={!request}
-                                onPress={loginFlowGoogle}
-                            >
-                                <Text style={themedStyles.buttonTextStyle}>Login with Google</Text>
-                            </TouchableOpacity>
-                        )}
+                        <TouchableOpacity
+                            style={themedStyles.buttonStyle}
+                            activeOpacity={0.5}
+                            onPress={loginFlowGoogle}
+                        >
+                            <Text style={themedStyles.buttonTextStyle}>Login with Google</Text>
+                        </TouchableOpacity>
 
                         <View style={themedStyles.inputContainerView}>
                             <TextInput
