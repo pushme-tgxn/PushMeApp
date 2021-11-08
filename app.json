@@ -1,39 +1,44 @@
 {
-  "expo": {
-    "name": "PushMe",
-    "description": "Simple Push Notifications & Approvals",
-    "primaryColor": "#A845FF",
-    "slug": "pushme",
-    "version": "1.8.2",
-    "orientation": "portrait",
-    "icon": "./assets/logo.png",
-    "userInterfaceStyle": "automatic",
-    "scheme": "pushme",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "package": "net.tgxn.pushme",
-      "versionCode": 182,
-      "useNextNotificationsApi": true,
-      "permissions": [],
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundImage": "./assets/adaptive-icon-bg.png"
-      },
-      "googleServicesFile": "./google-services.json"
-    },
-    "web": {
-      "favicon": "./assets/logo.png"
+    "expo": {
+        "name": "PushMe",
+        "description": "Simple Push Notifications & Approvals",
+        "primaryColor": "#A845FF",
+        "slug": "pushme",
+        "version": "1.8.4",
+        "orientation": "portrait",
+        "icon": "./assets/logo.png",
+        "userInterfaceStyle": "automatic",
+        "scheme": "pushme",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "package": "net.tgxn.pushme",
+            "versionCode": 184,
+            "useNextNotificationsApi": true,
+            "permissions": [],
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundImage": "./assets/adaptive-icon-bg.png"
+            },
+            "googleServicesFile": "./google-services.json",
+            "config": {
+                "googleSignIn": {
+                    "certificateHash": "2A:41:2A:51:5D:33:8E:0A:FE:35:C1:3B:9C:3A:3E:61:34:96:32:8F"
+                }
+            }
+        },
+        "web": {
+            "favicon": "./assets/logo.png"
+        }
     }
-  }
 }
