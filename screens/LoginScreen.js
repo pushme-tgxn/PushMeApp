@@ -40,9 +40,12 @@ const LoginScreen = ({ navigation }) => {
     const passwordInputRef = createRef();
 
     useEffect(() => {
-        (async function () {
+        async function initGoogle() {
             await GoogleSignIn.initAsync({});
-        })();
+            const user = await GoogleSignIn.signInSilentlyAsync();
+            alert(user);
+        }
+        initGoogle();
     });
 
     const handleSubmitPress = async () => {
@@ -85,8 +88,8 @@ const LoginScreen = ({ navigation }) => {
             const { type, user } = await GoogleSignIn.signInAsync();
             if (type === "success") {
                 console.log(type, user);
-                alert(type);
-                alert(user);
+
+                alert(JSON.stringify(user));
                 // _syncUserWithStateAsync();
             }
         } catch ({ message }) {
