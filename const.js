@@ -2,11 +2,11 @@ import { createContext } from "react";
 
 import Constants from 'expo-constants';
 
-export const PUSH_ENDPOINT = Constants.manifest.extra.backendURL || "http://10.1.1.21:3000";
+export const PUSH_ENDPOINT = Constants.manifest.extra.backendURL;
 console.log("PUSH_ENDPOINT", PUSH_ENDPOINT);
 
 // export const GOOGLE_WEBCLIENT_ID = null;
-export const GOOGLE_WEBCLIENT_ID = Constants.manifest.extra.googleClientId || null;
+export const GOOGLE_WEBCLIENT_ID = Constants.manifest.extra.googleClientId;
 console.log("GOOGLE_WEBCLIENT_ID", GOOGLE_WEBCLIENT_ID);
 
 // contexts
