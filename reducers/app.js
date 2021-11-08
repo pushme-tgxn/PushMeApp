@@ -3,120 +3,117 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import apiService from "../service/backend";
 
 export function setAppReadyState(isAppReady) {
-  console.info("setAppReadyState", isAppReady);
-  return {
-    type: "setAppReadyState",
-    payload: {
-      isAppReady,
-    },
-  };
+    console.info("setAppReadyState", isAppReady);
+    return {
+        type: "setAppReadyState",
+        payload: {
+            isAppReady,
+        },
+    };
 }
 
 export function setUserData(userData) {
-  console.info("setUserData", userData);
-  return {
-    type: "setUserData",
-    payload: {
-      userData,
-    },
-  };
+    console.info("setUserData", userData);
+    return {
+        type: "setUserData",
+        payload: {
+            userData,
+        },
+    };
 }
 
 export function setExpoPushToken(pushToken) {
-  console.info("setExpoPushToken", pushToken);
-  return {
-    type: "setExpoPushToken",
-    payload: {
-      pushToken,
-    },
-  };
+    console.info("setExpoPushToken", pushToken);
+    return {
+        type: "setExpoPushToken",
+        payload: {
+            pushToken,
+        },
+    };
 }
 
 export function setPushList(pushList) {
-  console.info("setPushList", pushList);
-  return {
-    type: "setPushList",
-    payload: {
-      pushList,
-    },
-  };
+    console.info("setPushList", pushList);
+    return {
+        type: "setPushList",
+        payload: {
+            pushList,
+        },
+    };
 }
 
 export function pushRecieved(push) {
-  console.info("pushRecieved", push);
-  return {
-    type: "pushRecieved",
-    payload: {
-      push,
-    },
-  };
+    console.info("pushRecieved", push);
+    return {
+        type: "pushRecieved",
+        payload: {
+            push,
+        },
+    };
 }
 
 export function setPushResponse(pushResponse) {
-  console.info("setPushResponse", pushResponse);
-  return {
-    type: "setPushResponse",
-    payload: {
-      pushResponse,
-    },
-  };
+    console.info("setPushResponse", pushResponse);
+    return {
+        type: "setPushResponse",
+        payload: {
+            pushResponse,
+        },
+    };
 }
 
 export const initialState = {
-  appIsReady: false,
-  expoPushToken: null,
+    appIsReady: false,
+    expoPushToken: null,
 
-  user: null,
-  accessToken: null,
+    user: null,
+    accessToken: null,
 
-  pushList: {},
+    pushList: {},
 
-  notification: false,
-  response: false,
+    notification: false,
+    response: false,
 };
 
 export function reducer(state, action) {
-  switch (action.type) {
-    case "setAppReadyState":
-      return { ...state, appIsReady: action.payload.isAppReady };
+    switch (action.type) {
+        case "setAppReadyState":
+            return { ...state, appIsReady: action.payload.isAppReady };
 
-    case "setUserData":
-      if (action.payload.userData !== null) {
-        AsyncStorage.setItem(
-          "userData",
-          JSON.stringify(action.payload.userData)
-        );
+        case "setUserData":
+            if (action.payload.userData !== null) {
+                AsyncStorage.setItem("userData", JSON.stringify(action.payload.userData));
 
-        apiService.setAccessToken(action.payload.userData.token);
-        apiService.upsertTokenRegistration({
-          token: state.expoPushToken,
-        });
+                apiService.setAccessToken(action.payload.userData.token);
+                apiService.upsertTokenRegistration({
+                    token: state.expoPushToken,
+                });
 
-        return {
-          ...state,
-          user: action.payload.userData,
-          accessToken: action.payload.userData.token,
-        };
-      } else {
-        return {
-          ...state,
-          user: null,
-          accessToken: null,
-        };
-      }
+                return {
+                    ...state,
+                    user: action.payload.userData,
+                    accessToken: action.payload.userData.token,
+                };
+            } else {
+                return {
+                    ...state,
+                    user: null,
+                    accessToken: null,
+                };
+            }
 
-    case "setExpoPushToken":
-      return { ...state, expoPushToken: action.payload.pushToken };
+        case "setExpoPushToken":
+            return { ...state, expoPushToken: action.payload.pushToken };
 
-    case "setPushList":
-      const pushList = {};
-      action.payload.pushList.map((pushItem) => {
-        pushList[pushItem.id] = pushItem;
-      });
-      return { ...state, pushList };
+        case "setPushList":
+            const pushList = {};
+            action.payload.pushList.map((pushItem) => {
+                pushList[pushItem.id] = pushItem;
+            });
+            return { ...state, pushList };
 
-    case "pushRecieved":
-      /**
+        case "pushRecieved":
+            /**
       Object {
         "date": 1630230256230,
         "request": Object {
@@ -163,32 +160,31 @@ export function reducer(state, action) {
       }
        */
 
-      // all pushes should have id
-      try {
-        const pushId = action.payload.push.request.content.data.pushId;
-        const pushList = state.pushList;
+            // all pushes should have id
+            try {
+                const pushId = action.payload.push.request.content.data.pushId;
+                const pushList = state.pushList;
 
-        // update this push details
-        pushList[pushId] = {
-          id: pushId,
-          pushPayload: {
-            categoryId:
-              action.payload.push.request.content.data.categoryIdentifier,
-            title: action.payload.push.request.content.title,
-            body: action.payload.push.request.content.body,
-            data: action.payload.push.request.content.data,
-          },
-        };
+                // update this push details
+                pushList[pushId] = {
+                    id: pushId,
+                    pushPayload: {
+                        categoryId: action.payload.push.request.content.data.categoryIdentifier,
+                        title: action.payload.push.request.content.title,
+                        body: action.payload.push.request.content.body,
+                        data: action.payload.push.request.content.data,
+                    },
+                };
 
-        return { ...state, pushList };
-      } catch (e) {
-        console.error("cannot gather pushId", action.payload.push, e);
-      }
+                return { ...state, pushList };
+            } catch (e) {
+                console.error("cannot gather pushId", action.payload.push, e);
+            }
 
-      return state;
+            return state;
 
-    case "setPushResponse":
-      /**
+        case "setPushResponse":
+            /**
       Object {
         "actionIdentifier": "expo.modules.notifications.actions.DEFAULT",
         "notification": Object {
@@ -237,30 +233,29 @@ export function reducer(state, action) {
         },
       }
        */
-      try {
-        const pushId =
-          action.payload.pushResponse.notification.request.content.data.pushId;
+            try {
+                const pushId = action.payload.pushResponse.notification.request.content.data.pushId;
 
-        apiService.respondToPush(pushId, action.payload.pushResponse);
+                apiService.respondToPush(pushId, action.payload.pushResponse);
 
-        const pushList = state.pushList;
+                const pushList = state.pushList;
 
-        // update this push details
-        pushList[pushId] = {
-          ...pushList[pushId],
-          response: action.payload.pushResponse,
-        };
+                // update this push details
+                pushList[pushId] = {
+                    ...pushList[pushId],
+                    response: action.payload.pushResponse,
+                };
 
-        console.log("RESPONSE", pushList[pushId]);
+                console.log("RESPONSE", pushList[pushId]);
 
-        return { ...state, pushList };
-      } catch (e) {
-        console.error("cannot gather pushId", action.payload.push, e);
-      }
+                return { ...state, pushList };
+            } catch (e) {
+                console.error("cannot gather pushId", action.payload.push, e);
+            }
 
-      return state;
+            return state;
 
-    default:
-      throw new Error(`Unhandled action: ${action.type}`);
-  }
+        default:
+            throw new Error(`Unhandled action: ${action.type}`);
+    }
 }
