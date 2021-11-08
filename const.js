@@ -1,11 +1,13 @@
 import { createContext } from "react";
 
-// export const PUSH_ENDPOINT = "https://pushme.tgxn.net";
-export const PUSH_ENDPOINT = "http://10.1.1.21:3000";
+import Constants from 'expo-constants';
+
+export const PUSH_ENDPOINT = Constants.manifest.extra.backendURL;
+console.log("PUSH_ENDPOINT", PUSH_ENDPOINT);
 
 // export const GOOGLE_WEBCLIENT_ID = null;
-export const GOOGLE_WEBCLIENT_ID =
-  "496431691586-9g6qno92idps781s2sto66ar863c8jr4.apps.googleusercontent.com";
+export const GOOGLE_WEBCLIENT_ID = Constants.manifest.extra.googleClientId;
+console.log("GOOGLE_WEBCLIENT_ID", GOOGLE_WEBCLIENT_ID);
 
 // contexts
 export const AppReducer = createContext(null);

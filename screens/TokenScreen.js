@@ -17,83 +17,79 @@ import styles from "../styles";
 const Stack = createStackNavigator();
 
 const TokenScreen = () => {
-  return (
-    <Stack.Navigator initialRouteName="TokenList">
-      <Stack.Screen
-        name="TokenList"
-        component={TokenList}
-        options={{ headerShown: false }}
-      />
+    return (
+        <Stack.Navigator initialRouteName="TokenList">
+            <Stack.Screen name="TokenList" component={TokenList} options={{ headerShown: false }} />
 
-      <Stack.Screen name="TokenView" component={ViewToken} />
-    </Stack.Navigator>
-  );
+            <Stack.Screen name="TokenView" component={ViewToken} />
+        </Stack.Navigator>
+    );
 };
 
 const TokenList = ({ navigation }) => {
-  const colorScheme = useColorScheme();
-  const themedStyles = styles(colorScheme);
+    const colorScheme = useColorScheme();
+    const themedStyles = styles(colorScheme);
 
-  const { state } = useContext(AppReducer);
+    const { state } = useContext(AppReducer);
 
-  const [tokenList, setTokenList] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
+    const [tokenList, setTokenList] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(() => {
-    async function prepare() {
-      setRefreshing(true);
-      setTokenList([]);
-      try {
-        const response = await apiService.getTokenList();
+    const onRefresh = useCallback(() => {
+        async function prepare() {
+            setRefreshing(true);
+            setTokenList([]);
+            try {
+                const response = await apiService.getTokenList();
 
-        setTokenList(response);
-      } catch (error) {
-        alert(error);
-        console.error(error);
-      } finally {
-        setRefreshing(false);
-      }
-    }
-    prepare();
-  }, []);
+                setTokenList(response);
+            } catch (error) {
+                alert(error);
+                console.error(error);
+            } finally {
+                setRefreshing(false);
+            }
+        }
+        prepare();
+    }, []);
 
-  useEffect(onRefresh, []);
+    useEffect(onRefresh, []);
 
-  return (
-    <SafeAreaView style={themedStyles.screenContainer}>
-      <FlatList
-        ListHeaderComponent={() => (
-          <Text style={themedStyles.headerText}>
-            {refreshing
-              ? "List Loading..."
-              : tokenList.length == 0
-              ? "No Tokens!"
-              : "Active Tokens"}
-          </Text>
-        )}
-        data={tokenList}
-        onRefresh={onRefresh}
-        refreshing={refreshing}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => {
-          let buttonStyle = themedStyles.listItem;
-          if (item.token == state.expoPushToken) {
-            buttonStyle = [themedStyles.listItem, { backgroundColor: "red" }];
-          }
-          return (
-            <CustomButton
-              onPress={async () => {
-                navigation.navigate("TokenView", { tokenData: item });
-              }}
-              style={buttonStyle}
-            >
-              {item.id}: {item.name ? item.name : item.createdAt}
-            </CustomButton>
-          );
-        }}
-      />
-    </SafeAreaView>
-  );
+    return (
+        <SafeAreaView style={themedStyles.screenContainer}>
+            <FlatList
+                ListHeaderComponent={() => (
+                    <Text style={themedStyles.headerText}>
+                        {refreshing
+                            ? "List Loading..."
+                            : tokenList.length == 0
+                            ? "No Tokens!"
+                            : "Active Tokens"}
+                    </Text>
+                )}
+                data={tokenList}
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => {
+                    let buttonStyle = themedStyles.listItem;
+                    if (item.token == state.expoPushToken) {
+                        buttonStyle = [themedStyles.listItem, { backgroundColor: "red" }];
+                    }
+                    return (
+                        <CustomButton
+                            onPress={async () => {
+                                navigation.navigate("TokenView", { tokenData: item });
+                            }}
+                            style={buttonStyle}
+                        >
+                            {item.id}: {item.name ? item.name : item.createdAt}
+                        </CustomButton>
+                    );
+                }}
+            />
+        </SafeAreaView>
+    );
 };
 
 export default TokenScreen;
