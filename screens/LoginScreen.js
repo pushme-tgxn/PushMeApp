@@ -41,9 +41,11 @@ const LoginScreen = ({ navigation }) => {
 
     useEffect(() => {
         async function initGoogle() {
-            await GoogleSignIn.initAsync({});
-            const user = await GoogleSignIn.signInSilentlyAsync();
-            alert(user);
+            try {
+                await GoogleSignIn.initAsync();
+            } catch ({ message }) {
+                alert("GoogleSignIn.initAsync(): " + message);
+            }
         }
         initGoogle();
     });
@@ -90,7 +92,18 @@ const LoginScreen = ({ navigation }) => {
                 console.log(type, user);
 
                 alert(JSON.stringify(user));
-                // _syncUserWithStateAsync();
+
+                const responseJson = await apiService.authWithGoogle(user.auth.accessToken);
+
+                console.log(responseJson);
+
+                if (responseJson.user.token) {
+                    setLoading(false);
+                    dispatch(setUserData(responseJson.user));
+                } else {
+                    setErrorText(responseJson.message);
+                    setLoading(false);
+                }
             }
         } catch ({ message }) {
             alert("login: Error:" + message);
