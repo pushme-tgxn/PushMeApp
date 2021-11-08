@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -8,35 +8,35 @@ import PushScreen from "../screens/PushScreen";
 import TokenScreen from "../screens/TokenScreen";
 import ConfigScreen from "../screens/ConfigScreen";
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const AppTabView = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+    return (
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
 
-          if (route.name === "Push History") {
-            iconName = "history";
-          } else if (route.name === "My Tokens") {
-            iconName = "key";
-          } else if (route.name === "Settings") {
-            iconName = "user-cog";
-          }
+                    if (route.name === "Push History") {
+                        iconName = "history";
+                    } else if (route.name === "My Tokens") {
+                        iconName = "key";
+                    } else if (route.name === "Settings") {
+                        iconName = "user-cog";
+                    }
 
-          return <FontAwesome5 name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: "#a845ff",
-        tabBarInactiveTintColor: "gray",
-        headerShown: false,
-      })}
-    >
-      <Tab.Screen name="Push History" component={PushScreen} />
-      <Tab.Screen name="My Tokens" component={TokenScreen} />
-      <Tab.Screen name="Settings" component={ConfigScreen} />
-    </Tab.Navigator>
-  );
+                    return <FontAwesome5 name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: "#a845ff",
+                tabBarInactiveTintColor: "gray",
+                headerShown: false,
+            })}
+        >
+            <Tab.Screen name="Push History" component={PushScreen} />
+            <Tab.Screen name="My Tokens" component={TokenScreen} />
+            <Tab.Screen name="Settings" component={ConfigScreen} />
+        </Tab.Navigator>
+    );
 };
 
 export default AppTabView;
