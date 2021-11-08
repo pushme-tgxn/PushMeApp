@@ -33,6 +33,7 @@ const LoginScreen = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
     const [errorText, setErrorText] = useState(false);
+    const [googleLoginEnabled, setGoogleLoginEnabled] = useState(false);
 
     const [userName, setUserName] = useState("");
     const [userPassword, setUserPassword] = useState("");
@@ -43,8 +44,9 @@ const LoginScreen = ({ navigation }) => {
         async function initGoogle() {
             try {
                 await GoogleSignIn.initAsync();
+                setGoogleLoginEnabled(true);
             } catch ({ message }) {
-                alert("GoogleSignIn.initAsync(): " + message);
+                console.log("GoogleSignIn.initAsync(): " + message);
             }
         }
         initGoogle();
@@ -68,9 +70,9 @@ const LoginScreen = ({ navigation }) => {
         try {
             const responseJson = await apiService.userLogin(userName, userPassword);
 
-            if (responseJson.token) {
+            if (responseJson.user.token) {
                 setLoading(false);
-                dispatch(setUserData(responseJson));
+                dispatch(setUserData(responseJson.user));
             } else {
                 setErrorText(responseJson.message);
                 setLoading(false);
@@ -89,13 +91,7 @@ const LoginScreen = ({ navigation }) => {
             await GoogleSignIn.askForPlayServicesAsync();
             const { type, user } = await GoogleSignIn.signInAsync();
             if (type === "success") {
-                console.log(type, user);
-
-                alert(JSON.stringify(user));
-
                 const responseJson = await apiService.authWithGoogle(user.auth.accessToken);
-
-                console.log(responseJson);
 
                 if (responseJson.user.token) {
                     setLoading(false);
@@ -105,8 +101,10 @@ const LoginScreen = ({ navigation }) => {
                     setLoading(false);
                 }
             }
-        } catch ({ message }) {
-            alert("login: Error:" + message);
+        } catch (error) {
+            console.error("GoogleSignIn rrror:" + error.toString());
+            setLoading(false);
+            setErrorText(error.toString());
         }
     };
 
@@ -136,13 +134,15 @@ const LoginScreen = ({ navigation }) => {
                             />
                         </View>
 
-                        <TouchableOpacity
-                            style={themedStyles.buttonStyle}
-                            activeOpacity={0.5}
-                            onPress={loginFlowGoogle}
-                        >
-                            <Text style={themedStyles.buttonTextStyle}>Login with Google</Text>
-                        </TouchableOpacity>
+                        {googleLoginEnabled && (
+                            <TouchableOpacity
+                                style={themedStyles.buttonStyle}
+                                activeOpacity={0.5}
+                                onPress={loginFlowGoogle}
+                            >
+                                <Text style={themedStyles.buttonTextStyle}>Login with Google</Text>
+                            </TouchableOpacity>
+                        )}
 
                         <View style={themedStyles.inputContainerView}>
                             <TextInput

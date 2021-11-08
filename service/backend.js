@@ -6,6 +6,7 @@ class APIService {
     }
 
     setAccessToken(accessToken) {
+        console.log("setAccessToken", accessToken);
         this.accessToken = accessToken;
         this.authorization = `Bearer ${accessToken}`;
     }
