@@ -5,12 +5,21 @@
 Simple push just has a message and a title.
 No action will be performed on click.
 
-**Webhook Payload**
+Request:
+POST `/webhook/push/{{webhookSecret}}`
 ```json
 {
-    title: "Notification Title",
-    body: "Desc / Body",
-    data: {},
+    title: "Notification Title", // required
+    body: "Desc / Body", // required
+    callback_url: "https://example.pushme.tgxn.net/some_callback_url" // optional
+}
+```
+
+Response:
+```json
+{
+    success: true,
+    push_ref: "000000000-00000-00000-0000000"
 }
 ```
 
@@ -20,27 +29,95 @@ Interactive push requires a type pre-defined within the application, the followi
 
 This can call an outbound web service to acknowledge or action noticiations.
 
-### Buttons
-
-#### `button.yes_no` - Yes / No
-
-
-#### `button.approve_deny` - Approve / Deny
-#### `button.acknowledge` - Acknowledge
-#### `button.open_link` - Open Link
-
-## Input Field Plus..
-#### `input.submit` - Submit
-#### `input.reply` - Reply
-#### `input.approve_deny` - Approve / Deny
-
-
 **Webhook Payload**
 ```json
 {
-    title: "Notification Title",
-    body: "Desc / Body",
-    intent: "button.yes_no",
-    data: {},
+    title: "Notification Title", // required
+    body: "Desc / Body", // optional
+    callback_url: "https://example.pushme.tgxn.net/some_callback_url", // optional
+    category_id: "categoryId" // required
+}
+```
+
+### Category IDs `categoryId`
+
+#### `button.yes_no` - Buttons: Yes / No
+Callback Format
+
+```json
+{
+    pushId: "000000000-00000-00000-0000000",
+    category_id: "button.yes_no",
+    userText: "uesrs text"
+}
+```
+
+#### `button.approve_deny` - Buttons: Approve / Deny
+#### `button.acknowledge` - Button: Acknowledge
+
+Callback Format
+```json
+{
+    pushId: "000000000-00000-00000-0000000",
+    category_id: "button.acknowledge",
+    clicked: true
+}
+```
+
+#### `button.open_link` - Button: Open Link
+
+Request:
+POST `/webhook/push/{{webhookSecret}}`
+```json
+{
+    title: "Notification Title", // required
+    body: "Desc / Body", // optional
+    callback_url: "https://example.pushme.tgxn.net/some_callback_url", // optional
+    category_id: "button.open_link", // required
+    link_url: "https://example.pushme.tgxn.net/" // required
+}
+```
+
+Callback Format
+```json
+{
+    pushId: "000000000-00000-00000-0000000",
+    category_id: "button.open_link",
+    clicked: true
+}
+```
+
+
+#### `input.submit` - Input Field: Submit
+#### `input.reply` - Input Field: Reply
+#### `input.approve_deny` - Input Field: Approve / Deny
+
+Request:
+POST `/webhook/push/{{webhookSecret}}`
+```json
+{
+    title: "Notification Title", // required
+    body: "Desc / Body", // optional
+    callback_url: "https://example.pushme.tgxn.net/some_callback_url", // optional
+    categoryId: "button.yes_no" // required
+}
+```
+
+Response:
+```json
+{
+    success: true,
+    pushId: "000000000-00000-00000-0000000"
+}
+```
+
+
+### Callback Format
+
+```json
+{
+    pushId: "000000000-00000-00000-0000000",
+    actionIdent: "reply",
+    userText: "uesrs text"
 }
 ```
