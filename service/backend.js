@@ -1,4 +1,4 @@
-import { PUSH_ENDPOINT } from "../const";
+import { BACKEND_URL } from "../const";
 
 class APIService {
     constructor() {
@@ -87,8 +87,8 @@ class APIService {
         if (this.authorization) {
             headers.Authorization = this.authorization;
         }
-        console.log("_callApi", `${PUSH_ENDPOINT}${path}`, method, payload, this.authorization);
-        const fetchResponse = await fetch(`${PUSH_ENDPOINT}${path}`, {
+        console.log("_callApi", `${BACKEND_URL}${path}`, method, payload, this.authorization);
+        const fetchResponse = await fetch(`${BACKEND_URL}${path}`, {
             method,
             headers,
             body: payload ? JSON.stringify(payload) : null,

@@ -87,7 +87,6 @@ Callback Format
 }
 ```
 
-
 #### `input.submit` - Input Field: Submit
 #### `input.reply` - Input Field: Reply
 #### `input.approve_deny` - Input Field: Approve / Deny

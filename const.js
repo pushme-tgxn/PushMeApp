@@ -2,8 +2,8 @@ import { createContext } from "react";
 
 import Constants from "expo-constants";
 
-export const PUSH_ENDPOINT = Constants.manifest.extra.backendURL;
-console.log("PUSH_ENDPOINT", PUSH_ENDPOINT);
+export const BACKEND_URL = Constants.manifest.extra.BACKEND_URL;
+console.log("BACKEND_URL", BACKEND_URL);
 
 // contexts
 export const AppReducer = createContext(null);
