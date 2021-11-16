@@ -5,7 +5,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import PushScreen from "../screens/PushScreen";
-import TokenScreen from "../screens/TokenScreen";
+import TopicScreen from "../screens/TopicScreen";
 import ConfigScreen from "../screens/ConfigScreen";
 
 const Tab = createMaterialBottomTabNavigator();
@@ -19,7 +19,7 @@ const AppTabView = () => {
 
                     if (route.name === "Push History") {
                         iconName = "history";
-                    } else if (route.name === "My Tokens") {
+                    } else if (route.name === "Topics") {
                         iconName = "key";
                     } else if (route.name === "Settings") {
                         iconName = "user-cog";
@@ -32,8 +32,8 @@ const AppTabView = () => {
                 headerShown: false,
             })}
         >
+            <Tab.Screen name="Topics" component={TopicScreen} />
             <Tab.Screen name="Push History" component={PushScreen} />
-            <Tab.Screen name="My Tokens" component={TokenScreen} />
             <Tab.Screen name="Settings" component={ConfigScreen} />
         </Tab.Navigator>
     );

@@ -2,6 +2,8 @@ import React, { useReducer, useEffect, useRef } from "react";
 
 import { Platform, useColorScheme } from "react-native";
 
+import { DefaultTheme as PaperDefaultTheme, Provider as PaperProvider } from "react-native-paper";
+
 import * as TaskManager from "expo-task-manager";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
@@ -28,7 +30,7 @@ import AppTabView from "./views/AppTabView";
 
 import { AppReducer, NotificationCategories } from "./const";
 
-import apiService from "./service/backend";
+import apiService from "./service/api";
 
 const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 
@@ -50,6 +52,18 @@ Notifications.setNotificationHandler({
 const App = () => {
     const scheme = useColorScheme();
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    const theme = {
+        ...PaperDefaultTheme,
+        dark: scheme === "dark",
+        backdrop: true,
+        roundness: 2,
+        colors: {
+            ...PaperDefaultTheme.colors,
+            primary: "#3498db",
+            accent: "#f1c40f",
+        },
+    };
 
     const startState = useRef("Auth");
 
@@ -118,7 +132,7 @@ const App = () => {
                     const userData = JSON.parse(serializedUserData);
                     if (userData) {
                         apiService.setAccessToken(userData.token);
-                        const currentUser = await apiService.getCurrentUser();
+                        const currentUser = await apiService.user.getCurrentUser();
                         if (currentUser && currentUser.user.id == userData.id) {
                             loggedInUser = userData;
                         } else {
@@ -177,11 +191,13 @@ const App = () => {
                 dispatch,
             }}
         >
-            <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
-                <StatusBar />
-                {state.user && <AppTabView />}
-                {!state.user && <AuthView />}
-            </NavigationContainer>
+            <PaperProvider theme={theme}>
+                <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+                    <StatusBar />
+                    {state.user && <AppTabView />}
+                    {!state.user && <AuthView />}
+                </NavigationContainer>
+            </PaperProvider>
         </AppReducer.Provider>
     );
 };

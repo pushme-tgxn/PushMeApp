@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import apiService from "../service/backend";
+import apiService from "../service/api";
 
 export function setAppReadyState(isAppReady) {
     console.info("setAppReadyState", isAppReady);
@@ -42,6 +42,16 @@ export function setPushList(pushList) {
     };
 }
 
+export function setTopicList(topicList) {
+    console.info("setTopicList", topicList);
+    return {
+        type: "setTopicList",
+        payload: {
+            topicList,
+        },
+    };
+}
+
 export function pushRecieved(push) {
     console.info("pushRecieved", push);
     return {
@@ -70,6 +80,7 @@ export const initialState = {
     accessToken: null,
 
     pushList: {},
+    topicList: [],
 
     notification: false,
     response: false,
@@ -85,7 +96,8 @@ export function reducer(state, action) {
                 AsyncStorage.setItem("userData", JSON.stringify(action.payload.userData));
 
                 apiService.setAccessToken(action.payload.userData.token);
-                apiService.upsertTokenRegistration({
+
+                apiService.device.upsertRegistration({
                     token: state.expoPushToken,
                 });
 
@@ -111,6 +123,13 @@ export function reducer(state, action) {
                 pushList[pushItem.id] = pushItem;
             });
             return { ...state, pushList };
+
+        case "setTopicList":
+            const topicList = {};
+            // action.payload.topicList.map((topic) => {
+            //     topicList[topic.id] = topic;
+            // });
+            return { ...state, topicList: action.payload.topicList };
 
         case "pushRecieved":
             /**
@@ -236,7 +255,7 @@ export function reducer(state, action) {
             try {
                 const pushId = action.payload.pushResponse.notification.request.content.data.pushId;
 
-                apiService.respondToPush(pushId, action.payload.pushResponse);
+                apiService.push.respondToPush(pushId, action.payload.pushResponse);
 
                 const pushList = state.pushList;
 
