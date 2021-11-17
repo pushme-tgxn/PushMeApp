@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { SafeAreaView, FlatList, Text, useColorScheme, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import { FAB } from "react-native-paper";
 
-import { FontAwesome5 } from "@expo/vector-icons";
+// import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AppReducer } from "../const";
 
@@ -12,6 +13,7 @@ import { Separator, CustomButton } from "../components/Shared";
 import { setTopicList } from "../reducers/app";
 
 import ViewTopic from "../components/ViewTopic";
+import CustomNavigationBar from "../components/CustomNavigationBar";
 
 import apiService from "../service/api";
 
@@ -20,7 +22,12 @@ import styles from "../styles";
 const Stack = createStackNavigator();
 const TopicScreen = () => {
     return (
-        <Stack.Navigator initialRouteName="TopicList">
+        <Stack.Navigator
+            initialRouteName="TopicList"
+            screenOptions={{
+                header: CustomNavigationBar,
+            }}
+        >
             <Stack.Screen name="TopicList" component={TopicList} options={{ headerShown: false }} />
 
             <Stack.Screen name="ViewTopic" component={ViewTopic} />
@@ -76,8 +83,7 @@ const TopicList = ({ navigation }) => {
                 onRefresh={onRefresh}
                 refreshing={refreshing}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item, index, ...others }) => {
-                    console.log(others);
+                renderItem={({ item, index }) => {
                     return (
                         <CustomButton
                             onPress={async () => {

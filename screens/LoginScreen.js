@@ -45,8 +45,10 @@ const LoginScreen = ({ navigation }) => {
             try {
                 await GoogleSignIn.initAsync();
                 setGoogleLoginEnabled(true);
-            } catch ({ message }) {
-                console.log("GoogleSignIn.initAsync(): " + message);
+            } catch ({ message, name }) {
+                if (name != "Invariant Violation") {
+                    console.log("GoogleSignIn.initAsync() error: " + message);
+                }
             }
         }
         initGoogle();

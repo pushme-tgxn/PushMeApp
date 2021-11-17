@@ -42,6 +42,10 @@ class DeviceService {
         return this.apiService._callApi("/device", "GET");
     }
 
+    getDevice(deviceId) {
+        return this.apiService._callApi(`/device/${deviceId}`, "GET");
+    }
+
     upsertRegistration(deviceData) {
         return this.apiService._callApi("/device", "POST", deviceData);
     }
@@ -60,12 +64,20 @@ class TopicService {
         return this.apiService._callApi("/topic", "GET");
     }
 
+    getTopic(topicId) {
+        return this.apiService._callApi(`/topic/${topicId}`, "GET");
+    }
+
     create(tokenId) {
         return this.apiService._callApi(`/topic`, "POST", { tokenId });
     }
 
     update(topicId, updateData) {
         return this.apiService._callApi(`/topic/${topicId}`, "POST", updateData);
+    }
+
+    delete(topicId) {
+        return this.apiService._callApi(`/topic/${topicId}`, "DELETE");
     }
 }
 

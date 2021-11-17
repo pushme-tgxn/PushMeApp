@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { SafeAreaView, FlatList, Text, ScrollView, useColorScheme, View } from "react-native";
-
+import { Button, TextInput } from "react-native-paper";
 // import * as Notifications from "expo-notifications";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -14,7 +14,9 @@ import { AppReducer } from "../const";
 import { setUserData } from "../reducers/app";
 
 import { Separator, CustomButton } from "../components/Shared";
+import CustomNavigationBar from "../components/CustomNavigationBar";
 
+import ViewTopic from "../components/ViewTopic";
 import ViewDevice from "../components/ViewDevice";
 
 import styles from "../styles";
@@ -54,11 +56,29 @@ const ConfigScreen = ({ navigation }) => {
                     <View>
                         <Text style={themedStyles.headerText}>Account</Text>
 
-                        <Text style={themedStyles.baseText}>Username: {state.user.username}</Text>
+                        {/* <Text style={themedStyles.baseText}>Email: {state.user.email}</Text> */}
                         <Text style={themedStyles.baseText}>Registered: {state.user.createdAt}</Text>
-                        <Text style={themedStyles.baseText}>Email: {state.user.email}</Text>
 
-                        <CustomButton
+                        <Button
+                            onPress={async () => {
+                                await AsyncStorage.removeItem("userData");
+                                dispatch(setUserData(null));
+
+                                // navigation.replace("Auth");
+                            }}
+                            icon="sign-out-alt"
+                            mode="contained"
+                            color="red"
+                            onPress={async () => {
+                                await AsyncStorage.removeItem("userData");
+                                dispatch(setUserData(null));
+
+                                // navigation.replace("Auth");
+                            }}
+                        >
+                            Logout
+                        </Button>
+                        {/* <CustomButton
                             onPress={async () => {
                                 await AsyncStorage.removeItem("userData");
                                 dispatch(setUserData(null));
@@ -67,14 +87,13 @@ const ConfigScreen = ({ navigation }) => {
                             }}
                             title="Logout"
                             style={{ backgroundColor: "red" }}
-                        />
+                        /> */}
                         <Separator />
 
-                        <Text style={themedStyles.headerText}>Device</Text>
+                        <Text style={themedStyles.headerText}>This Device</Text>
 
                         <Text style={themedStyles.baseText}>
-                            Token:
-                            {state.expoPushToken ? state.expoPushToken : "Loading..."}
+                            Token: {state.expoPushToken ? state.expoPushToken : "Loading..."}
                         </Text>
 
                         <Separator />
@@ -117,10 +136,16 @@ const ConfigScreen = ({ navigation }) => {
 const Stack = createStackNavigator();
 const ConfigStack = () => {
     return (
-        <Stack.Navigator initialRouteName="ConfigScreen">
+        <Stack.Navigator
+            initialRouteName="ConfigScreen"
+            screenOptions={{
+                header: CustomNavigationBar,
+            }}
+        >
             <Stack.Screen name="ConfigScreen" component={ConfigScreen} options={{ headerShown: false }} />
 
             <Stack.Screen name="ViewDevice" component={ViewDevice} />
+            <Stack.Screen name="ViewTopic" component={ViewTopic} />
         </Stack.Navigator>
     );
 };

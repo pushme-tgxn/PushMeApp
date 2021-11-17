@@ -4,6 +4,8 @@ import { Platform, useColorScheme } from "react-native";
 
 import { DefaultTheme as PaperDefaultTheme, Provider as PaperProvider } from "react-native-paper";
 
+import { FontAwesome5 } from "@expo/vector-icons";
+
 import * as TaskManager from "expo-task-manager";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
@@ -35,7 +37,7 @@ import apiService from "./service/api";
 const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }) => {
-    console.log("Received a notification in the background!");
+    console.debug("Received a notification in the background!");
     // Do something with the notification data
 });
 
@@ -60,8 +62,8 @@ const App = () => {
         roundness: 2,
         colors: {
             ...PaperDefaultTheme.colors,
-            primary: "#3498db",
-            accent: "#f1c40f",
+            primary: "#a845ff",
+            accent: "#933ce0",
         },
     };
 
@@ -119,7 +121,7 @@ const App = () => {
                 expoToken = await registerForPushNotificationsAsync();
                 dispatch(setExpoPushToken(expoToken));
             } catch (error) {
-                console.log("error setting app up", error);
+                console.error("error setting app up", error);
                 alert("error setting app up: " + error.toString());
             }
 
@@ -127,9 +129,9 @@ const App = () => {
             try {
                 const serializedUserData = await AsyncStorage.getItem("userData");
                 if (serializedUserData !== null) {
-                    console.log("loaded serializedUserData", serializedUserData);
-
                     const userData = JSON.parse(serializedUserData);
+                    console.debug("loaded serializedUserData", userData.id);
+
                     if (userData) {
                         apiService.setAccessToken(userData.token);
                         const currentUser = await apiService.user.getCurrentUser();
@@ -191,7 +193,12 @@ const App = () => {
                 dispatch,
             }}
         >
-            <PaperProvider theme={theme}>
+            <PaperProvider
+                settings={{
+                    icon: (props) => <FontAwesome5 {...props} />,
+                }}
+                theme={theme}
+            >
                 <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
                     <StatusBar />
                     {state.user && <AppTabView />}

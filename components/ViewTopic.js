@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { SafeAreaView, FlatList, Text, ScrollView, useColorScheme, View } from "react-native";
+import { List, TextInput } from "react-native-paper";
 
-import { Checkbox } from "react-native-paper";
+import { Checkbox, IconButton, Colors } from "react-native-paper";
 
 import { AppReducer } from "../const";
 
@@ -16,7 +17,7 @@ const ViewTopic = ({ navigation, route }) => {
 
     const { state } = useContext(AppReducer);
 
-    const { topicData, topicIndex } = route.params;
+    let { topicData, topicIndex } = route.params;
 
     const [deviceList, setDeviceList] = useState([]);
     const [checkedDeviceList, setCheckedDeviceList] = useState([]);
@@ -28,15 +29,20 @@ const ViewTopic = ({ navigation, route }) => {
         });
     }, [topicData]);
 
-    console.log("Devices", topicData.devices);
-    const topicDeviceArray = topicData.devices.map((device) => device.id);
-    console.log("topicDeviceArray", topicDeviceArray);
+    // console.log("Devices", topicData.devices);
+    // console.log("topicDeviceArray", topicDeviceArray);
 
     const onRefresh = useCallback(() => {
         async function prepare() {
             setRefreshing(true);
             setDeviceList([]);
             try {
+                const freshData = await apiService.topic.getTopic(topicData.id);
+                topicData = freshData.topic;
+                console.log("topicData", topicData);
+
+                const topicDeviceArray = topicData.devices.map((device) => device.id);
+
                 const response = await apiService.device.getList();
 
                 setDeviceList(response.devices);
@@ -80,25 +86,28 @@ const ViewTopic = ({ navigation, route }) => {
         console.log("NEW checkedDeviceList", checkedDeviceList);
         setCheckedDeviceList(checkedDeviceList);
 
-        await updateTopic(
-            topicData.id,
-            checkedDeviceList
-                .filter((checked) => checked)
-                .map((checked) => {
-                    if (checked) {
-                        return deviceList[index].id;
-                    }
-                }),
-        );
+        const deviceIdList = checkedDeviceList
+            //
+            .map((checked, chkIndex) => {
+                if (checked) {
+                    return deviceList[chkIndex].id;
+                }
+                return null;
+            })
+            .filter(Boolean);
+
+        console.log("deviceIdList", deviceIdList);
+
+        await updateTopic(topicData.id, deviceIdList);
+        onRefresh();
     };
 
     return (
         <SafeAreaView style={themedStyles.paneContainer}>
             <FlatList
-                data={deviceList}
                 ListHeaderComponent={() => (
                     <View>
-                        <Text style={themedStyles.headerText}>Topic</Text>
+                        <Text style={themedStyles.baseText}>Name: {topicData.name || "Unnamed Topic"}</Text>
 
                         <Text style={themedStyles.baseText}>ID: {topicData.id}</Text>
                         <Text style={themedStyles.baseText}>Secret: {topicData.secretKey}</Text>
@@ -112,6 +121,7 @@ const ViewTopic = ({ navigation, route }) => {
                         </Text>
                     </View>
                 )}
+                data={deviceList}
                 keyExtractor={(item) => item.id}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
@@ -119,16 +129,21 @@ const ViewTopic = ({ navigation, route }) => {
                     console.log("checkedDeviceList[index]", index, checkedDeviceList[index]);
 
                     return (
-                        <Text style={themedStyles.baseText}>
-                            ID: {item.id}
-                            name: {item.name}
-                            <Checkbox
-                                status={checkedDeviceList[index] ? "checked" : "unchecked"}
-                                onPress={() => {
-                                    onChangeChecked(index);
-                                }}
-                            />
-                        </Text>
+                        <List.Item
+                            title={<Text style={themedStyles.baseText}>Name: {item.name}</Text>}
+                            description={<Text style={themedStyles.baseText}>ID: {item.id}</Text>}
+                            // description="Item description"
+                            left={() => (
+                                <Checkbox
+                                    status={checkedDeviceList[index] ? "checked" : "unchecked"}
+                                    onPress={() => {
+                                        onChangeChecked(index);
+                                    }}
+                                />
+                            )}
+                        >
+                            test
+                        </List.Item>
                     );
                 }}
             />

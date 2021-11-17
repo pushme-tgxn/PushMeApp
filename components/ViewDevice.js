@@ -7,13 +7,14 @@ import {
     Text,
     View,
     useColorScheme,
-    TextInput,
+    // TextInput,
     StyleSheet,
     FlatList,
     ScrollView,
 } from "react-native";
+import { TextInput } from "react-native-paper";
 
-import { Picker } from "@react-native-picker/picker";
+// import { Picker } from "@react-native-picker/picker";
 
 import { Separator, CustomButton } from "./Shared.js";
 
@@ -105,12 +106,15 @@ const ViewDevice = ({ navigation, route }) => {
                 {deviceData.topics.length !== 0 &&
                     deviceData.topics.map((item) => {
                         let buttonStyle = themedStyles.listItem;
+                        // console.log(item);
                         return (
                             <CustomButton
                                 key={item.id}
-                                // onPress={async () => {
-                                //   navigation.navigate("TokenView", { tokenData: item });
-                                // }}
+                                onPress={async () => {
+                                    navigation.push("ViewTopic", {
+                                        topicData: item,
+                                    });
+                                }}
                                 style={buttonStyle}
                             >
                                 {item.id} : {item.secretKey}
