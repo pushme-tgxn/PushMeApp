@@ -29,7 +29,7 @@ const ViewDevice = ({ navigation, route }) => {
 
     useEffect(() => {
         navigation.setOptions({
-            title: `Device Registration: ${deviceData.name}`,
+            title: `Device: ${deviceData.name}`,
         });
     }, [deviceData]);
 
@@ -38,20 +38,20 @@ const ViewDevice = ({ navigation, route }) => {
 
     const [deviceName, setDeviceName] = useState(deviceData.name || Device.deviceName);
 
-    const createUpdateRegistration = async () => {
-        const fetchResponse = await apiService.device.upsertRegistration({
-            name: deviceName,
-            token: deviceData.token,
-        });
+    // const createUpdateRegistration = async () => {
+    //     const fetchResponse = await apiService.device.upsertRegistration({
+    //         name: deviceName,
+    //         token: deviceData.token,
+    //     });
 
-        alert(JSON.stringify(fetchResponse));
-    };
+    //     alert(JSON.stringify(fetchResponse));
+    // };
 
-    const deleteRegistration = async () => {
-        const fetchResponse = await apiService.device.deleteRegistration(deviceData.id);
+    // const deleteRegistration = async () => {
+    //     const fetchResponse = await apiService.device.deleteRegistration(deviceData.id);
 
-        alert(JSON.stringify(fetchResponse));
-    };
+    //     alert(JSON.stringify(fetchResponse));
+    // };
 
     // const onSend = async () => {
     //     await apiService.push.pushToToken(deviceData.id, {
@@ -71,32 +71,11 @@ const ViewDevice = ({ navigation, route }) => {
     return (
         <SafeAreaView style={themedStyles.paneContainer}>
             <ScrollView>
-                <Text style={themedStyles.headerText}>Device</Text>
+                {/* <Text style={themedStyles.headerText}>Device</Text> */}
 
                 <Text style={themedStyles.baseText}>ID: {deviceData.id}</Text>
                 <Text style={themedStyles.baseText}>Name: {deviceData.name}</Text>
                 <Text style={themedStyles.baseText}>Created: {deviceData.createdAt}</Text>
-                <Separator />
-
-                <Text style={themedStyles.baseText}>Device Name:</Text>
-                <TextInput
-                    style={themedStyles.inputStyle}
-                    onChangeText={setDeviceName}
-                    value={deviceName}
-                    placeholder="Device Name"
-                />
-
-                <CustomButton
-                    onPress={createUpdateRegistration}
-                    title="Save name"
-                    style={{ backgroundColor: "green" }}
-                />
-
-                <CustomButton
-                    onPress={deleteRegistration}
-                    title="Unregister device"
-                    style={{ backgroundColor: "red" }}
-                />
                 <Separator />
 
                 <Text style={themedStyles.headerText}>
