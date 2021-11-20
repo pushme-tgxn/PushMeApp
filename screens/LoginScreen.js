@@ -17,7 +17,7 @@ import * as GoogleSignIn from "expo-google-sign-in";
 
 import Loader from "../components/Loader";
 
-import apiService from "../service/backend";
+import apiService from "../service/api";
 
 import { AppReducer } from "../const";
 
@@ -35,7 +35,7 @@ const LoginScreen = ({ navigation }) => {
     const [errorText, setErrorText] = useState(false);
     const [googleLoginEnabled, setGoogleLoginEnabled] = useState(false);
 
-    const [userName, setUserName] = useState("");
+    const [emailAddress, setEmailAddress] = useState("");
     const [userPassword, setUserPassword] = useState("");
 
     const passwordInputRef = createRef();
@@ -45,8 +45,10 @@ const LoginScreen = ({ navigation }) => {
             try {
                 await GoogleSignIn.initAsync();
                 setGoogleLoginEnabled(true);
-            } catch ({ message }) {
-                console.log("GoogleSignIn.initAsync(): " + message);
+            } catch ({ message, name }) {
+                if (name != "Invariant Violation") {
+                    console.log("GoogleSignIn.initAsync() error: " + message);
+                }
             }
         }
         initGoogle();
@@ -55,8 +57,8 @@ const LoginScreen = ({ navigation }) => {
     const handleSubmitPress = async () => {
         setErrorText(false);
 
-        if (!userName) {
-            alert("Please enter your Username!");
+        if (!emailAddress) {
+            alert("Please enter your Email!");
             return;
         }
 
@@ -68,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
         setLoading(true);
 
         try {
-            const responseJson = await apiService.userLogin(userName, userPassword);
+            const responseJson = await apiService.user.emailLogin(emailAddress, userPassword);
 
             if (responseJson.success) {
                 setLoading(false);
@@ -91,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
             await GoogleSignIn.askForPlayServicesAsync();
             const { type, user } = await GoogleSignIn.signInAsync();
             if (type === "success") {
-                const responseJson = await apiService.authWithGoogle(user.auth.accessToken);
+                const responseJson = await apiService.user.authWithGoogle(user.auth.accessToken);
 
                 if (responseJson.success) {
                     setLoading(false);
@@ -148,10 +150,13 @@ const LoginScreen = ({ navigation }) => {
                             <TextInput
                                 style={themedStyles.inputStyle}
                                 placeholderTextColor={themedStyles.inputStyle.color}
-                                onChangeText={setUserName}
-                                placeholder="Username"
+                                onChangeText={setEmailAddress}
+                                placeholder="Email Address"
                                 autoCapitalize="none"
                                 returnKeyType="next"
+                                autoCompleteType="email"
+                                keyboardType="email-address"
+                                textContentType="emailAddress"
                                 onSubmitEditing={() =>
                                     passwordInputRef.current && passwordInputRef.current.focus()
                                 }
