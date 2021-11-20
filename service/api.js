@@ -86,8 +86,8 @@ class PushService {
         this.apiService = apiService;
     }
 
-    pushToToken(pushToken, { categoryId, title, body, data }) {
-        return this.apiService._callApi(`/push/${pushToken}`, "POST", {
+    pushToTopic(topicSecret, { categoryId, title, body, data }) {
+        return this.apiService._callApi(`/push/${topicSecret}`, "POST", {
             categoryId,
             title,
             body,
@@ -95,8 +95,8 @@ class PushService {
         });
     }
 
-    respondToPush(pushToken, responseData) {
-        return this.apiService._callApi(`/push/${pushToken}/response`, "POST", {
+    respondToPush(topicSecret, responseData) {
+        return this.apiService._callApi(`/push/${topicSecret}/response`, "POST", {
             response: responseData,
         });
     }
@@ -126,14 +126,14 @@ class APIService {
         if (this.authorization) {
             headers.Authorization = this.authorization;
         }
-        console.log("_callApi", `${BACKEND_URL}${path}`, method, payload, this.authorization);
+        console.log("_callApi", method, `${BACKEND_URL}${path}`);
         const fetchResponse = await fetch(`${BACKEND_URL}${path}`, {
             method,
             headers,
             body: payload ? JSON.stringify(payload) : null,
         });
         const jsonResponse = await fetchResponse.json();
-        console.log(jsonResponse);
+        // console.log(jsonResponse);
 
         if (jsonResponse.message == "Unauthorized") {
             throw new Error("Unauthorized");

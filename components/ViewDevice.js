@@ -85,7 +85,6 @@ const ViewDevice = ({ navigation, route }) => {
                 {deviceData.topics.length !== 0 &&
                     deviceData.topics.map((item) => {
                         let buttonStyle = themedStyles.listItem;
-                        // console.log(item);
                         return (
                             <CustomButton
                                 key={item.id}

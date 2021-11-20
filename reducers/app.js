@@ -43,7 +43,7 @@ export function setPushList(pushList) {
 }
 
 export function setTopicList(topicList) {
-    console.info("setTopicList", topicList);
+    console.info("setTopicList", topicList.length);
     return {
         type: "setTopicList",
         payload: {

@@ -58,8 +58,9 @@ const App = () => {
     const theme = {
         ...PaperDefaultTheme,
         dark: scheme === "dark",
+        mode: "exact",
         backdrop: true,
-        roundness: 2,
+        roundness: 3,
         colors: {
             ...PaperDefaultTheme.colors,
             primary: "#a845ff",
