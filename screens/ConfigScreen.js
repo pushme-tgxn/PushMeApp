@@ -109,7 +109,7 @@ const ConfigScreen = ({ navigation }) => {
                 data={tokenList}
                 onRefresh={onRefresh}
                 refreshing={refreshing}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     let isThisDevice = item.token == state.expoPushToken;
                     let buttonStyle = themedStyles.listItem;

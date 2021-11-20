@@ -196,7 +196,7 @@ const App = () => {
         >
             <PaperProvider
                 settings={{
-                    icon: (props) => <FontAwesome5 {...props} />,
+                    icon: (props) => <FontAwesome5 style={{ textAlign: "center" }} {...props} />,
                 }}
                 theme={theme}
             >

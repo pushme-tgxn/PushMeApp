@@ -82,7 +82,7 @@ const TopicList = ({ navigation }) => {
                 data={topicList}
                 onRefresh={onRefresh}
                 refreshing={refreshing}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item, index }) => {
                     return (
                         <CustomButton

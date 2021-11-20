@@ -92,7 +92,7 @@ function ViewDeviceButtons({ navigation, deviceData }) {
         await apiService.device.deleteRegistration(deviceData.id);
 
         setDeleteVisible(false);
-        navigation.navigate("ViewDevice");
+        navigation.navigate("ConfigScreen");
     };
 
     return (

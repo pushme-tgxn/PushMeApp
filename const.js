@@ -41,7 +41,7 @@ export const NotificationCategories = {
         {
             identifier: "acknowledge",
             buttonTitle: "Acknowledge",
-            isDestructive: true,
+            isDestructive: false,
             // options: {},
         },
     ],
@@ -49,7 +49,7 @@ export const NotificationCategories = {
         {
             identifier: "open_link",
             buttonTitle: "Open Link",
-            isDestructive: true,
+            isDestructive: false,
             // options: {},
         },
     ],

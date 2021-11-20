@@ -79,7 +79,7 @@ const PushList = ({ navigation }) => {
                 data={pushArray}
                 onRefresh={onRefresh}
                 refreshing={refreshing}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     return (
                         <CustomButton
