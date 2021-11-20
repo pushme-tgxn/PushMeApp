@@ -33,7 +33,7 @@ function ViewTopicButtons({ navigation, topicData }) {
         await apiService.topic.delete(topicData.id);
         setDeleteVisible(false);
         console.log("deleted!");
-        navigation.navigate("ViewTopics");
+        navigation.navigate("ViewTopic");
     };
 
     return (

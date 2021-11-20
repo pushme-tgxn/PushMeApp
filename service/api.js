@@ -95,9 +95,9 @@ class PushService {
         });
     }
 
-    respondToPush(topicSecret, responseData) {
-        return this.apiService._callApi(`/push/${topicSecret}/response`, "POST", {
-            response: responseData,
+    respondToPush(pushIdent, response) {
+        return this.apiService._callApi(`/push/${pushIdent}/response`, "POST", {
+            response,
         });
     }
 }

@@ -182,11 +182,13 @@ export function reducer(state, action) {
             // all pushes should have id
             try {
                 const pushId = action.payload.push.request.content.data.pushId;
+                const pushIdent = action.payload.push.request.content.data.pushIdent;
                 const pushList = state.pushList;
 
                 // update this push details
                 pushList[pushId] = {
                     id: pushId,
+                    pushIdent,
                     pushPayload: {
                         categoryId: action.payload.push.request.content.data.categoryIdentifier,
                         title: action.payload.push.request.content.title,
@@ -254,8 +256,9 @@ export function reducer(state, action) {
        */
             try {
                 const pushId = action.payload.pushResponse.notification.request.content.data.pushId;
+                const pushIdent = action.payload.pushResponse.notification.request.content.data.pushIdent;
 
-                apiService.push.respondToPush(pushId, action.payload.pushResponse);
+                apiService.push.respondToPush(pushIdent, action.payload.pushResponse);
 
                 const pushList = state.pushList;
 
