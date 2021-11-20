@@ -46,6 +46,10 @@ class DeviceService {
         return this.apiService._callApi(`/device/${deviceId}`, "GET");
     }
 
+    createDeviceRegistration(deviceData) {
+        return this.apiService._callApi("/device/create", "POST", deviceData);
+    }
+
     upsertRegistration(deviceData) {
         return this.apiService._callApi("/device", "POST", deviceData);
     }

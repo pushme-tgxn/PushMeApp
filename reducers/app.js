@@ -86,6 +86,8 @@ export const initialState = {
     response: false,
 };
 
+import * as Device from "expo-device";
+
 export function reducer(state, action) {
     switch (action.type) {
         case "setAppReadyState":
@@ -96,9 +98,16 @@ export function reducer(state, action) {
                 AsyncStorage.setItem("userData", JSON.stringify(action.payload.userData));
 
                 apiService.setAccessToken(action.payload.userData.token);
+                console.log("setAccessToken", Device);
 
-                apiService.device.upsertRegistration({
+                const defaultDeviceNameFormat = `${Device.osName}: ${((string) => {
+                    return string.charAt(0).toUpperCase() + string.slice(1);
+                })(Device.brand)} ${Device.deviceName}`;
+                console.log("defaultDeviceNameFormat", defaultDeviceNameFormat);
+
+                apiService.device.createDeviceRegistration({
                     token: state.expoPushToken,
+                    name: defaultDeviceNameFormat,
                 });
 
                 return {
