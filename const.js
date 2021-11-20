@@ -13,50 +13,44 @@ export const NotificationCategories = {
         {
             identifier: "yes",
             buttonTitle: "Yes",
-            options: {
-                isDestructive: true,
-            },
+            isDestructive: true,
+            // options: {},
         },
         {
             identifier: "no",
             buttonTitle: "No",
-            options: {
-                isDestructive: false,
-            },
+            isDestructive: false,
+            // options: {},
         },
     ],
     "button.approve_deny": [
         {
             identifier: "approve",
             buttonTitle: "Approve",
-            options: {
-                isDestructive: true,
-            },
+            isDestructive: true,
+            // options: {},
         },
         {
             identifier: "deny",
             buttonTitle: "Deny",
-            options: {
-                isDestructive: false,
-            },
+            isDestructive: false,
+            // options: {},
         },
     ],
     "button.acknowledge": [
         {
             identifier: "acknowledge",
             buttonTitle: "Acknowledge",
-            options: {
-                isDestructive: true,
-            },
+            isDestructive: true,
+            // options: {},
         },
     ],
     "button.open_link": [
         {
             identifier: "open_link",
             buttonTitle: "Open Link",
-            options: {
-                isDestructive: true,
-            },
+            isDestructive: true,
+            // options: {},
         },
     ],
     "input.submit": [
@@ -67,9 +61,8 @@ export const NotificationCategories = {
                 submitButtonTitle: "Submit",
                 placeholder: "Type a message...",
             },
-            options: {
-                isAuthenticationRequired: false,
-            },
+            isAuthenticationRequired: false,
+            // options: {},
         },
     ],
     "input.reply": [
@@ -80,9 +73,8 @@ export const NotificationCategories = {
                 submitButtonTitle: "Reply",
                 placeholder: "Type a reply...",
             },
-            options: {
-                isAuthenticationRequired: false,
-            },
+            isAuthenticationRequired: false,
+            // options: {},
         },
     ],
     "input.approve_deny": [
@@ -93,9 +85,8 @@ export const NotificationCategories = {
                 submitButtonTitle: "Approve",
                 placeholder: "Type an approval message...",
             },
-            options: {
-                isAuthenticationRequired: false,
-            },
+            isAuthenticationRequired: false,
+            // options: {},
         },
         {
             identifier: "deny",
@@ -104,9 +95,8 @@ export const NotificationCategories = {
                 submitButtonTitle: "Deny",
                 placeholder: "Type a deny message...",
             },
-            options: {
-                isAuthenticationRequired: false,
-            },
+            isAuthenticationRequired: false,
+            // options: {},
         },
     ],
 };
