@@ -22,7 +22,9 @@ API Docs can be found on the server.
 
 Primary: #a845ff
 
-
+Gradient:?
+483099
+933ce0
 
 ## License
 

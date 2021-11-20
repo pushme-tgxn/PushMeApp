@@ -4,11 +4,11 @@
         "description": "Simple Push Notifications & Approvals",
         "primaryColor": "#A845FF",
         "slug": "pushme",
-        "version": "1.8.4",
+        "version": "1.8.5",
         "orientation": "portrait",
         "icon": "./assets/logo.png",
         "userInterfaceStyle": "automatic",
-        "scheme": "pushme",
+        "scheme": "net.tgxn.pushme",
         "splash": {
             "image": "./assets/splash.png",
             "resizeMode": "contain",
@@ -23,7 +23,7 @@
         },
         "android": {
             "package": "net.tgxn.pushme",
-            "versionCode": 184,
+            "versionCode": 185,
             "useNextNotificationsApi": true,
             "permissions": [],
             "adaptiveIcon": {

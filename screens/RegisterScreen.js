@@ -12,7 +12,7 @@ import {
     useColorScheme,
 } from "react-native";
 
-import apiService from "../service/backend";
+import apiService from "../service/api";
 
 import Loader from "../components/Loader";
 
@@ -27,7 +27,6 @@ const RegisterScreen = (props) => {
 
     const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
 
-    const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
 
@@ -36,11 +35,6 @@ const RegisterScreen = (props) => {
 
     const handleSubmitButton = async () => {
         setErrorText(false);
-
-        if (!userName) {
-            alert("Please enter a Username!");
-            return;
-        }
 
         if (!userEmail) {
             alert("Please enter an Email!");
@@ -55,7 +49,7 @@ const RegisterScreen = (props) => {
         setLoading(true);
 
         try {
-            const responseJson = await apiService.userRegister(userName, userEmail, userPassword);
+            const responseJson = await apiService.user.emailRegister(userEmail, userPassword);
 
             if (responseJson.success) {
                 setIsRegistraionSuccess(true);
@@ -109,17 +103,6 @@ const RegisterScreen = (props) => {
                 </View>
 
                 <KeyboardAvoidingView enabled>
-                    <View style={themedStyles.inputContainerView}>
-                        <TextInput
-                            style={themedStyles.inputStyle}
-                            onChangeText={setUserName}
-                            placeholder="Username"
-                            autoCapitalize="none"
-                            returnKeyType="next"
-                            onSubmitEditing={() => emailInputRef.current && emailInputRef.current.focus()}
-                            blurOnSubmit={false}
-                        />
-                    </View>
                     <View style={themedStyles.inputContainerView}>
                         <TextInput
                             style={themedStyles.inputStyle}
