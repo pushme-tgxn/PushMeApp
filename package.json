@@ -2,6 +2,7 @@
     "main": "node_modules/expo/AppEntry.js",
     "scripts": {
         "start": "npx cross-env BACKEND_URL='http://10.1.1.21:3000' expo start",
+        "start:prod": "npx cross-env BACKEND_URL='https://pushme.tgxn.net' expo start",
         "publish": "expo publish",
         "build:apk": "expo build:android -t apk",
         "build:bundle": "expo build:android -t app-bundle",

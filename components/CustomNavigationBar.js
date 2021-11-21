@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-    Appbar,
-    Menu,
-    IconButton,
-    Colors,
-    Button,
-    Paragraph,
-    Dialog,
-    Portal,
-    TextInput,
-} from "react-native-paper";
+import { Appbar, Button, Colors, Dialog, IconButton, Paragraph, Portal, TextInput } from "react-native-paper";
 
 import apiService from "../service/api";
 
@@ -33,7 +23,7 @@ function ViewTopicButtons({ navigation, topicData }) {
         await apiService.topic.delete(topicData.id);
         setDeleteVisible(false);
         console.log("deleted!");
-        navigation.navigate("ViewTopic");
+        navigation.navigate("TopicList");
     };
 
     return (

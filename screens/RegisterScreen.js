@@ -111,6 +111,9 @@ const RegisterScreen = (props) => {
                             keyboardType="email-address"
                             ref={emailInputRef}
                             returnKeyType="next"
+                            autoCapitalize="none"
+                            autoCompleteType="email"
+                            textContentType="emailAddress"
                             onSubmitEditing={() =>
                                 passwordInputRef.current && passwordInputRef.current.focus()
                             }
