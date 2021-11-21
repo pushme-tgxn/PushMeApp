@@ -17,6 +17,10 @@ API Docs can be found on the server.
 
 ## Features
 
+@TODO
+[Unhandled promise rejection: Error: Background remote notifications have not been configured. To enable it, add `remote-notification` to `UIBackgroundModes` in the application's Info.plist file.]
+
+- diudn't create tables before mariadb was available (docker)
 
 ## Colors
 
