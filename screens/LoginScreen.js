@@ -13,7 +13,10 @@ import {
     useColorScheme,
 } from "react-native";
 
-import * as GoogleSignIn from "expo-google-sign-in";
+// import * as GoogleSignIn from "expo-google-sign-in";
+
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 
 import Loader from "../components/Loader";
 
@@ -25,6 +28,8 @@ import { setUserData } from "../reducers/app";
 
 import styles from "../styles";
 
+WebBrowser.maybeCompleteAuthSession();
+
 const LoginScreen = ({ navigation }) => {
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
@@ -33,26 +38,40 @@ const LoginScreen = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
     const [errorText, setErrorText] = useState(false);
-    const [googleLoginEnabled, setGoogleLoginEnabled] = useState(false);
+    const [googleLoginEnabled, setGoogleLoginEnabled] = useState(true);
 
     const [emailAddress, setEmailAddress] = useState("");
     const [userPassword, setUserPassword] = useState("");
 
     const passwordInputRef = createRef();
 
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        expoClientId: "496431691586-9g6qno92idps781s2sto66ar863c8jr4.apps.googleusercontent.com",
+        // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+        androidClientId: "496431691586-8oab0j5ea8upcn0qdatv2j0lco4dplg1.apps.googleusercontent.com",
+        // webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+    });
+
     useEffect(() => {
         async function initGoogle() {
-            try {
-                await GoogleSignIn.initAsync();
-                setGoogleLoginEnabled(true);
-            } catch ({ message, name }) {
-                if (name != "Invariant Violation") {
-                    console.log("GoogleSignIn.initAsync() error: " + message);
+            if (response?.type === "success") {
+                const { authentication } = response;
+
+                console.log(authentication);
+
+                const responseJson = await apiService.user.authWithGoogle(authentication.accessToken);
+
+                if (responseJson.success) {
+                    setLoading(false);
+                    dispatch(setUserData(responseJson.user));
+                } else {
+                    setErrorText(responseJson.message);
+                    setLoading(false);
                 }
             }
         }
         initGoogle();
-    });
+    }, [response]);
 
     const handleSubmitPress = async () => {
         setErrorText(false);
@@ -73,6 +92,7 @@ const LoginScreen = ({ navigation }) => {
             const responseJson = await apiService.user.emailLogin(emailAddress, userPassword);
 
             if (responseJson.success) {
+                console.log(responseJson);
                 setLoading(false);
                 dispatch(setUserData(responseJson.user));
             } else {
@@ -89,30 +109,12 @@ const LoginScreen = ({ navigation }) => {
     const loginFlowGoogle = async () => {
         setLoading(true);
 
-        try {
-            await GoogleSignIn.askForPlayServicesAsync();
-            const { type, user } = await GoogleSignIn.signInAsync();
-            if (type === "success") {
-                const responseJson = await apiService.user.authWithGoogle(user.auth.accessToken);
-
-                if (responseJson.success) {
-                    setLoading(false);
-                    dispatch(setUserData(responseJson.user));
-                } else {
-                    setErrorText(responseJson.message);
-                    setLoading(false);
-                }
-            }
-        } catch (error) {
-            console.error("GoogleSignIn rrror:" + error.toString());
-            setLoading(false);
-            setErrorText(error.toString());
-        }
+        promptAsync();
     };
 
     return (
         <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
-            <Loader loading={loading} />
+            <Loader loading={loading || !request} />
 
             <ScrollView
                 keyboardShouldPersistTaps="handled"
