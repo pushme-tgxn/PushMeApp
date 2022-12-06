@@ -1,6 +1,7 @@
 {
     "expo": {
         "name": "PushMe",
+        "originalFullName": "@tgxn/pushme",
         "description": "Simple Push Notifications & Approvals",
         "primaryColor": "#A845FF",
         "slug": "pushme",
