@@ -6,6 +6,8 @@ import { DefaultTheme as PaperDefaultTheme, Provider as PaperProvider } from "re
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { RootSiblingParent } from "react-native-root-siblings";
+
 import * as TaskManager from "expo-task-manager";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
@@ -194,18 +196,20 @@ const App = () => {
                 dispatch,
             }}
         >
-            <PaperProvider
-                settings={{
-                    icon: (props) => <FontAwesome5 style={{ textAlign: "center" }} {...props} />,
-                }}
-                theme={theme}
-            >
-                <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
-                    <StatusBar />
-                    {state.user && <AppTabView />}
-                    {!state.user && <AuthView />}
-                </NavigationContainer>
-            </PaperProvider>
+            <RootSiblingParent>
+                <PaperProvider
+                    settings={{
+                        icon: (props) => <FontAwesome5 style={{ textAlign: "center" }} {...props} />,
+                    }}
+                    theme={theme}
+                >
+                    <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+                        <StatusBar />
+                        {state.user && <AppTabView />}
+                        {!state.user && <AuthView />}
+                    </NavigationContainer>
+                </PaperProvider>
+            </RootSiblingParent>
         </AppReducer.Provider>
     );
 };

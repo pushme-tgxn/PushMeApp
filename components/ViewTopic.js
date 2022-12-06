@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import * as Clipboard from "expo-clipboard";
 
+import Toast from "react-native-root-toast";
+
 import { SafeAreaView, FlatList, Text, ScrollView, useColorScheme, View } from "react-native";
 import { Button, List, TextInput } from "react-native-paper";
 
@@ -95,18 +97,16 @@ const ViewTopic = ({ navigation, route }) => {
         onRefresh();
     };
 
-    const copyToClipboard = (stringToCopy) => {
-        Clipboard.setString(stringToCopy);
-    };
     const [visible, setVisible] = useState(false);
     return (
         <SafeAreaView style={themedStyles.paneContainer}>
             <FlatList
                 ListHeaderComponent={() => (
-                    <View>
+                    <View style={{ paddingTop: 10 }}>
                         <Text style={themedStyles.baseText}>Name: {topicData.name || "Unnamed Topic"}</Text>
 
                         <Text style={themedStyles.baseText}>ID: {topicData.id}</Text>
+                        <Text style={themedStyles.baseText}>Key: {topicData.topicKey}</Text>
                         <Text style={themedStyles.baseText}>Secret: {topicData.secretKey}</Text>
                         <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <Button
@@ -114,12 +114,14 @@ const ViewTopic = ({ navigation, route }) => {
                                     setVisible(true);
                                 }}
                                 icon="check"
-                                mode="outline"
-                                color="blue"
-                                style={{ flex: 1 }}
+                                mode="contained"
+                                color="purple"
+                                style={{ flex: 1, margin: 10 }}
                             >
                                 Test Push
                             </Button>
+                        </View>
+                        <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <PushPopup
                                 topicData={topicData}
                                 secretKey={topicData.secretKey}
@@ -128,12 +130,35 @@ const ViewTopic = ({ navigation, route }) => {
                             />
                             <Button
                                 onPress={async () => {
-                                    copyToClipboard(topicData.secretKey);
+                                    await Clipboard.setStringAsync(topicData.topicKey);
+                                    Toast.show("✅ Copied topic key to clipboard. 🎉", {
+                                        duration: Toast.durations.SHORT,
+                                        position: -65,
+                                        backgroundColor: "#222222",
+                                        animation: true,
+                                    });
                                 }}
                                 icon="copy"
                                 mode="outline"
                                 color="green"
-                                style={{ flex: 1 }}
+                                style={{ flex: 1, margin: 10 }}
+                            >
+                                Copy Key
+                            </Button>
+                            <Button
+                                onPress={async () => {
+                                    await Clipboard.setStringAsync(topicData.secretKey);
+                                    Toast.show("✅ Copied topic secret to clipboard. 🤫", {
+                                        duration: Toast.durations.SHORT,
+                                        position: -65,
+                                        backgroundColor: "#222222",
+                                        animation: true,
+                                    });
+                                }}
+                                icon="copy"
+                                mode="outline"
+                                color="orange"
+                                style={{ flex: 1, margin: 10 }}
                             >
                                 Copy Secret
                             </Button>

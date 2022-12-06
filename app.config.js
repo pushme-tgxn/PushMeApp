@@ -11,5 +11,12 @@ export default ({ config }) => {
                 projectId: "dc94d550-9538-48ff-b051-43562cdcf34e",
             },
         },
+        updates: {
+            url: "https://u.expo.dev/dc94d550-9538-48ff-b051-43562cdcf34e",
+            fallbackToCacheTimeout: 0,
+        },
+        runtimeVersion: {
+            policy: "sdkVersion",
+        },
     };
 };

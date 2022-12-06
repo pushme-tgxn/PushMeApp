@@ -87,6 +87,7 @@ export const initialState = {
 };
 
 import * as Device from "expo-device";
+import { Platform } from "react-native";
 
 export function reducer(state, action) {
     switch (action.type) {
@@ -100,7 +101,8 @@ export function reducer(state, action) {
                 apiService.setAccessToken(action.payload.userData.token);
                 console.log("setAccessToken", Device);
 
-                const defaultDeviceNameFormat = `${Device.osName} (${Device.deviceName})`;
+                const platform = Platform.OS === "android" ? "Android" : "iOS";
+                const defaultDeviceNameFormat = `${platform} (${Device.deviceName})`;
                 console.log("defaultDeviceNameFormat", defaultDeviceNameFormat);
 
                 apiService.device.createDeviceRegistration({
