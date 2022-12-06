@@ -100,9 +100,7 @@ export function reducer(state, action) {
                 apiService.setAccessToken(action.payload.userData.token);
                 console.log("setAccessToken", Device);
 
-                const defaultDeviceNameFormat = `${Device.osName}: ${((string) => {
-                    return string.charAt(0).toUpperCase() + string.slice(1);
-                })(Device.brand)} ${Device.deviceName}`;
+                const defaultDeviceNameFormat = `${Device.osName} (${Device.deviceName})`;
                 console.log("defaultDeviceNameFormat", defaultDeviceNameFormat);
 
                 apiService.device.createDeviceRegistration({

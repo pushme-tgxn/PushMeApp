@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { SafeAreaView, FlatList, Text, ScrollView, useColorScheme, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-// import * as Notifications from "expo-notifications";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -69,12 +68,12 @@ const ConfigScreen = ({ navigation }) => {
                             icon="sign-out-alt"
                             mode="contained"
                             color="red"
-                            onPress={async () => {
-                                await AsyncStorage.removeItem("userData");
-                                dispatch(setUserData(null));
+                            // onPress={async () => {
+                            //     await AsyncStorage.removeItem("userData");
+                            //     dispatch(setUserData(null));
 
-                                // navigation.replace("Auth");
-                            }}
+                            //     // navigation.replace("Auth");
+                            // }}
                         >
                             Logout
                         </Button>
