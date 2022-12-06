@@ -4,7 +4,7 @@
         "description": "Simple Push Notifications & Approvals",
         "primaryColor": "#A845FF",
         "slug": "pushme",
-        "version": "1.8.5",
+        "version": "1.9.0",
         "orientation": "portrait",
         "icon": "./assets/logo.png",
         "userInterfaceStyle": "automatic",
@@ -23,18 +23,11 @@
         },
         "android": {
             "package": "net.tgxn.pushme",
-            "versionCode": 185,
-            "useNextNotificationsApi": true,
+            "versionCode": 190,
             "permissions": [],
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundImage": "./assets/adaptive-icon-bg.png"
-            },
-            "googleServicesFile": "./google-services.json",
-            "config": {
-                "googleSignIn": {
-                    "certificateHash": "2A:41:2A:51:5D:33:8E:0A:FE:35:C1:3B:9C:3A:3E:61:34:96:32:8F"
-                }
             }
         },
         "web": {

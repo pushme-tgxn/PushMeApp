@@ -1,0 +1,30 @@
+{
+    "cli": {
+        "version": ">= 2.9.0"
+    },
+    "build": {
+        "apkLocal": {
+            "android": {
+                "buildType": "apk"
+            },
+            "env": {
+                "BACKEND_URL": "http://10.1.1.20:3000"
+            }
+        },
+        "apkProd": {
+            "android": {
+                "buildType": "apk"
+            },
+            "env": {
+                "BACKEND_URL": "https://pushme.tgxn.net"
+            }
+        },
+        "preview": {
+            "distribution": "internal"
+        },
+        "production": {}
+    },
+    "submit": {
+        "production": {}
+    }
+}
