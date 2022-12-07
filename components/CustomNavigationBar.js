@@ -28,8 +28,8 @@ function ViewTopicButtons({ navigation, topicData }) {
 
     return (
         <React.Fragment>
-            <IconButton icon="edit" color={Colors.blue400} size={20} onPress={() => setEditVisible(true)} />
-            <IconButton icon="trash" color={Colors.red600} size={20} onPress={() => setDeleteVisible(true)} />
+            <IconButton icon="edit" size={20} onPress={() => setEditVisible(true)} />
+            <IconButton icon="trash" size={20} onPress={() => setDeleteVisible(true)} />
             <Portal>
                 <Dialog visible={editVisible} onDismiss={() => setEditVisible(false)}>
                     <Dialog.Title>Editing Topic {topicData.id}</Dialog.Title>
@@ -87,8 +87,8 @@ function ViewDeviceButtons({ navigation, deviceData }) {
 
     return (
         <React.Fragment>
-            <IconButton icon="edit" color={Colors.blue400} size={20} onPress={() => setEditVisible(true)} />
-            <IconButton icon="trash" color={Colors.red600} size={20} onPress={() => setDeleteVisible(true)} />
+            <IconButton icon="edit" size={20} onPress={() => setEditVisible(true)} />
+            <IconButton icon="trash" size={20} onPress={() => setDeleteVisible(true)} />
             <Portal>
                 <Dialog visible={editVisible} onDismiss={() => setEditVisible(false)}>
                     <Dialog.Title>Editing Device {deviceData.id}</Dialog.Title>

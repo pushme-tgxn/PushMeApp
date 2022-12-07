@@ -2,7 +2,12 @@ import React, { useReducer, useEffect, useRef } from "react";
 
 import { Platform, useColorScheme } from "react-native";
 
-import { DefaultTheme as PaperDefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import {
+    // DefaultTheme as PaperDefaultTheme,
+    Provider as PaperProvider,
+    MD3LightTheme as DefaultLightTheme,
+    MD3DarkTheme as DefaultDarkTheme,
+} from "react-native-paper";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -13,7 +18,7 @@ import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import Constants from "expo-constants";
 
-import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -54,17 +59,25 @@ Notifications.setNotificationHandler({
 });
 
 const App = () => {
+    // DefaultTheme;
     const scheme = useColorScheme();
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const theme = {
-        ...PaperDefaultTheme,
-        dark: scheme === "dark",
+    let theme = DefaultLightTheme;
+    if (scheme === "dark") {
+        theme = DefaultDarkTheme;
+    }
+
+    // adpations
+    theme = {
+        ...theme,
+        // dark: scheme === "dark",
+        // dark: true,
         mode: "exact",
         backdrop: true,
-        roundness: 3,
+        roundness: 1,
         colors: {
-            ...PaperDefaultTheme.colors,
+            ...theme.colors,
             primary: "#a845ff",
             accent: "#933ce0",
         },
@@ -205,7 +218,7 @@ const App = () => {
                     }}
                     theme={theme}
                 >
-                    <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+                    <NavigationContainer theme={theme}>
                         <StatusBar />
                         {state.user && <AppTabView />}
                         {!state.user && <AuthView />}

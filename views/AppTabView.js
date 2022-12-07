@@ -13,7 +13,8 @@ const Tab = createMaterialBottomTabNavigator();
 const AppTabView = () => {
     return (
         <Tab.Navigator
-            barStyle={{ backgroundColor: "#222222" }}
+            // barStyle={{ backgroundColor: "#222222" }}
+            // compact={true}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;

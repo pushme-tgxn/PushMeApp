@@ -3,10 +3,9 @@ import * as Clipboard from "expo-clipboard";
 
 import Toast from "react-native-root-toast";
 
-import { SafeAreaView, FlatList, Text, ScrollView, useColorScheme, View } from "react-native";
-import { Button, List, TextInput } from "react-native-paper";
+import { SafeAreaView, FlatList, useColorScheme, View } from "react-native";
 
-import { Checkbox, IconButton, Colors } from "react-native-paper";
+import { Button, List, Text, Checkbox, IconButton, Colors } from "react-native-paper";
 
 import { AppReducer } from "../const";
 
@@ -103,11 +102,12 @@ const ViewTopic = ({ navigation, route }) => {
             <FlatList
                 ListHeaderComponent={() => (
                     <View style={{ paddingTop: 10 }}>
-                        <Text style={themedStyles.baseText}>Name: {topicData.name || "Unnamed Topic"}</Text>
+                        <Text>Name: {topicData.name || "Unnamed Topic"}</Text>
 
-                        <Text style={themedStyles.baseText}>ID: {topicData.id}</Text>
-                        <Text style={themedStyles.baseText}>Key: {topicData.topicKey}</Text>
-                        <Text style={themedStyles.baseText}>Secret: {topicData.secretKey}</Text>
+                        <Text>ID: {topicData.id}</Text>
+                        <Text>Key: {topicData.topicKey}</Text>
+                        <Text>Secret: {topicData.secretKey}</Text>
+
                         <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <Button
                                 onPress={async () => {
@@ -139,7 +139,7 @@ const ViewTopic = ({ navigation, route }) => {
                                     });
                                 }}
                                 icon="copy"
-                                mode="outline"
+                                mode="outlined"
                                 color="green"
                                 style={{ flex: 1, margin: 10 }}
                             >
@@ -156,19 +156,19 @@ const ViewTopic = ({ navigation, route }) => {
                                     });
                                 }}
                                 icon="copy"
-                                mode="outline"
+                                mode="outlined"
                                 color="orange"
                                 style={{ flex: 1, margin: 10 }}
                             >
                                 Copy Secret
                             </Button>
                         </View>
-                        <Text style={themedStyles.headerText}>
+                        <Text variant="titleLarge">
                             {refreshing
                                 ? "Devices Loading..."
                                 : state.topicList.length == 0
                                 ? "No Devices!"
-                                : "Devices"}
+                                : "Devices List"}
                         </Text>
                     </View>
                 )}
@@ -178,8 +178,8 @@ const ViewTopic = ({ navigation, route }) => {
                 onRefresh={onRefresh}
                 renderItem={({ item, index }) => (
                     <List.Item
-                        title={<Text style={themedStyles.baseText}>Name: {item.name}</Text>}
-                        description={<Text style={themedStyles.baseText}>ID: {item.id}</Text>}
+                        title={<Text>Name: {item.name}</Text>}
+                        description={<Text>ID: {item.id}</Text>}
                         left={() => (
                             <Checkbox
                                 status={checkedDeviceList[index] ? "checked" : "unchecked"}

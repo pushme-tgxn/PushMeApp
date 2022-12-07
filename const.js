@@ -13,44 +13,63 @@ export const NotificationCategories = {
         {
             identifier: "yes",
             buttonTitle: "Yes",
-            isDestructive: true,
-            // options: {},
+            options: {
+                opensAppToForeground: false,
+            },
         },
         {
             identifier: "no",
             buttonTitle: "No",
-            isDestructive: false,
-            // options: {},
+            options: {
+                opensAppToForeground: false,
+            },
         },
     ],
     "button.approve_deny": [
         {
             identifier: "approve",
             buttonTitle: "Approve",
-            isDestructive: true,
-            // options: {},
+            options: {
+                opensAppToForeground: false,
+            },
         },
         {
             identifier: "deny",
             buttonTitle: "Deny",
-            isDestructive: false,
-            // options: {},
+            options: {
+                opensAppToForeground: false,
+            },
+        },
+    ],
+    "button.allow_reject": [
+        {
+            identifier: "allow",
+            buttonTitle: "Allow",
+            options: {
+                opensAppToForeground: false,
+            },
+        },
+        {
+            identifier: "reject",
+            buttonTitle: "Reject",
+            options: {
+                opensAppToForeground: false,
+            },
         },
     ],
     "button.acknowledge": [
         {
             identifier: "acknowledge",
             buttonTitle: "Acknowledge",
-            isDestructive: false,
-            // options: {},
+            options: {
+                opensAppToForeground: false,
+            },
         },
     ],
     "button.open_link": [
         {
             identifier: "open_link",
             buttonTitle: "Open Link",
-            isDestructive: false,
-            // options: {},
         },
     ],
     "input.submit": [

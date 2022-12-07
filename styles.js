@@ -6,6 +6,44 @@ const baseColors = {
     backgroundColor: "#fff",
 };
 const baseStyles = {
+    fields: {
+        inputStyle: {
+            flexGrow: 1,
+            // color: baseColors.textColor,
+            // borderColor: baseColors.textColor,
+            margin: 10,
+            height: 40,
+            // borderWidth: 1,
+            borderRadius: 2,
+            // paddingHorizontal: 5,
+        },
+    },
+
+    dropdown: {
+        containerView: {
+            height: 40,
+            margin: 10,
+            // borderWidth: 1,
+            // borderColor: "#737373",
+        },
+
+        inputStyle: {
+            flexGrow: 1,
+            color: baseColors.textColor,
+            borderColor: baseColors.textColor,
+            margin: 5,
+            height: 40,
+            borderWidth: 1,
+            borderRadius: 2,
+            paddingHorizontal: 5,
+        },
+    },
+
+    authScreenContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignContent: "center",
+    },
     // containers
     screenContainer: {
         flex: 1,
@@ -69,35 +107,6 @@ const baseStyles = {
         flexDirection: "row",
         height: 40,
         margin: 10,
-    },
-
-    pickerContainerView: {
-        height: 40,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: "#737373",
-    },
-
-    inputStyle: {
-        flexGrow: 1,
-        color: baseColors.textColor,
-        borderColor: baseColors.textColor,
-        margin: 10,
-        height: 40,
-        borderWidth: 1,
-        borderRadius: 2,
-        paddingHorizontal: 5,
-    },
-
-    inputPickerStyle: {
-        flexGrow: 1,
-        color: baseColors.textColor,
-        borderColor: baseColors.textColor,
-        margin: 5,
-        height: 40,
-        borderWidth: 1,
-        borderRadius: 2,
-        paddingHorizontal: 5,
     },
 
     modalBackground: {

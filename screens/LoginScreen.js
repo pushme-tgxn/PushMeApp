@@ -147,8 +147,7 @@ const LoginScreen = ({ navigation }) => {
 
                         <View>
                             <TextInput
-                                style={themedStyles.inputStyle}
-                                // placeholderTextColor={themedStyles.inputStyle.color}
+                                style={themedStyles.fields.inputStyle}
                                 onChangeText={setEmailAddress}
                                 placeholder="Email Address"
                                 autoCapitalize="none"
@@ -163,8 +162,7 @@ const LoginScreen = ({ navigation }) => {
                             />
 
                             <TextInput
-                                style={themedStyles.inputStyle}
-                                // placeholderTextColor={themedStyles.inputStyle.color}
+                                style={themedStyles.fields.inputStyle}
                                 onChangeText={setUserPassword}
                                 placeholder="Password"
                                 secureTextEntry={true}
