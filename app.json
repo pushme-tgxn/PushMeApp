@@ -1,21 +1,27 @@
 {
     "expo": {
         "name": "PushMe",
-        "originalFullName": "@tgxn/pushme",
         "description": "Simple Push Notifications & Approvals",
-        "primaryColor": "#A845FF",
         "slug": "pushme",
+        "originalFullName": "@tgxn/pushme",
         "version": "1.9.0",
+        "githubUrl": "https://github.com/pushme-tgxn-net/PushMeApp",
         "orientation": "portrait",
-        "icon": "./assets/logo.png",
         "userInterfaceStyle": "automatic",
-        "scheme": "net.tgxn.pushme",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+        "primaryColor": "#A845FF",
+        "icon": "./assets/logo.png",
+        "notification": {
+            "icon": "./assets/logo.png",
+            "color": "#A845FF",
+            "iosDisplayInForeground": true
         },
+        "scheme": "net.tgxn.pushme",
         "assetBundlePatterns": ["**/*"],
+        "splash": {
+            "backgroundColor": "#ffffff",
+            "resizeMode": "contain",
+            "image": "./assets/splash.png"
+        },
         "ios": {
             "supportsTablet": true
         },
