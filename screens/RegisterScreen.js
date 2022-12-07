@@ -1,16 +1,8 @@
 import React, { useState, createRef } from "react";
 
-import {
-    TextInput,
-    View,
-    Text,
-    Image,
-    KeyboardAvoidingView,
-    Keyboard,
-    TouchableOpacity,
-    ScrollView,
-    useColorScheme,
-} from "react-native";
+import { View, Text, Image, KeyboardAvoidingView, Keyboard, ScrollView, useColorScheme } from "react-native";
+
+import { Button, TextInput } from "react-native-paper";
 
 import apiService from "../service/api";
 
@@ -69,13 +61,15 @@ const RegisterScreen = (props) => {
         return (
             <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
                 <Text style={themedStyles.successTextStyle}>Registration Successful</Text>
-                <TouchableOpacity
-                    style={themedStyles.buttonStyle}
-                    activeOpacity={0.5}
+                <Button
                     onPress={() => props.navigation.navigate("LoginScreen")}
+                    icon="arrow-right"
+                    mode="contained"
+                    color="green"
+                    style={{ margin: 10 }}
                 >
-                    <Text style={themedStyles.buttonTextStyle}>Login Now</Text>
-                </TouchableOpacity>
+                    Login Now
+                </Button>
             </View>
         );
     }
@@ -103,7 +97,7 @@ const RegisterScreen = (props) => {
                 </View>
 
                 <KeyboardAvoidingView enabled>
-                    <View style={themedStyles.inputContainerView}>
+                    <View>
                         <TextInput
                             style={themedStyles.inputStyle}
                             onChangeText={setUserEmail}
@@ -119,8 +113,7 @@ const RegisterScreen = (props) => {
                             }
                             blurOnSubmit={false}
                         />
-                    </View>
-                    <View style={themedStyles.inputContainerView}>
+
                         <TextInput
                             style={themedStyles.inputStyle}
                             onChangeText={setUserPassword}
@@ -134,14 +127,17 @@ const RegisterScreen = (props) => {
                     </View>
 
                     {errorText != "" ? <Text style={themedStyles.errorTextStyle}>{errorText}</Text> : null}
-
-                    <TouchableOpacity
-                        style={themedStyles.buttonStyle}
-                        activeOpacity={0.5}
-                        onPress={handleSubmitButton}
-                    >
-                        <Text style={themedStyles.buttonTextStyle}>REGISTER</Text>
-                    </TouchableOpacity>
+                    <View>
+                        <Button
+                            onPress={handleSubmitButton}
+                            icon="arrow-right"
+                            mode="contained"
+                            color="green"
+                            style={{ margin: 10 }}
+                        >
+                            Register
+                        </Button>
+                    </View>
                 </KeyboardAvoidingView>
             </ScrollView>
         </View>

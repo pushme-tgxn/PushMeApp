@@ -1,17 +1,8 @@
 import React, { useState, createRef, useContext, useEffect } from "react";
 
-import {
-    StyleSheet,
-    TextInput,
-    View,
-    Text,
-    ScrollView,
-    Image,
-    Keyboard,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    useColorScheme,
-} from "react-native";
+import { View, Text, ScrollView, Image, Keyboard, KeyboardAvoidingView, useColorScheme } from "react-native";
+
+import { Button, TextInput } from "react-native-paper";
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -137,19 +128,23 @@ const LoginScreen = ({ navigation }) => {
                         </View>
 
                         {googleLoginEnabled && (
-                            <TouchableOpacity
-                                style={themedStyles.buttonStyle}
-                                activeOpacity={0.5}
+                            <Button
                                 onPress={loginFlowGoogle}
+                                icon="google"
+                                mode="contained"
+                                color="#4285F4"
+                                style={{ margin: 10 }}
                             >
-                                <Text style={themedStyles.buttonTextStyle}>Login with Google</Text>
-                            </TouchableOpacity>
+                                Login with Google
+                            </Button>
                         )}
 
-                        <View style={themedStyles.inputContainerView}>
+                        <View style={{ margin: 10 }} />
+
+                        <View>
                             <TextInput
                                 style={themedStyles.inputStyle}
-                                placeholderTextColor={themedStyles.inputStyle.color}
+                                // placeholderTextColor={themedStyles.inputStyle.color}
                                 onChangeText={setEmailAddress}
                                 placeholder="Email Address"
                                 autoCapitalize="none"
@@ -162,11 +157,10 @@ const LoginScreen = ({ navigation }) => {
                                 }
                                 blurOnSubmit={false}
                             />
-                        </View>
-                        <View style={themedStyles.inputContainerView}>
+
                             <TextInput
                                 style={themedStyles.inputStyle}
-                                placeholderTextColor={themedStyles.inputStyle.color}
+                                // placeholderTextColor={themedStyles.inputStyle.color}
                                 onChangeText={setUserPassword}
                                 placeholder="Password"
                                 secureTextEntry={true}
@@ -177,19 +171,27 @@ const LoginScreen = ({ navigation }) => {
                             />
                         </View>
                         {errorText ? <Text style={themedStyles.errorTextStyle}>{errorText}</Text> : null}
-                        <TouchableOpacity
-                            style={themedStyles.buttonStyle}
-                            activeOpacity={0.5}
-                            onPress={handleSubmitPress}
-                        >
-                            <Text style={themedStyles.buttonTextStyle}>LOGIN</Text>
-                        </TouchableOpacity>
-                        <Text
-                            style={themedStyles.actionTextStyle}
-                            onPress={() => navigation.navigate("RegisterScreen")}
-                        >
-                            Register Account
-                        </Text>
+                        <View>
+                            <Button
+                                onPress={handleSubmitPress}
+                                icon="arrow-right"
+                                mode="contained"
+                                color="green"
+                                style={{ margin: 10 }}
+                            >
+                                Login
+                            </Button>
+
+                            <Button
+                                onPress={() => navigation.navigate("RegisterScreen")}
+                                // icon="arrow-right"
+                                mode="outlined"
+                                color="grey"
+                                style={{ margin: 10 }}
+                            >
+                                Register
+                            </Button>
+                        </View>
                     </KeyboardAvoidingView>
                 </View>
             </ScrollView>

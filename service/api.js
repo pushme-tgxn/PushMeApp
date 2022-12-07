@@ -1,3 +1,5 @@
+import Toast from "react-native-root-toast";
+
 import { BACKEND_URL } from "../const";
 
 class UserService {
@@ -123,27 +125,44 @@ class APIService {
     }
 
     async _callApi(path, method, payload = null) {
-        const headers = {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        };
-        if (this.authorization) {
-            headers.Authorization = this.authorization;
-        }
-        console.log("_callApi", method, `${BACKEND_URL}${path}`);
-        const fetchResponse = await fetch(`${BACKEND_URL}${path}`, {
-            method,
-            headers,
-            body: payload ? JSON.stringify(payload) : null,
-        });
-        const jsonResponse = await fetchResponse.json();
-        // console.log(jsonResponse);
+        try {
+            const headers = {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            };
+            if (this.authorization) {
+                headers.Authorization = this.authorization;
+            }
+            console.log("_callApi", method, `${BACKEND_URL}${path}`);
+            const fetchResponse = await fetch(`${BACKEND_URL}${path}`, {
+                method,
+                headers,
+                body: payload ? JSON.stringify(payload) : null,
+            });
+            const jsonResponse = await fetchResponse.json();
+            // console.log(jsonResponse);
 
-        if (jsonResponse.message == "Unauthorized") {
-            throw new Error("Unauthorized");
-        }
+            if (jsonResponse.message == "Unauthorized") {
+                Toast.show("❌ Unauthorized, please login again! 🔒", {
+                    duration: Toast.durations.SHORT,
+                    position: -65,
+                    backgroundColor: "#222222",
+                    animation: true,
+                });
+                throw new Error("Unauthorized");
+            }
 
-        return jsonResponse;
+            return jsonResponse;
+        } catch (error) {
+            Toast.show("❌ API network request failed! 😭", {
+                duration: Toast.durations.SHORT,
+                position: -65,
+                backgroundColor: "#222222",
+                animation: true,
+            });
+            throw error;
+            // console.error(error);
+        }
     }
 }
 

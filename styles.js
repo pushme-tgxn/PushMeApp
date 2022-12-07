@@ -82,7 +82,7 @@ const baseStyles = {
         flexGrow: 1,
         color: baseColors.textColor,
         borderColor: baseColors.textColor,
-        margin: 5,
+        margin: 10,
         height: 40,
         borderWidth: 1,
         borderRadius: 2,
