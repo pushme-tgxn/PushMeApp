@@ -4,11 +4,6 @@
     },
     "build": {
         "apk": {
-            "android": {
-                "buildType": "apk"
-            }
-        },
-        "bundle": {
             "distribution": "internal"
         },
         "production": {}
