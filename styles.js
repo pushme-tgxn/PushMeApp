@@ -105,7 +105,7 @@ const baseStyles = {
         alignItems: "center",
         flexDirection: "column",
         justifyContent: "space-around",
-        backgroundColor: "#00000040",
+        backgroundColor: "#22222240",
     },
     activityIndicatorWrapper: {
         backgroundColor: "#FFFFFF",

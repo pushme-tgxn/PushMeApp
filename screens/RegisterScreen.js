@@ -60,6 +60,17 @@ const RegisterScreen = (props) => {
     if (isRegistraionSuccess) {
         return (
             <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
+                <View style={{ alignItems: "center" }}>
+                    <Image
+                        source={require("../assets/namelogo.png")}
+                        style={{
+                            width: 200,
+                            height: 150,
+                            resizeMode: "contain",
+                            margin: 30,
+                        }}
+                    />
+                </View>
                 <Text>Registration Successful</Text>
                 <Button
                     onPress={() => props.navigation.navigate("LoginScreen")}
@@ -88,8 +99,8 @@ const RegisterScreen = (props) => {
                     <Image
                         source={require("../assets/namelogo.png")}
                         style={{
-                            width: "50%",
-                            height: 100,
+                            width: 200,
+                            height: 150,
                             resizeMode: "contain",
                             margin: 30,
                         }}

@@ -171,7 +171,7 @@ const App = () => {
             console.log("addNotificationReceivedListener", notification);
             dispatch(pushRecieved(notification));
 
-            Notifications.dismissNotificationAsync(response.notification.request.identifier);
+            // Notifications.dismissNotificationAsync(notification.request.identifier);
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {

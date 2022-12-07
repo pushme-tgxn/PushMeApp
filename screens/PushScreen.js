@@ -9,6 +9,7 @@ import { Separator, CustomButton } from "../components/Shared";
 import { setPushList } from "../reducers/app";
 
 import ViewPush from "../components/ViewPush";
+import CustomNavigationBar from "../components/CustomNavigationBar";
 
 import { AppReducer } from "../const";
 
@@ -20,7 +21,12 @@ const Stack = createStackNavigator();
 
 const PushScreen = () => {
     return (
-        <Stack.Navigator initialRouteName="PushList">
+        <Stack.Navigator
+            initialRouteName="PushList"
+            screenOptions={{
+                header: CustomNavigationBar,
+            }}
+        >
             <Stack.Screen name="PushList" component={PushList} options={{ headerShown: false }} />
 
             <Stack.Screen name="ViewPush" component={ViewPush} />

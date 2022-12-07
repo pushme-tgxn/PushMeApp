@@ -47,18 +47,21 @@ const LoginScreen = ({ navigation }) => {
         async function initGoogle() {
             if (response?.type === "success") {
                 const { authentication } = response;
-
-                console.log(authentication);
+                console.log("success", authentication);
 
                 const responseJson = await apiService.user.authWithGoogle(authentication.accessToken);
+                setLoading(false);
 
                 if (responseJson.success) {
-                    setLoading(false);
                     dispatch(setUserData(responseJson.user));
                 } else {
                     setErrorText(responseJson.message);
-                    setLoading(false);
                 }
+            } else if (response?.type === "dismiss") {
+                setLoading(false);
+            } else {
+                setLoading(false);
+                // console.error("UNKNOWN TYPE", response?.type);
             }
         }
         initGoogle();
@@ -105,7 +108,7 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
-            <Loader loading={loading || !request} />
+            <Loader loading={loading} />
 
             <ScrollView
                 keyboardShouldPersistTaps="handled"
@@ -140,8 +143,7 @@ const LoginScreen = ({ navigation }) => {
                                 Login with Google
                             </Button>
                         )}
-
-                        <Separator />
+                        {googleLoginEnabled && <Separator />}
 
                         <View>
                             <TextInput
