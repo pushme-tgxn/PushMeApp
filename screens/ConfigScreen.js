@@ -89,13 +89,13 @@ const ConfigScreen = ({ navigation }) => {
                         /> */}
                         <Separator />
 
-                        <Text style={themedStyles.headerText}>This Device</Text>
+                        {/* <Text style={themedStyles.headerText}>This Device</Text>
 
                         <Text style={themedStyles.baseText}>
                             Token: {state.expoPushToken ? state.expoPushToken : "Loading..."}
                         </Text>
 
-                        <Separator />
+                        <Separator /> */}
                         <Text style={themedStyles.headerText}>
                             {refreshing
                                 ? "List Loading..."

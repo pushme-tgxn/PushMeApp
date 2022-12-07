@@ -9,6 +9,8 @@ import * as Google from "expo-auth-session/providers/google";
 
 import Loader from "../components/Loader";
 
+import { Separator } from "../components/Shared";
+
 import apiService from "../service/api";
 
 import { AppReducer } from "../const";
@@ -119,8 +121,8 @@ const LoginScreen = ({ navigation }) => {
                             <Image
                                 source={require("../assets/namelogo.png")}
                                 style={{
-                                    width: "50%",
-                                    height: 100,
+                                    width: 200,
+                                    height: 150,
                                     resizeMode: "contain",
                                     margin: 30,
                                 }}
@@ -139,7 +141,7 @@ const LoginScreen = ({ navigation }) => {
                             </Button>
                         )}
 
-                        <View style={{ margin: 10 }} />
+                        <Separator />
 
                         <View>
                             <TextInput

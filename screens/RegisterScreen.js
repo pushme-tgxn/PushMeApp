@@ -60,7 +60,7 @@ const RegisterScreen = (props) => {
     if (isRegistraionSuccess) {
         return (
             <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
-                <Text style={themedStyles.successTextStyle}>Registration Successful</Text>
+                <Text>Registration Successful</Text>
                 <Button
                     onPress={() => props.navigation.navigate("LoginScreen")}
                     icon="arrow-right"

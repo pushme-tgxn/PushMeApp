@@ -188,9 +188,7 @@ const ViewTopic = ({ navigation, route }) => {
                                 }}
                             />
                         )}
-                    >
-                        test
-                    </List.Item>
+                    />
                 )}
             />
         </SafeAreaView>
