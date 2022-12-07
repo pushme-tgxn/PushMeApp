@@ -13,25 +13,18 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      # - name: Decode google-services.json
-      #   env:
-      #     GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-      #   run: echo $GOOGLE_SERVICES > $GITHUB_WORKSPACE/google-services.json
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
           node-version: 16.x
 
-      - name: Install Expo CLI
-        uses: expo/expo-github-action@v6
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
         with:
-          expo-version: 4.x
+          expo-version: latest
+          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-          
-      - name: Install EAS
-        run: npm install eas -g
-        
+
       - name: Install NPM Packages
         run: npm install
 
@@ -46,24 +39,17 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      # - name: Decode google-services.json
-      #   env:
-      #     GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-      #   run: echo $GOOGLE_SERVICES > $GITHUB_WORKSPACE/google-services.json
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
           node-version: 16.x
 
-      - name: Install Expo CLI
-        uses: expo/expo-github-action@v6
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
         with:
-          expo-version: 4.x
+          expo-version: latest
+          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Install EAS
-        run: npm install eas -g
 
       - name: Install NPM Packages
         run: npm install
@@ -80,24 +66,17 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      # - name: Decode google-services.json
-      #   env:
-      #     GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-      #   run: echo $GOOGLE_SERVICES > $GITHUB_WORKSPACE/google-services.json
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
           node-version: 16.x
 
-      - name: Install Expo CLI
-        uses: expo/expo-github-action@v6
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
         with:
-          expo-version: 4.x
+          expo-version: latest
+          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Install EAS
-        run: npm install eas -g
 
       - name: Install NPM Packages
         run: npm install
