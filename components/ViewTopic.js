@@ -96,7 +96,7 @@ const ViewTopic = ({ navigation, route }) => {
 
     const [visible, setVisible] = useState(false);
     return (
-        <SafeAreaView style={themedStyles.paneContainer}>
+        <SafeAreaView style={themedStyles.container.pane}>
             <FlatList
                 ListHeaderComponent={() => (
                     <View style={{ paddingTop: 10 }}>

@@ -13,8 +13,8 @@ const Tab = createMaterialBottomTabNavigator();
 const AppTabView = () => {
     return (
         <Tab.Navigator
-            // barStyle={{ backgroundColor: "#222222" }}
-            // compact={true}
+            sceneAnimationEnabled={true}
+            sceneAnimationType={"shifting"}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
@@ -27,11 +27,8 @@ const AppTabView = () => {
                         iconName = "user-cog";
                     }
 
-                    return <FontAwesome5 name={iconName} size={size} color={color} />;
+                    return <FontAwesome5 name={iconName} size={20} color={color} />;
                 },
-                // tabBarActiveTintColor: "#a845ff",
-                // tabBarInactiveTintColor: "gray",
-                headerShown: false,
             })}
         >
             <Tab.Screen name="Topics" component={TopicScreen} />

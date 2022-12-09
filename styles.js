@@ -21,6 +21,7 @@ const baseStyles = {
         margin: 16,
         right: 0,
         bottom: 0,
+        borderRadius: 20,
     },
 
     fields: {
@@ -52,12 +53,18 @@ const baseStyles = {
     container: {
         base: {
             flex: 1,
-            paddingHorizontal: 16,
             marginTop: 10,
+            paddingHorizontal: 16,
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        },
+        pane: {
+            flex: 1,
+            paddingTop: 5,
+            paddingHorizontal: 16,
         },
         center: {
             flex: 1,
+            paddingHorizontal: 16,
             justifyContent: "center",
             alignContent: "center",
         },
@@ -71,8 +78,7 @@ const baseStyles = {
             marginBottom: 10,
         },
         bigButton: {
-            paddingTop: 8,
-            paddingBottom: 8,
+            paddingVertical: 8,
         },
     },
 
@@ -95,20 +101,20 @@ const baseStyles = {
     // },
 
     // containers
-    screenContainer: {
-        flex: 1,
-        alignContent: "center",
-        color: baseColors.textColor,
-        paddingHorizontal: 16,
-        marginTop: 10,
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    },
-    paneContainer: {
-        flex: 1,
-        alignContent: "center",
-        color: baseColors.textColor,
-        paddingHorizontal: 16,
-    },
+    // screenContainer: {
+    //     flex: 1,
+    //     alignContent: "center",
+    //     color: baseColors.textColor,
+    //     paddingHorizontal: 16,
+    //     marginTop: 10,
+    //     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    // },
+    // paneContainer: {
+    //     flex: 1,
+    //     alignContent: "center",
+    //     color: baseColors.textColor,
+    //     paddingHorizontal: 16,
+    // },
     // authScreenContainer: {
     //     flex: 1,
     //     justifyContent: "center",
@@ -230,12 +236,12 @@ const baseStyles = {
     //     height: 50,
     //     backgroundColor: "purple",
     // },
-    fab: {
-        position: "absolute",
-        margin: 16,
-        right: 0,
-        bottom: 0,
-    },
+    // fab: {
+    //     position: "absolute",
+    //     margin: 16,
+    //     right: 0,
+    //     bottom: 0,
+    // },
 };
 
 const darkColors = {

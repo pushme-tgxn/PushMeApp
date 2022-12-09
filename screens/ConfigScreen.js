@@ -67,7 +67,7 @@ const ConfigScreen = ({ navigation }) => {
     useEffect(onRefresh, []);
 
     return (
-        <SafeAreaView style={themedStyles.screenContainer}>
+        <SafeAreaView style={[themedStyles.container.base]}>
             <FlatList
                 ListHeaderComponent={() => (
                     <View>

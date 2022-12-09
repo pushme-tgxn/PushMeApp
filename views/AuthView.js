@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -10,10 +10,16 @@ import CustomNavigationBar from "../components/CustomNavigationBar";
 const Stack = createStackNavigator();
 
 const AuthView = () => {
+    useEffect(() => {
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+        };
+    }, []);
     return (
         <Stack.Navigator
             initialRouteName="LoginScreen"
-            detachInactiveScreens={true}
+            // detachInactiveScreens={true}
             screenOptions={{
                 header: CustomNavigationBar,
             }}

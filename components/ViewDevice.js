@@ -4,7 +4,6 @@ import * as Device from "expo-device";
 
 import {
     SafeAreaView,
-    Text,
     View,
     useColorScheme,
     // TextInput,
@@ -14,9 +13,11 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-paper";
 
+import { Text, Button, FAB } from "react-native-paper";
+
 // import { Picker } from "@react-native-picker/picker";
 
-import { Separator, CustomButton } from "./Shared.js";
+import { Separator } from "./Shared.js";
 
 import { NotificationCategories } from "../const";
 
@@ -69,38 +70,39 @@ const ViewDevice = ({ navigation, route }) => {
     }
 
     return (
-        <SafeAreaView style={themedStyles.paneContainer}>
-            <ScrollView>
-                {/* <Text style={themedStyles.headerText}>Device</Text> */}
+        <SafeAreaView style={themedStyles.container.pane}>
+            {/* <Text style={themedStyles.headerText}>Device</Text> */}
 
-                <Text style={themedStyles.baseText}>ID: {deviceData.id}</Text>
-                <Text style={themedStyles.baseText}>Name: {deviceData.name}</Text>
-                <Text style={themedStyles.baseText}>Created: {deviceData.createdAt}</Text>
-                <Separator />
+            <Text variant="labelLarge">ID: {deviceData.id}</Text>
+            <Text variant="labelLarge">Name: {deviceData.name}</Text>
+            <Text variant="labelLarge">Created: {deviceData.createdAt}</Text>
 
-                <Text style={themedStyles.headerText}>
-                    {deviceData.topics.length == 0 ? "No Topics!" : "Topics"}
-                </Text>
+            <Separator />
 
-                {deviceData.topics.length !== 0 &&
-                    deviceData.topics.map((item) => {
-                        let buttonStyle = themedStyles.listItem;
-                        return (
-                            <CustomButton
-                                key={item.id}
-                                onPress={async () => {
-                                    navigation.push("ViewTopic", {
-                                        topicData: item,
-                                    });
-                                }}
-                                style={buttonStyle}
-                            >
-                                {item.id} : {item.secretKey}
-                            </CustomButton>
-                        );
-                    })}
+            <Text variant="displaySmall" style={{ marginBottom: 10 }}>
+                {deviceData.topics.length == 0 ? "No Topics!" : "Topics"}
+            </Text>
 
-                {/* <View style={themedStyles.inputContainerView}>
+            {deviceData.topics.length !== 0 &&
+                deviceData.topics.map((item) => {
+                    let buttonStyle = themedStyles.listItem;
+                    return (
+                        <Button
+                            style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
+                            key={item.id}
+                            // onPress={async () => {
+                            //     navigation.push("ViewTopic", {
+                            //         topicData: item,
+                            //     });
+                            // }}
+                            mode="contained-tonal"
+                        >
+                            {item.id} : {item.secretKey}
+                        </Button>
+                    );
+                })}
+
+            {/* <View style={themedStyles.inputContainerView}>
                     <CustomButton
                         onPress={async () => {
                             await apiService.createWebhook(deviceData.id);
@@ -109,7 +111,6 @@ const ViewDevice = ({ navigation, route }) => {
                         style={{ backgroundColor: "green" }}
                     />
                 </View> */}
-            </ScrollView>
         </SafeAreaView>
     );
 };

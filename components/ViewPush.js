@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
+import { SafeAreaView, View, ScrollView, useColorScheme } from "react-native";
 
-import { SafeAreaView, ScrollView, Text, View, useColorScheme } from "react-native";
+import { Button, List, Text, Checkbox } from "react-native-paper";
 
 import { AppReducer } from "../const";
 
@@ -22,26 +23,26 @@ const ViewPush = ({ navigation, route }) => {
     const themedStyles = styles(colorScheme);
 
     return (
-        <SafeAreaView style={themedStyles.paneContainer}>
-            <ScrollView>
-                <Text style={themedStyles.headerText}>Push Recieved</Text>
+        <SafeAreaView style={themedStyles.container.pane}>
+            <View style={{ paddingTop: 10 }}>
+                <Text variant="titleLarge">Push Recieved</Text>
 
-                <Text style={themedStyles.baseText}>ID: {thisPush.id}</Text>
-                <Text style={themedStyles.baseText}>
+                <Text variant="labelLarge">ID: {thisPush.id}</Text>
+                <Text variant="labelLarge">
                     Request:
                     {thisPush.request}
                 </Text>
-                <Text style={themedStyles.baseText}>
+                <Text variant="labelLarge">
                     Data:
                     {thisPush.pushPayload && JSON.stringify(thisPush.pushPayload)}
                 </Text>
 
-                <Text style={themedStyles.headerText}>Push Response</Text>
+                <Text variant="titleLarge">Push Response</Text>
 
-                <Text style={themedStyles.baseText}>
+                <Text variant="labelLarge">
                     Response: {thisPush.response && JSON.stringify(thisPush.response)}
                 </Text>
-            </ScrollView>
+            </View>
         </SafeAreaView>
     );
 };

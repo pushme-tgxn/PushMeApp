@@ -17,11 +17,6 @@
         },
         "scheme": "net.tgxn.pushme",
         "assetBundlePatterns": ["**/*"],
-        "splash": {
-            "backgroundColor": "#ffffff",
-            "resizeMode": "contain",
-            "image": "./assets/splash.png"
-        },
         "ios": {
             "supportsTablet": true
         },
