@@ -4,7 +4,7 @@
         "description": "Simple Push Notifications & Approvals",
         "slug": "pushme",
         "originalFullName": "@tgxn/pushme",
-        "version": "1.9.3",
+        "version": "1.9.4",
         "githubUrl": "https://github.com/pushme-tgxn-net/PushMeApp",
         "orientation": "portrait",
         "userInterfaceStyle": "automatic",
@@ -22,7 +22,7 @@
         },
         "android": {
             "package": "net.tgxn.pushme",
-            "versionCode": 193,
+            "versionCode": 194,
             "permissions": [],
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
