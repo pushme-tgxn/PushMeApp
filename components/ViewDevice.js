@@ -85,7 +85,6 @@ const ViewDevice = ({ navigation, route }) => {
 
             {deviceData.topics.length !== 0 &&
                 deviceData.topics.map((item) => {
-                    let buttonStyle = themedStyles.listItem;
                     return (
                         <Button
                             style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
@@ -101,16 +100,6 @@ const ViewDevice = ({ navigation, route }) => {
                         </Button>
                     );
                 })}
-
-            {/* <View style={themedStyles.inputContainerView}>
-                    <CustomButton
-                        onPress={async () => {
-                            await apiService.createWebhook(deviceData.id);
-                        }}
-                        title="Create Token!"
-                        style={{ backgroundColor: "green" }}
-                    />
-                </View> */}
         </SafeAreaView>
     );
 };

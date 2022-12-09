@@ -19,13 +19,13 @@ const Loader = (props) => {
                 console.log("Loader close modal");
             }}
         >
-            <View style={themedStyles.modalBackground}>
-                <View style={themedStyles.activityIndicatorWrapper}>
+            <View style={themedStyles.modal.background}>
+                <View style={themedStyles.modal.activityIndicatorWrapper}>
                     <ActivityIndicator
                         animating={true}
                         color="#000000"
                         size="large"
-                        style={themedStyles.activityIndicator}
+                        style={themedStyles.modal.activityIndicator}
                     />
                 </View>
             </View>
