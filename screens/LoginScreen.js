@@ -1,6 +1,14 @@
 import React, { useState, createRef, useContext, useEffect } from "react";
 
-import { View, Text, ScrollView, Image, Keyboard, KeyboardAvoidingView, useColorScheme } from "react-native";
+import {
+    SafeAreaView,
+    View,
+    ScrollView,
+    Image,
+    Keyboard,
+    KeyboardAvoidingView,
+    useColorScheme,
+} from "react-native";
 
 import { Button, TextInput } from "react-native-paper";
 
@@ -27,41 +35,45 @@ const LoginScreen = ({ navigation }) => {
 
     const { dispatch } = useContext(AppReducer);
 
-    const [loading, setLoading] = useState(false);
-    const [errorText, setErrorText] = useState(false);
     const [googleLoginEnabled, setGoogleLoginEnabled] = useState(true);
 
+    const [loading, setLoading] = useState(false); // tracks normal login loading
+    const [googleLoading, setGoogleLoading] = useState(false); // tracks google auth loading
+
+    const [errorText, setErrorText] = useState(false);
+
+    // tracking login fields
     const [emailAddress, setEmailAddress] = useState("");
     const [userPassword, setUserPassword] = useState("");
 
+    // so we can switch focus after email is complete
     const passwordInputRef = createRef();
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         expoClientId: "496431691586-9g6qno92idps781s2sto66ar863c8jr4.apps.googleusercontent.com",
-        // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
         androidClientId: "496431691586-8oab0j5ea8upcn0qdatv2j0lco4dplg1.apps.googleusercontent.com",
+        // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
         // webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
     });
 
     useEffect(() => {
         async function initGoogle() {
-            if (response?.type === "success") {
-                const { authentication } = response;
-                console.log("success", authentication);
+            try {
+                if (response?.type === "success") {
+                    const { authentication } = response;
+                    console.log("success", authentication);
 
-                const responseJson = await apiService.user.authWithGoogle(authentication.accessToken);
-                setLoading(false);
+                    const responseJson = await apiService.user.authWithGoogle(authentication.accessToken);
+                    // setGoogleLoading(false);
 
-                if (responseJson.success) {
-                    dispatch(setUserData(responseJson.user));
-                } else {
-                    setErrorText(responseJson.message);
+                    if (responseJson.success) {
+                        dispatch(setUserData(responseJson.user));
+                    } else {
+                        setErrorText(responseJson.message);
+                    }
                 }
-            } else if (response?.type === "dismiss") {
-                setLoading(false);
-            } else {
-                setLoading(false);
-                // console.error("UNKNOWN TYPE", response?.type);
+            } finally {
+                setGoogleLoading(false);
             }
         }
         initGoogle();
@@ -94,110 +106,114 @@ const LoginScreen = ({ navigation }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.error("@34234e", error);
+            // console.error("@34234e", error);
             setLoading(false);
             setErrorText(error.toString());
         }
     };
 
     const loginFlowGoogle = async () => {
-        setLoading(true);
+        setGoogleLoading(true);
 
         promptAsync();
     };
 
     return (
-        <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
-            <Loader loading={loading} />
+        <SafeAreaView style={[themedStyles.container.base]}>
+            {/* <Loader loading={loading} /> */}
 
             <ScrollView
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignContent: "center",
-                }}
+                contentContainerStyle={themedStyles.container.center}
+                style={{ marginLeft: 15, marginRight: 15 }}
             >
-                <View>
-                    <KeyboardAvoidingView enabled>
-                        <View style={{ alignItems: "center" }}>
-                            <Image
-                                source={require("../assets/namelogo.png")}
-                                style={{
-                                    width: 200,
-                                    height: 150,
-                                    resizeMode: "contain",
-                                    margin: 30,
-                                }}
-                            />
-                        </View>
+                <KeyboardAvoidingView enabled>
+                    <View style={{ alignItems: "center" }}>
+                        <Image
+                            source={require("../assets/namelogo.png")}
+                            style={{
+                                width: 200,
+                                height: 150,
+                                resizeMode: "contain",
+                                marginBottom: 30, // pad between logo and button
+                            }}
+                        />
+                    </View>
 
-                        {googleLoginEnabled && (
-                            <Button
-                                onPress={loginFlowGoogle}
-                                icon="google"
-                                mode="contained"
-                                color="#4285F4"
-                                style={{ margin: 10 }}
-                            >
-                                Login with Google
-                            </Button>
-                        )}
-                        {googleLoginEnabled && <Separator />}
+                    {googleLoginEnabled && (
+                        <Button
+                            onPress={loginFlowGoogle}
+                            disabled={loading || googleLoading}
+                            loading={googleLoading}
+                            icon="google"
+                            mode="contained"
+                            color="#4285F4"
+                        >
+                            Login with Google
+                        </Button>
+                    )}
+                    {googleLoginEnabled && <Separator />}
 
-                        <View>
-                            <TextInput
-                                style={themedStyles.fields.inputStyle}
-                                onChangeText={setEmailAddress}
-                                placeholder="Email Address"
-                                autoCapitalize="none"
-                                returnKeyType="next"
-                                autoCompleteType="email"
-                                keyboardType="email-address"
-                                textContentType="emailAddress"
-                                onSubmitEditing={() =>
-                                    passwordInputRef.current && passwordInputRef.current.focus()
-                                }
-                                blurOnSubmit={false}
-                            />
+                    <View>
+                        <TextInput
+                            style={themedStyles.fields.inputStyle}
+                            onChangeText={setEmailAddress}
+                            placeholder="Email Address"
+                            disabled={loading || googleLoading}
+                            autoCapitalize="none"
+                            returnKeyType="next"
+                            autoCompleteType="email"
+                            keyboardType="email-address"
+                            textContentType="emailAddress"
+                            onSubmitEditing={() =>
+                                passwordInputRef.current && passwordInputRef.current.focus()
+                            }
+                            blurOnSubmit={false}
+                        />
 
-                            <TextInput
-                                style={themedStyles.fields.inputStyle}
-                                onChangeText={setUserPassword}
-                                placeholder="Password"
-                                secureTextEntry={true}
-                                ref={passwordInputRef}
-                                returnKeyType="next"
-                                onSubmitEditing={Keyboard.dismiss}
-                                blurOnSubmit={false}
-                            />
-                        </View>
-                        {errorText ? <Text style={themedStyles.errorTextStyle}>{errorText}</Text> : null}
-                        <View>
-                            <Button
-                                onPress={handleSubmitPress}
-                                icon="arrow-right"
-                                mode="contained"
-                                color="green"
-                                style={{ margin: 10 }}
-                            >
-                                Login
-                            </Button>
+                        <TextInput
+                            style={themedStyles.fields.inputStyle}
+                            onChangeText={setUserPassword}
+                            placeholder="Password"
+                            disabled={loading || googleLoading}
+                            secureTextEntry={true}
+                            ref={passwordInputRef}
+                            returnKeyType="next"
+                            onSubmitEditing={Keyboard.dismiss}
+                            blurOnSubmit={false}
+                        />
+                    </View>
 
-                            <Button
-                                onPress={() => navigation.navigate("RegisterScreen")}
-                                // icon="arrow-right"
-                                mode="outlined"
-                                color="grey"
-                                style={{ margin: 10 }}
-                            >
-                                Register
-                            </Button>
-                        </View>
-                    </KeyboardAvoidingView>
-                </View>
+                    <View>
+                        <Button
+                            onPress={handleSubmitPress}
+                            icon="arrow-right"
+                            mode="contained"
+                            color="green"
+                            disabled={loading || googleLoading}
+                            loading={loading}
+                            contentStyle={themedStyles.button.iconRight}
+                        >
+                            Login
+                        </Button>
+                        {/* {errorText ? (
+                            <Text style={[themedStyles.text.redCenter, { paddingTop: 10, fontSize: 16 }]}>
+                                {errorText}
+                            </Text>
+                        ) : null} */}
+                        <Separator />
+                        <Button
+                            onPress={() => navigation.navigate("RegisterScreen")}
+                            mode="outlined"
+                            color="grey"
+                            disabled={loading || googleLoading}
+                        >
+                            Register
+                        </Button>
+                    </View>
+                </KeyboardAvoidingView>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 };
 

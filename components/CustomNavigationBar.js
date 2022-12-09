@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+
+import { SafeAreaView, FlatList, useColorScheme, View } from "react-native";
+
 import { Appbar, Button, Colors, Dialog, IconButton, Paragraph, Portal, TextInput } from "react-native-paper";
 
 import apiService from "../service/api";
@@ -64,6 +67,9 @@ function ViewTopicButtons({ navigation, topicData }) {
 }
 
 function ViewDeviceButtons({ navigation, deviceData }) {
+    const colorScheme = useColorScheme();
+    const themedStyles = styles(colorScheme);
+
     const [deviceName, setDeviceName] = useState(deviceData.name || "Unnamed Device");
 
     const [editVisible, setEditVisible] = useState(false);
@@ -94,7 +100,7 @@ function ViewDeviceButtons({ navigation, deviceData }) {
                     <Dialog.Title>Editing Device {deviceData.id}</Dialog.Title>
                     <Dialog.Content>
                         <TextInput
-                            style={styles.inputStyle}
+                            style={themedStyles.fields.inputStyle}
                             onChangeText={setDeviceName}
                             value={deviceName}
                             placeholder="Device Name"
@@ -123,6 +129,9 @@ function ViewDeviceButtons({ navigation, deviceData }) {
 }
 
 export default function CustomNavigationBar({ navigation, route, back, options, ...others }) {
+    const colorScheme = useColorScheme();
+    const themedStyles = styles(colorScheme);
+
     let topicButtons = null;
     if (route.name == "ViewTopic") {
         topicButtons = <ViewTopicButtons topicData={route.params.topicData} navigation={navigation} />;
@@ -131,7 +140,7 @@ export default function CustomNavigationBar({ navigation, route, back, options, 
     }
 
     return (
-        <Appbar.Header>
+        <Appbar.Header style={themedStyles.appBar} elevated={true}>
             {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
             <Appbar.Content title={options.title || "Topic Details"} />
             {back ? topicButtons : null}

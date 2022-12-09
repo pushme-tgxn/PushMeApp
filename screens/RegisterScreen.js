@@ -1,6 +1,15 @@
 import React, { useState, createRef } from "react";
 
-import { View, Text, Image, KeyboardAvoidingView, Keyboard, ScrollView, useColorScheme } from "react-native";
+import {
+    SafeAreaView,
+    View,
+    Text,
+    Image,
+    KeyboardAvoidingView,
+    Keyboard,
+    ScrollView,
+    useColorScheme,
+} from "react-native";
 
 import { Button, TextInput } from "react-native-paper";
 
@@ -51,7 +60,7 @@ const RegisterScreen = (props) => {
             }
         } catch (error) {
             setErrorText(error);
-            console.error(error);
+            // console.error(error);
         } finally {
             setLoading(false);
         }
@@ -59,8 +68,8 @@ const RegisterScreen = (props) => {
 
     if (isRegistraionSuccess) {
         return (
-            <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
-                <View style={{ alignItems: "center" }}>
+            <SafeAreaView style={[themedStyles.container.base, themedStyles.container.center]}>
+                <View>
                     <Image
                         source={require("../assets/namelogo.png")}
                         style={{
@@ -81,77 +90,73 @@ const RegisterScreen = (props) => {
                 >
                     Login Now
                 </Button>
-            </View>
+            </SafeAreaView>
         );
     }
     return (
-        <View style={[themedStyles.screenContainer, themedStyles.authScreenContainer]}>
+        <SafeAreaView style={[themedStyles.container.base, themedStyles.container.center]}>
             <Loader loading={loading} />
 
             <ScrollView
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    justifyContent: "center",
-                    alignContent: "center",
-                }}
+                contentContainerStyle={themedStyles.container.center}
+                style={{ marginLeft: 15, marginRight: 15 }}
             >
-                <View style={{ alignItems: "center" }}>
-                    <Image
-                        source={require("../assets/namelogo.png")}
-                        style={{
-                            width: 200,
-                            height: 150,
-                            resizeMode: "contain",
-                            margin: 30,
-                        }}
-                    />
-                </View>
-
                 <KeyboardAvoidingView enabled>
-                    <View>
-                        <TextInput
-                            style={themedStyles.inputStyle}
-                            onChangeText={setUserEmail}
-                            placeholder="Email"
-                            keyboardType="email-address"
-                            ref={emailInputRef}
-                            returnKeyType="next"
-                            autoCapitalize="none"
-                            autoCompleteType="email"
-                            textContentType="emailAddress"
-                            onSubmitEditing={() =>
-                                passwordInputRef.current && passwordInputRef.current.focus()
-                            }
-                            blurOnSubmit={false}
-                        />
-
-                        <TextInput
-                            style={themedStyles.inputStyle}
-                            onChangeText={setUserPassword}
-                            placeholder="Password"
-                            secureTextEntry={true}
-                            ref={passwordInputRef}
-                            returnKeyType="next"
-                            onSubmitEditing={Keyboard.dismiss}
-                            blurOnSubmit={false}
+                    <View style={{ alignItems: "center" }}>
+                        <Image
+                            source={require("../assets/namelogo.png")}
+                            style={{
+                                width: 200,
+                                height: 150,
+                                resizeMode: "contain",
+                                marginBottom: 30, // pad between logo and button
+                            }}
                         />
                     </View>
 
-                    {errorText != "" ? <Text style={themedStyles.errorTextStyle}>{errorText}</Text> : null}
-                    <View>
-                        <Button
-                            onPress={handleSubmitButton}
-                            icon="arrow-right"
-                            mode="contained"
-                            color="green"
-                            style={{ margin: 10 }}
-                        >
-                            Register
-                        </Button>
-                    </View>
+                    <TextInput
+                        style={themedStyles.fields.inputStyle}
+                        onChangeText={setUserEmail}
+                        placeholder="Email"
+                        keyboardType="email-address"
+                        ref={emailInputRef}
+                        returnKeyType="next"
+                        autoCapitalize="none"
+                        autoCompleteType="email"
+                        textContentType="emailAddress"
+                        onSubmitEditing={() => passwordInputRef.current && passwordInputRef.current.focus()}
+                        blurOnSubmit={false}
+                    />
+
+                    <TextInput
+                        style={themedStyles.fields.inputStyle}
+                        onChangeText={setUserPassword}
+                        placeholder="Password"
+                        secureTextEntry={true}
+                        ref={passwordInputRef}
+                        returnKeyType="next"
+                        onSubmitEditing={Keyboard.dismiss}
+                        blurOnSubmit={false}
+                    />
+
+                    {/* {errorText != "" ? <Text style={themedStyles.errorTextStyle}>{errorText}</Text> : null} */}
+
+                    <Button
+                        onPress={handleSubmitButton}
+                        icon="arrow-right"
+                        mode="contained"
+                        color="green"
+                        loading={loading}
+                        disabled={loading}
+                        contentStyle={themedStyles.button.iconRight}
+                        // style={{ margin: 10 }}
+                    >
+                        Register
+                    </Button>
                 </KeyboardAvoidingView>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 };
 

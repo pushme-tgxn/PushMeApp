@@ -6,16 +6,28 @@ const baseColors = {
     backgroundColor: "#fff",
 };
 const baseStyles = {
+    separator: {
+        marginVertical: 8,
+        margin: 0,
+        marginTop: 15,
+        marginBottom: 15,
+        borderBottomColor: "#737373",
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+
+    fab: {
+        position: "absolute",
+        backgroundColor: "#a845ff",
+        margin: 16,
+        right: 0,
+        bottom: 0,
+    },
+
     fields: {
         inputStyle: {
             flexGrow: 1,
-            // color: baseColors.textColor,
-            // borderColor: baseColors.textColor,
-            margin: 10,
+            marginBottom: 10,
             height: 40,
-            // borderWidth: 1,
-            borderRadius: 2,
-            // paddingHorizontal: 5,
         },
     },
 
@@ -23,8 +35,6 @@ const baseStyles = {
         containerView: {
             height: 40,
             margin: 10,
-            // borderWidth: 1,
-            // borderColor: "#737373",
         },
 
         inputStyle: {
@@ -39,11 +49,51 @@ const baseStyles = {
         },
     },
 
-    authScreenContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignContent: "center",
+    container: {
+        base: {
+            flex: 1,
+            paddingHorizontal: 16,
+            marginTop: 10,
+            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        },
+        center: {
+            flex: 1,
+            justifyContent: "center",
+            alignContent: "center",
+        },
     },
+
+    button: {
+        iconRight: {
+            flexDirection: "row-reverse",
+        },
+        listButton: {
+            marginBottom: 10,
+        },
+        bigButton: {
+            paddingTop: 8,
+            paddingBottom: 8,
+        },
+    },
+
+    text: {
+        redCenter: {
+            color: "red",
+            textAlign: "center",
+        },
+    },
+
+    appBar: {
+        // elevated appbar is good for now
+        // backgroundColor: "#a845ff",
+    },
+
+    // authScreenContainer: {
+    //     flex: 1,
+    //     justifyContent: "center",
+    //     alignContent: "center",
+    // },
+
     // containers
     screenContainer: {
         flex: 1,
@@ -59,11 +109,11 @@ const baseStyles = {
         color: baseColors.textColor,
         paddingHorizontal: 16,
     },
-    authScreenContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignContent: "center",
-    },
+    // authScreenContainer: {
+    //     flex: 1,
+    //     justifyContent: "center",
+    //     alignContent: "center",
+    // },
 
     // content
     baseText: {
@@ -78,23 +128,16 @@ const baseStyles = {
         height: 44,
     },
 
-    button: {
-        padding: 10,
-        margin: 5,
-        borderRadius: 2,
-        backgroundColor: baseColors.primaryColor,
-    },
-    buttonText: {
-        fontSize: 20,
-        color: "#fff",
-    },
-
-    separator: {
-        marginVertical: 8,
-        paddingTop: 10,
-        borderBottomColor: "#737373",
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
+    // button: {
+    //     padding: 10,
+    //     margin: 5,
+    //     borderRadius: 2,
+    //     backgroundColor: baseColors.primaryColor,
+    // },
+    // buttonText: {
+    //     fontSize: 20,
+    //     color: "#fff",
+    // },
 
     listItem: {
         padding: 10,
@@ -163,11 +206,6 @@ const baseStyles = {
         alignSelf: "center",
         padding: 10,
     },
-    errorTextStyle: {
-        color: "red",
-        textAlign: "center",
-        fontSize: 14,
-    },
 
     successTextStyle: {
         color: baseColors.textColor,
@@ -205,29 +243,29 @@ const darkColors = {
     backgroundColor: "#000",
 };
 const darkStyles = {
-    screenContainer: {
-        flex: 1,
-        color: darkColors.textColor,
-    },
+    // screenContainer: {
+    //     flex: 1,
+    //     color: darkColors.textColor,
+    // },
 
-    baseText: {
-        color: darkColors.textColor,
-    },
-    headerText: {
-        color: darkColors.textColor,
-    },
-    actionTextStyle: {
-        color: darkColors.textColor,
-    },
-    pushModalWrapper: {
-        backgroundColor: darkColors.backgroundColor,
-        borderWidth: 1,
-        borderColor: darkColors.textColor,
-    },
-    inputStyle: {
-        color: darkColors.textColor,
-        borderColor: darkColors.textColor,
-    },
+    // baseText: {
+    //     color: darkColors.textColor,
+    // },
+    // headerText: {
+    //     color: darkColors.textColor,
+    // },
+    // actionTextStyle: {
+    //     color: darkColors.textColor,
+    // },
+    // pushModalWrapper: {
+    //     backgroundColor: darkColors.backgroundColor,
+    //     borderWidth: 1,
+    //     borderColor: darkColors.textColor,
+    // },
+    // inputStyle: {
+    //     color: darkColors.textColor,
+    //     borderColor: darkColors.textColor,
+    // },
 
     listItem: {
         color: darkColors.textColor,

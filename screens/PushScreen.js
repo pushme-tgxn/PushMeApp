@@ -1,24 +1,20 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
-import { SafeAreaView, FlatList, Text, useColorScheme } from "react-native";
-
+import { SafeAreaView, FlatList, useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Separator, CustomButton } from "../components/Shared";
+import { Text, Button } from "react-native-paper";
 
+import { AppReducer } from "../const";
 import { setPushList } from "../reducers/app";
 
 import ViewPush from "../components/ViewPush";
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
-import { AppReducer } from "../const";
-
 import apiService from "../service/api";
-
 import styles from "../styles";
 
 const Stack = createStackNavigator();
-
 const PushScreen = () => {
     return (
         <Stack.Navigator
@@ -28,7 +24,6 @@ const PushScreen = () => {
             }}
         >
             <Stack.Screen name="PushList" component={PushList} options={{ headerShown: false }} />
-
             <Stack.Screen name="ViewPush" component={ViewPush} />
         </Stack.Navigator>
     );
@@ -39,18 +34,15 @@ const PushList = ({ navigation }) => {
     const themedStyles = styles(colorScheme);
 
     const { state, dispatch } = useContext(AppReducer);
-
     const [refreshing, setRefreshing] = useState(false);
-
-    // const [pushModalOpen, setPushModalOpen] = useState(false);
 
     const onRefresh = useCallback(() => {
         async function prepare() {
             setRefreshing(true);
             dispatch(setPushList([]));
+
             try {
                 const response = await apiService.user.getPushHistory();
-
                 dispatch(setPushList(response.pushes));
             } catch (error) {
                 alert(error);
@@ -64,6 +56,7 @@ const PushList = ({ navigation }) => {
 
     useEffect(onRefresh, []);
 
+    // reverse push history list @TODO do server-side (request `order param)
     const pushArray = [];
     Object.keys(state.pushList).map((pushId) => {
         pushArray.push(state.pushList[pushId]);
@@ -71,10 +64,10 @@ const PushList = ({ navigation }) => {
     pushArray.reverse();
 
     return (
-        <SafeAreaView style={themedStyles.screenContainer}>
+        <SafeAreaView style={[themedStyles.container.base]}>
             <FlatList
                 ListHeaderComponent={() => (
-                    <Text style={themedStyles.headerText}>
+                    <Text variant="displaySmall" style={{ marginBottom: 10 }}>
                         {refreshing
                             ? "List Loading..."
                             : pushArray.length == 0
@@ -88,14 +81,15 @@ const PushList = ({ navigation }) => {
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     return (
-                        <CustomButton
+                        <Button
+                            style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
                             onPress={async () => {
                                 navigation.navigate("ViewPush", { pushId: item.id });
                             }}
-                            style={themedStyles.listItem}
+                            mode="contained-tonal"
                         >
                             {item.id}: {item.createdAt}
-                        </CustomButton>
+                        </Button>
                     );
                 }}
             />

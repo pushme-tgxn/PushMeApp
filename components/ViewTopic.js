@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import * as Clipboard from "expo-clipboard";
-
-import Toast from "react-native-root-toast";
 
 import { SafeAreaView, FlatList, useColorScheme, View } from "react-native";
 
-import { Button, List, Text, Checkbox, IconButton, Colors } from "react-native-paper";
+import { Button, List, Text, Checkbox } from "react-native-paper";
+
+import { CopyTextButton } from "../components/Shared";
 
 import { AppReducer } from "../const";
 
-import apiService from "../service/api";
-
 import PushPopup from "./PushPopup";
 
+import apiService from "../service/api";
 import styles from "../styles";
 
 const ViewTopic = ({ navigation, route }) => {
@@ -102,11 +100,11 @@ const ViewTopic = ({ navigation, route }) => {
             <FlatList
                 ListHeaderComponent={() => (
                     <View style={{ paddingTop: 10 }}>
-                        <Text>Name: {topicData.name || "Unnamed Topic"}</Text>
+                        {topicData.name && <Text variant="labelLarge">Name: {topicData.name}</Text>}
 
-                        <Text>ID: {topicData.id}</Text>
-                        <Text>Key: {topicData.topicKey}</Text>
-                        <Text>Secret: {topicData.secretKey}</Text>
+                        <Text variant="labelLarge">ID: {topicData.id}</Text>
+                        <Text variant="labelLarge">Key: {topicData.topicKey}</Text>
+                        <Text variant="labelLarge">Secret: {topicData.secretKey}</Text>
 
                         <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <Button
@@ -128,47 +126,32 @@ const ViewTopic = ({ navigation, route }) => {
                                 visible={visible}
                                 setVisible={setVisible}
                             />
-                            <Button
-                                onPress={async () => {
-                                    await Clipboard.setStringAsync(topicData.topicKey);
-                                    Toast.show("✅ Copied topic key to clipboard. 🎉", {
-                                        duration: Toast.durations.SHORT,
-                                        position: -65,
-                                        backgroundColor: "#222222",
-                                        animation: true,
-                                    });
-                                }}
-                                icon="copy"
+                            <CopyTextButton
+                                text={topicData.topicKey}
+                                successMessage={"✅ Copied topic key to clipboard. 🎉"}
+                                style={{ flex: 1, margin: 10 }}
                                 mode="outlined"
                                 color="green"
-                                style={{ flex: 1, margin: 10 }}
                             >
                                 Copy Key
-                            </Button>
-                            <Button
-                                onPress={async () => {
-                                    await Clipboard.setStringAsync(topicData.secretKey);
-                                    Toast.show("✅ Copied topic secret to clipboard. 🤫", {
-                                        duration: Toast.durations.SHORT,
-                                        position: -65,
-                                        backgroundColor: "#222222",
-                                        animation: true,
-                                    });
-                                }}
-                                icon="copy"
+                            </CopyTextButton>
+
+                            <CopyTextButton
+                                text={topicData.secretKey}
+                                successMessage={"✅ Copied topic secret to clipboard. 🤫"}
+                                style={{ flex: 1, margin: 10 }}
                                 mode="outlined"
                                 color="orange"
-                                style={{ flex: 1, margin: 10 }}
                             >
                                 Copy Secret
-                            </Button>
+                            </CopyTextButton>
                         </View>
                         <Text variant="titleLarge">
                             {refreshing
                                 ? "Devices Loading..."
                                 : state.topicList.length == 0
                                 ? "No Devices!"
-                                : "Devices List"}
+                                : "Subscribed Devices"}
                         </Text>
                     </View>
                 )}
