@@ -221,7 +221,7 @@ const App = () => {
                     theme={theme}
                 >
                     <NavigationContainer theme={theme}>
-                        <StatusBar />
+                        <StatusBar style={scheme === "dark" ? "dark" : "light"} />
                         {state.user && <AppTabView />}
                         {!state.user && <AuthView />}
                     </NavigationContainer>
