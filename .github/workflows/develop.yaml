@@ -1,32 +1,33 @@
-name: Build Expo App
-on:
-  push:
-    branches:
-      - develop
+# name: Build Expo App
+# on:
+#   push:
+#     branches:
+#       - develop
 
-jobs:
-  build-apk:
-    name: Build Android DevClient APK
-    runs-on: ubuntu-latest
-    steps:
+# jobs:
+#   build-apk:
+#     name: Build Android DevClient APK
+#     runs-on: ubuntu-latest
+#     steps:
       
-      - name: 🏗 Setup repo
-        uses: actions/checkout@v3
+#       - name: 🏗 Setup repo
+#         uses: actions/checkout@v3
 
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
+#       - name: 🏗 Setup Node
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16.x
 
-      - name: 🏗 Setup Expo
-        uses: expo/expo-github-action@v7
-        with:
-          expo-version: latest
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+#       - name: 🏗 Setup Expo
+#         uses: expo/expo-github-action@v7
+#         with:
+#           expo-version: latest
+#           eas-version: latest
+#           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: 📦 Install dependencies
-        run: npm install
+#       - name: 📦 Install dependencies
+#         run: npm install
 
-      - name: Expo Android APK Build
-        run: npm run build:apk
+#       - name: Expo Android APK Build
+#         run: npm run build:apk
+      

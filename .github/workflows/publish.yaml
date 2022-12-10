@@ -1,13 +1,13 @@
-name: Build Expo App
+name: Publish Expo App Update
 on:
   push:
     branches:
+      - develop
       - main
 
 jobs:
- 
-  build-aab:
-    name: Build Android App Bundle
+  publish:
+    name: Publish Expo App
     runs-on: ubuntu-latest
     steps:
       
@@ -29,6 +29,5 @@ jobs:
       - name: Install NPM Packages
         run: npm install
 
-      - name: Expo Android Bundle Build
-        run: npm run build:prod
-     
+      - name: Publish Expo App
+        run: eas update --auto --non-interactive

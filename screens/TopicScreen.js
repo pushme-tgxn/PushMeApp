@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
-import { SafeAreaView, FlatList, useColorScheme } from "react-native";
+import { SafeAreaView, View, FlatList, useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { Text, Button, FAB } from "react-native-paper";
@@ -67,30 +67,36 @@ const TopicList = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
-            <FlatList
-                ListHeaderComponent={() => (
-                    <Text variant="displaySmall" style={{ marginBottom: 10 }}>
-                        {refreshing ? "List Loading..." : topicList.length == 0 ? "No Topics!" : "Topic List"}
-                    </Text>
-                )}
-                data={topicList}
-                onRefresh={onRefresh}
-                refreshing={refreshing}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item, index }) => {
-                    return (
-                        <Button
-                            style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
-                            onPress={async () => {
-                                navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
-                            }}
-                            mode="contained-tonal"
-                        >
-                            {item.createdAt} (ID: {item.id})
-                        </Button>
-                    );
-                }}
-            />
+            <View>
+                <FlatList
+                    ListHeaderComponent={() => (
+                        <Text variant="displaySmall" style={{ marginBottom: 10 }}>
+                            {refreshing
+                                ? "List Loading..."
+                                : topicList.length == 0
+                                ? "No Topics!"
+                                : "Topic List"}
+                        </Text>
+                    )}
+                    data={topicList}
+                    onRefresh={onRefresh}
+                    refreshing={refreshing}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <Button
+                                style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
+                                onPress={async () => {
+                                    navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
+                                }}
+                                mode="contained-tonal"
+                            >
+                                {item.createdAt} (ID: {item.id})
+                            </Button>
+                        );
+                    }}
+                />
+            </View>
             <FAB style={themedStyles.fab} icon="plus" onPress={createTopic} />
         </SafeAreaView>
     );
