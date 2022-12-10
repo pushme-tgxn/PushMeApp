@@ -2,7 +2,7 @@ name: Build Expo App
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
  
