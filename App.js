@@ -1,5 +1,7 @@
 import React, { useReducer, useEffect, useRef } from "react";
 
+import "expo-dev-client";
+
 import { Platform, useColorScheme } from "react-native";
 
 import {

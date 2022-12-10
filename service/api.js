@@ -26,6 +26,12 @@ class UserService {
         });
     }
 
+    authWithGoogleIdToken(idToken) {
+        return this.apiService._callApi("/auth/google/idtoken", "POST", {
+            idToken,
+        });
+    }
+
     getCurrentUser() {
         return this.apiService._callApi("/user", "GET");
     }

@@ -1,17 +1,11 @@
-name: Build Expo App
-on:
-  push:
-    branches:
-      - develop
-
+name: Publish EAS Update for PR
+on: [pull_request]
 jobs:
-  build-apk:
-    name: Build Android DevClient APK
+  publish:
     runs-on: ubuntu-latest
     steps:
-      
       - name: 🏗 Setup repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: 🏗 Setup Node
         uses: actions/setup-node@v2
@@ -28,5 +22,10 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      - name: Expo Android APK Build
-        run: npm run build:apk
+      - name: 🚀 Publish preview
+        run: eas update --auto --branch=pr-${{ github.event.number }} --non-interactive
+
+      - name: 💬 Comment preview
+        uses: expo/expo-github-action/preview-comment@v7
+        with:
+          channel: pr-${{ github.event.number }}
