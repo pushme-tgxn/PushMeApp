@@ -3,12 +3,15 @@
         "version": ">= 2.9.0"
     },
     "build": {
-        "apk": {
+        "develop": {
             "developmentClient": true,
             "distribution": "internal"
         },
         "preview": {
-            "distribution": "internal"
+            "distribution": "internal",
+            "android": {
+                "buildType": "apk"
+            }
         },
         "production": {
             "distribution": "store"
