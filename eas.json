@@ -4,9 +4,16 @@
     },
     "build": {
         "apk": {
+            "developmentClient": true,
+            "distribution": "internal",
+            "buildType": "apk"
+        },
+        "preview": {
             "distribution": "internal"
         },
-        "production": {}
+        "production": {
+            "distribution": "store"
+        }
     },
     "submit": {
         "production": {}

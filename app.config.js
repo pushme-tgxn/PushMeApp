@@ -47,6 +47,9 @@ export default ({ config }) => {
         runtimeVersion: {
             policy: "sdkVersion",
         },
+        developmentClient: {
+            silentLaunch: true,
+        },
         userInterfaceStyle: "automatic", // auto fof production
         // userInterfaceStyle: "dark", // force for testing
     };
