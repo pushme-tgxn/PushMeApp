@@ -28,6 +28,10 @@ export default ({ config }) => {
                 projectId: "dc94d550-9538-48ff-b051-43562cdcf34e",
             },
         },
+        androidStatusBar: {
+            // backgroundColor: "#C2185B",
+            translucent: false,
+        },
         splash: LIGHT_SPLASH,
         ios: {
             ...config.ios,
@@ -50,7 +54,6 @@ export default ({ config }) => {
         developmentClient: {
             silentLaunch: true,
         },
-        userInterfaceStyle: "automatic", // auto fof production
-        // userInterfaceStyle: "dark", // force for testing
+        // userInterfaceStyle: "light", // force for testing
     };
 };
