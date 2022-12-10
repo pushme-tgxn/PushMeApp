@@ -67,36 +67,31 @@ const TopicList = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
-            <View>
-                <FlatList
-                    ListHeaderComponent={() => (
-                        <Text variant="displaySmall" style={{ marginBottom: 10 }}>
-                            {refreshing
-                                ? "List Loading..."
-                                : topicList.length == 0
-                                ? "No Topics!"
-                                : "Topic List"}
-                        </Text>
-                    )}
-                    data={topicList}
-                    onRefresh={onRefresh}
-                    refreshing={refreshing}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <Button
-                                style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
-                                onPress={async () => {
-                                    navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
-                                }}
-                                mode="contained-tonal"
-                            >
-                                {item.createdAt} (ID: {item.id})
-                            </Button>
-                        );
-                    }}
-                />
-            </View>
+            <FlatList
+                ListHeaderComponent={() => (
+                    <Text variant="displaySmall" style={{ marginBottom: 10 }}>
+                        {refreshing ? "List Loading..." : topicList.length == 0 ? "No Topics!" : "Topic List"}
+                    </Text>
+                )}
+                data={topicList}
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item, index }) => {
+                    return (
+                        <Button
+                            style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
+                            onPress={async () => {
+                                navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
+                            }}
+                            mode="contained-tonal"
+                        >
+                            {item.createdAt} (ID: {item.id})
+                        </Button>
+                    );
+                }}
+            />
+
             <FAB style={themedStyles.fab} icon="plus" onPress={createTopic} />
         </SafeAreaView>
     );
