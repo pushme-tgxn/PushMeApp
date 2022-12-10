@@ -3,9 +3,8 @@
     "scripts": {
         "start": "npx cross-env BACKEND_URL='http://10.1.1.20:3000' expo start",
         "start:prod": "npx cross-env BACKEND_URL='https://pushme.tgxn.net' expo start",
-        "submit:android": "eas submit --platform android",
-        "build:apk": "eas build -p android --profile apk",
-        "build:prod": "eas build -p android --profile production",
+        "submit": "eas submit --platform android",
+        "build": "eas build -p android --profile apk",
         "android": "expo start --android",
         "ios": "expo start --ios",
         "web": "expo start --web"
