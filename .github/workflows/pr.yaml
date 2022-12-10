@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: 🚀 Publish preview
-        run: expo publish --release-channel=pr-${{ github.event.number }} --non-interactive
+        run: expo update --auto --branch=pr-${{ github.event.number }} --non-interactive
 
       - name: 💬 Comment preview
         uses: expo/expo-github-action/preview-comment@v7
