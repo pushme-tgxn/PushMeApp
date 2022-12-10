@@ -28,7 +28,9 @@ import apiService from "../service/api";
 import styles from "../styles";
 
 // WebBrowser.maybeCompleteAuthSession();
-GoogleSignin.configure();
+GoogleSignin.configure({
+    webClientId: "496431691586-8fp98qilt66vsteui7a5kf3ipm4i2rj4.apps.googleusercontent.com",
+});
 
 const LoginScreen = ({ navigation }) => {
     const colorScheme = useColorScheme();
@@ -119,7 +121,18 @@ const LoginScreen = ({ navigation }) => {
         try {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const userInfo = await GoogleSignin.signIn();
-            dispatch(setUserData(userInfo));
+
+            // const tokens = await GoogleSignin.getTokens();
+
+            console.log(userInfo);
+
+            // const responseJson = await apiService.user.authWithGoogle(authentication.accessToken);
+            const responseJson = await apiService.user.authWithGoogleIdToken(userInfo.idToken);
+            if (responseJson.success) {
+                dispatch(setUserData(responseJson.user));
+            } else {
+                setErrorText(responseJson.message);
+            }
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
@@ -129,6 +142,7 @@ const LoginScreen = ({ navigation }) => {
                 // play services not available or outdated
                 setErrorText("PLAY_SERVICES_NOT_AVAILABLE");
             } else {
+                setErrorText("some other error happened");
                 // some other error happened
             }
         } finally {

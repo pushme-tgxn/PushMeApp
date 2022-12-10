@@ -6,26 +6,26 @@ on:
 
 jobs:
   build-apk:
-    name: Build Android APK
+    name: Build Android DevClient APK
     runs-on: ubuntu-latest
     steps:
       
-      - name: Checkout Repo
+      - name: 🏗 Setup repo
         uses: actions/checkout@v3
 
-      - name: Setup Node
+      - name: 🏗 Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
 
-      - name: Setup Expo
+      - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
         with:
           expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Install NPM Packages
+      - name: 📦 Install dependencies
         run: npm install
 
       - name: Expo Android APK Build
