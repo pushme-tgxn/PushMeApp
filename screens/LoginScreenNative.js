@@ -122,12 +122,7 @@ const LoginScreen = ({ navigation }) => {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const userInfo = await GoogleSignin.signIn();
 
-            // const tokens = await GoogleSignin.getTokens();
-
-            console.log(userInfo);
-
-            // const responseJson = await apiService.user.authWithGoogle(authentication.accessToken);
-            const responseJson = await apiService.user.authWithGoogleIdToken(userInfo.idToken);
+            const responseJson = await apiService.user.authWithGoogle(userInfo.idToken);
             if (responseJson.success) {
                 dispatch(setUserData(responseJson.user));
             } else {

@@ -20,14 +20,8 @@ class UserService {
         });
     }
 
-    authWithGoogle(accessToken) {
+    authWithGoogle(idToken) {
         return this.apiService._callApi("/auth/google/token", "POST", {
-            accessToken,
-        });
-    }
-
-    authWithGoogleIdToken(idToken) {
-        return this.apiService._callApi("/auth/google/idtoken", "POST", {
             idToken,
         });
     }
