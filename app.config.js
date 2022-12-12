@@ -38,10 +38,11 @@ export default ({ config }) => {
                 projectId: "dc94d550-9538-48ff-b051-43562cdcf34e",
             },
         },
-        androidStatusBar: {
-            // backgroundColor: "#C2185B",
-            translucent: true,
-        },
+        // androidStatusBar: {
+        //     backgroundColor: "#222222",
+        //     translucent: true,
+        //     style: "dark",
+        // },
         splash: LIGHT_SPLASH,
         ios: {
             ...config.ios,
