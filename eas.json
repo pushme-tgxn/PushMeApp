@@ -7,8 +7,7 @@
             "distribution": "internal",
             "developmentClient": true,
             "env": {
-                "BACKEND_URL": "https://pushme.tgxn.net",
-                "PROJECT_ID": "net.tgxn.pushme.develop"
+                "ENVIRONMENT": "develop"
             }
         },
         "preview": {
@@ -17,15 +16,13 @@
                 "buildType": "apk"
             },
             "env": {
-                "BACKEND_URL": "https://pushme.tgxn.net",
-                "PROJECT_ID": "net.tgxn.pushme.preview"
+                "ENVIRONMENT": "preview"
             }
         },
         "production": {
             "distribution": "store",
             "env": {
-                "BACKEND_URL": "https://pushme.tgxn.net",
-                "PROJECT_ID": "net.tgxn.pushme"
+                "ENVIRONMENT": "production"
             }
         }
     },

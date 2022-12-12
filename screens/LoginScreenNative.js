@@ -154,26 +154,25 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
-            {/* <Loader loading={loading} /> */}
-            <ServerPopup visible={configModalShown} setVisible={setConfigModalShown} />
-            <View style={{ position: "absolute", top: 5, right: 10 }}>
-                <IconButton
-                    // disabled={false}
-                    icon="cog"
-                    mode="outlined"
-                    size={25}
-                    // onPress={showConfigModal}
-                    onPress={() => {
-                        console.log("show config");
-                        setConfigModalShown(true);
-                    }}
-                />
-            </View>
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={themedStyles.container.center}
                 style={{ marginLeft: 15, marginRight: 15 }}
             >
+                <View style={{ position: "absolute", top: 15, right: 0 }}>
+                    <ServerPopup visible={configModalShown} setVisible={setConfigModalShown} />
+                    <IconButton
+                        // disabled={false}
+                        icon="cog"
+                        mode="outlined"
+                        size={25}
+                        // onPress={showConfigModal}
+                        onPress={() => {
+                            console.log("show config");
+                            setConfigModalShown(true);
+                        }}
+                    />
+                </View>
                 <KeyboardAvoidingView enabled>
                     <View style={{ alignItems: "center" }}>
                         <Image

@@ -20,14 +20,24 @@ export default ({ config }) => {
         },
     };
 
+    const { ENVIRONMENT, BACKEND_URL } = process.env;
+
     let backendUrl = "https://pushme.tgxn.net";
-    if (process.env.BACKEND_URL) {
-        backendUrl = process.env.BACKEND_URL;
+    if (BACKEND_URL) {
+        backendUrl = BACKEND_URL;
     }
 
+    // set display name, package ident and icon
+    let packageName = "PushMe";
     let packageIdentifier = "net.tgxn.pushme";
-    if (process.env.PACKAGE_ID) {
-        packageIdentifier = process.env.PACKAGE_ID;
+
+    if (!ENVIRONMENT || ENVIRONMENT !== "production") {
+        packageIdentifier = `net.tgxn.pushme.${ENVIRONMENT}`;
+        if (ENVIRONMENT === "develop") {
+            packageName = "PushMe Dev";
+        } else if (ENVIRONMENT === "preview") {
+            packageName = "PushMe Preview";
+        }
     }
 
     return {
