@@ -11,6 +11,7 @@ on:
 
 jobs:
   bootstrap_expo:
+    name: Run Expo CLI Command
     runs-on: ubuntu-latest
     environment: production
     steps:
