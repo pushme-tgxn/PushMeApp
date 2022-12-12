@@ -22,11 +22,11 @@
             }
         },
         "production": {
-            "distribution": "store"
-        },
-        "env": {
-            "BACKEND_URL": "https://pushme.tgxn.net",
-            "PROJECT_ID": "net.tgxn.pushme"
+            "distribution": "store",
+            "env": {
+                "BACKEND_URL": "https://pushme.tgxn.net",
+                "PROJECT_ID": "net.tgxn.pushme"
+            }
         }
     },
     "submit": {
