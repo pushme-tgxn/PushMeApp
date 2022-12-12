@@ -222,9 +222,9 @@ const App = () => {
                 >
                     <NavigationContainer theme={theme}>
                         <StatusBar
-                            style={scheme === "dark" ? "light" : "dark"}
-                            // translucent={true}
-                            // backgroundColor={theme.colors.background}
+                        // style={scheme === "dark" ? "light" : "dark"}
+                        // translucent={true}
+                        // backgroundColor={theme.colors.background}
                         />
                         {state.user && <AppTabView />}
                         {!state.user && <AuthView />}

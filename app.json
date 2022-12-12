@@ -23,7 +23,6 @@
         },
         "android": {
             "icon": "./assets/logo.png",
-            "package": "net.tgxn.pushme",
             "versionCode": 195,
             "permissions": [],
             "adaptiveIcon": {
