@@ -1,6 +1,6 @@
 export default ({ config }) => {
     const LIGHT_SPLASH = {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#222222",
         resizeMode: "contain",
         image: "./assets/splash.png",
     };
@@ -34,19 +34,19 @@ export default ({ config }) => {
             },
         },
         androidStatusBar: {
-            // backgroundColor: "#222222",
-            // translucent: true,
-            // style: "dark",
+            backgroundColor: "#22222200",
+            translucent: true,
+            style: "dark-content",
         },
-        splash: LIGHT_SPLASH,
+        // splash: LIGHT_SPLASH,
         ios: {
             ...config.ios,
-            ...SHARED_SPLASH,
+            // ...SHARED_SPLASH,
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
         android: {
             ...config.android,
-            ...SHARED_SPLASH,
+            // ...SHARED_SPLASH,
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
 
