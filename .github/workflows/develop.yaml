@@ -17,5 +17,5 @@ jobs:
     uses: ./.github/workflows/bootstrap.yaml
     secrets: inherit
     with:
-      command: eas update --auto --non-interactive --no-wait
+      command: eas update --auto --non-interactive
 
