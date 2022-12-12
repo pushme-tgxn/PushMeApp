@@ -19,12 +19,14 @@
         "assetBundlePatterns": ["**/*"],
         "ios": {
             "icon": "./assets/logo.png",
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "net.tgxn.pushme"
         },
         "android": {
             "icon": "./assets/logo.png",
             "versionCode": 198,
             "permissions": [],
+            "package": "net.tgxn.pushme",
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundImage": "./assets/adaptive-icon-bg.png"

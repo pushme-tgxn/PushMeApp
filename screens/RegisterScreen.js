@@ -13,10 +13,9 @@ import {
 
 import { Button, TextInput } from "react-native-paper";
 
+import { showToast } from "../components/Shared";
+
 import apiService from "../service/api";
-
-import Loader from "../components/Loader";
-
 import styles from "../styles";
 
 const RegisterScreen = (props) => {
@@ -38,12 +37,12 @@ const RegisterScreen = (props) => {
         setErrorText(false);
 
         if (!userEmail) {
-            alert("Please enter an Email!");
+            showToast("❌ Please enter your Email Address!");
             return;
         }
 
         if (!userPassword) {
-            alert("Please enter a Password!");
+            showToast("❌ Please enter your Password!");
             return;
         }
 
@@ -54,13 +53,13 @@ const RegisterScreen = (props) => {
 
             if (responseJson.success) {
                 setIsRegistraionSuccess(true);
-                console.log("Registration Successful. Please Login to proceed");
+                showToast("✅ Registration Successful. You may now login.");
             } else {
                 setErrorText(responseJson.message);
             }
         } catch (error) {
-            setErrorText(error);
-            // console.error(error);
+            // setErrorText(error.toString());
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -94,13 +93,10 @@ const RegisterScreen = (props) => {
         );
     }
     return (
-        <SafeAreaView style={[themedStyles.container.base, themedStyles.container.center]}>
-            <Loader loading={loading} />
-
+        <SafeAreaView style={[themedStyles.container.base]}>
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={themedStyles.container.center}
-                style={{ marginLeft: 15, marginRight: 15 }}
             >
                 <KeyboardAvoidingView enabled>
                     <View style={{ alignItems: "center" }}>
@@ -141,7 +137,11 @@ const RegisterScreen = (props) => {
                     />
 
                     {/* {errorText != "" ? <Text style={themedStyles.errorTextStyle}>{errorText}</Text> : null} */}
-
+                    {errorText ? (
+                        <Text style={[themedStyles.text.redCenter, { paddingVertical: 10, fontSize: 16 }]}>
+                            {errorText}
+                        </Text>
+                    ) : null}
                     <Button
                         onPress={handleSubmitButton}
                         icon="arrow-right"

@@ -8,6 +8,8 @@ import { Text, Button, FAB } from "react-native-paper";
 import { AppReducer } from "../const";
 import { setTopicList } from "../reducers/app";
 
+import { reloadTopicList } from "../callbacks";
+
 import ViewTopic from "../components/ViewTopic";
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
@@ -29,7 +31,7 @@ const TopicScreen = () => {
     );
 };
 
-const TopicList = ({ navigation }) => {
+const TopicList = ({ navigation, route }) => {
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
@@ -39,22 +41,20 @@ const TopicList = ({ navigation }) => {
     const onRefresh = useCallback(() => {
         async function prepare() {
             setRefreshing(true);
-            dispatch(setTopicList([]));
-
-            try {
-                const response = await apiService.topic.getList();
-                dispatch(setTopicList(response.topics));
-            } catch (error) {
-                alert(error);
-                console.error(error);
-            } finally {
-                setRefreshing(false);
-            }
+            await reloadTopicList(dispatch);
+            setRefreshing(false);
         }
         prepare();
     }, []);
 
     useEffect(onRefresh, []);
+
+    useEffect(() => {
+        if (route?.params?.refresh) {
+            console.log("refreshing topiclist");
+            onRefresh();
+        }
+    }, [route]);
 
     const createTopic = async () => {
         await apiService.topic.create();

@@ -37,7 +37,7 @@ const ConfigStack = () => {
     );
 };
 
-const ConfigScreen = ({ navigation }) => {
+const ConfigScreen = ({ navigation, route }) => {
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
@@ -65,6 +65,13 @@ const ConfigScreen = ({ navigation }) => {
     }, []);
 
     useEffect(onRefresh, []);
+
+    useEffect(() => {
+        if (route?.params?.refresh) {
+            console.log("refreshing devices");
+            onRefresh();
+        }
+    }, [route]);
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>

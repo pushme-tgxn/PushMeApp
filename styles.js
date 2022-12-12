@@ -51,20 +51,20 @@ const baseStyles = {
     },
 
     container: {
-        base: {
+        base: { // base container for top-level screens
             flex: 1,
             marginTop: 10,
             paddingHorizontal: 16,
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
-        pane: {
+        pane: { // container for tab panes
             flex: 1,
-            paddingTop: 5,
+            paddingTop: 15,
             paddingHorizontal: 16,
         },
-        center: {
+        center: { // center pane for login screen
             flex: 1,
-            paddingHorizontal: 16,
+            paddingHorizontal: 10,
             justifyContent: "center",
             alignContent: "center",
         },

@@ -99,7 +99,7 @@ const ViewTopic = ({ navigation, route }) => {
         <SafeAreaView style={themedStyles.container.pane}>
             <FlatList
                 ListHeaderComponent={() => (
-                    <View style={{ paddingTop: 10 }}>
+                    <View>
                         {topicData.name && <Text variant="labelLarge">Name: {topicData.name}</Text>}
 
                         <Text variant="labelLarge">ID: {topicData.id}</Text>

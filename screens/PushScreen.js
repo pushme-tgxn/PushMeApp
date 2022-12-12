@@ -29,7 +29,7 @@ const PushScreen = () => {
     );
 };
 
-const PushList = ({ navigation }) => {
+const PushList = ({ navigation, route }) => {
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
@@ -55,6 +55,13 @@ const PushList = ({ navigation }) => {
     }, []);
 
     useEffect(onRefresh, []);
+
+    useEffect(() => {
+        if (route?.params?.refresh) {
+            console.log("refreshing pushlist");
+            onRefresh();
+        }
+    }, [route]);
 
     // reverse push history list @TODO do server-side (request `order param)
     const pushArray = [];

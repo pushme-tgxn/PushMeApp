@@ -12,12 +12,9 @@ import {
 
 import { IconButton, Button, Text, TextInput } from "react-native-paper";
 
-// import * as WebBrowser from "expo-web-browser";
-// import * as Google from "expo-auth-session/providers/google";
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 
-import { GoogleSignin, GoogleSigninButton, statusCodes } from "@react-native-google-signin/google-signin";
-
-import Loader from "../components/Loader";
+import { showToast } from "../components/Shared";
 
 import { Separator } from "../components/Shared";
 import ServerPopup from "../components/ServerPopup";
@@ -28,7 +25,6 @@ import { setUserData } from "../reducers/app";
 import apiService from "../service/api";
 import styles from "../styles";
 
-// WebBrowser.maybeCompleteAuthSession();
 GoogleSignin.configure({
     webClientId: "496431691586-8fp98qilt66vsteui7a5kf3ipm4i2rj4.apps.googleusercontent.com",
 });
@@ -53,46 +49,16 @@ const LoginScreen = ({ navigation }) => {
     // so we can switch focus after email is complete
     const passwordInputRef = createRef();
 
-    // const [request, response, promptAsync] = Google.useAuthRequest({
-    //     expoClientId: "496431691586-9g6qno92idps781s2sto66ar863c8jr4.apps.googleusercontent.com",
-    //     androidClientId: "496431691586-8oab0j5ea8upcn0qdatv2j0lco4dplg1.apps.googleusercontent.com",
-    //     // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-    //     // webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-    // });
-
-    // useEffect(() => {
-    //     async function initGoogle() {
-    //         try {
-    //             if (response?.type === "success") {
-    //                 const { authentication } = response;
-    //                 console.log("success", authentication);
-
-    //                 const responseJson = await apiService.user.authWithGoogle(authentication.accessToken);
-    //                 // setGoogleLoading(false);
-
-    //                 if (responseJson.success) {
-    //                     dispatch(setUserData(responseJson.user));
-    //                 } else {
-    //                     setErrorText(responseJson.message);
-    //                 }
-    //             }
-    //         } finally {
-    //             setGoogleLoading(false);
-    //         }
-    //     }
-    //     initGoogle();
-    // }, [response]);
-
     const handleSubmitPress = async () => {
         setErrorText(false);
 
         if (!emailAddress) {
-            alert("Please enter your Email!");
+            showToast("❌ Please enter your Email Address!");
             return;
         }
 
         if (!userPassword) {
-            alert("Please enter your Password!");
+            showToast("❌ Please enter your Password!");
             return;
         }
 
@@ -131,6 +97,7 @@ const LoginScreen = ({ navigation }) => {
             }
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                showToast("🤷‍♂️ Google login cancelled.");
                 // user cancelled the login flow
             } else if (error.code === statusCodes.IN_PROGRESS) {
                 // operation (e.g. sign in) is in progress already
@@ -157,9 +124,8 @@ const LoginScreen = ({ navigation }) => {
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={themedStyles.container.center}
-                style={{ marginLeft: 15, marginRight: 15 }}
             >
-                <View style={{ position: "absolute", top: 15, right: 0 }}>
+                <View style={{ position: "absolute", top: 10, right: 0 }}>
                     <ServerPopup visible={configModalShown} setVisible={setConfigModalShown} />
                     <IconButton
                         // disabled={false}
