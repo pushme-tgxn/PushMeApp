@@ -8,8 +8,6 @@ import { Text, Button, FAB } from "react-native-paper";
 import { AppReducer } from "../const";
 import { setTopicList } from "../reducers/app";
 
-import { reloadTopicList } from "../callbacks";
-
 import ViewTopic from "../components/ViewTopic";
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
@@ -41,8 +39,17 @@ const TopicList = ({ navigation, route }) => {
     const onRefresh = useCallback(() => {
         async function prepare() {
             setRefreshing(true);
-            await reloadTopicList(dispatch);
-            setRefreshing(false);
+            dispatch(setTopicList([]));
+
+            try {
+                const response = await apiService.topic.getList();
+                dispatch(setTopicList(response.topics));
+            } catch (error) {
+                alert(error);
+                console.error(error);
+            } finally {
+                setRefreshing(false);
+            }
         }
         prepare();
     }, []);
