@@ -5,17 +5,9 @@ on:
       - develop
 
 jobs:
-  build-dev-apk:
-    name: Build Android DevClient APK
-    uses: ./.github/workflows/bootstrap.yaml
-    secrets: inherit
-    with:
-      command: eas build -p android --profile develop --non-interactive --no-wait
-          
   publish-update:
     name: Publish Expo App
     uses: ./.github/workflows/bootstrap.yaml
     secrets: inherit
     with:
       command: eas update --auto --non-interactive
-
