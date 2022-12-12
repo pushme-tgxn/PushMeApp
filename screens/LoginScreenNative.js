@@ -10,7 +10,7 @@ import {
     useColorScheme,
 } from "react-native";
 
-import { Button, TextInput } from "react-native-paper";
+import { IconButton, Button, Text, TextInput } from "react-native-paper";
 
 // import * as WebBrowser from "expo-web-browser";
 // import * as Google from "expo-auth-session/providers/google";
@@ -20,6 +20,7 @@ import { GoogleSignin, GoogleSigninButton, statusCodes } from "@react-native-goo
 import Loader from "../components/Loader";
 
 import { Separator } from "../components/Shared";
+import ServerPopup from "../components/ServerPopup";
 
 import { AppReducer } from "../const";
 import { setUserData } from "../reducers/app";
@@ -145,10 +146,29 @@ const LoginScreen = ({ navigation }) => {
         }
     };
 
+    const [configModalShown, setConfigModalShown] = useState(false);
+    const showConfigModal = () => {
+        console.log("show config");
+        setConfigModalShown(true);
+    };
+
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
             {/* <Loader loading={loading} /> */}
-
+            <ServerPopup visible={configModalShown} setVisible={setConfigModalShown} />
+            <View style={{ position: "absolute", top: 5, right: 10 }}>
+                <IconButton
+                    // disabled={false}
+                    icon="cog"
+                    mode="outlined"
+                    size={25}
+                    // onPress={showConfigModal}
+                    onPress={() => {
+                        console.log("show config");
+                        setConfigModalShown(true);
+                    }}
+                />
+            </View>
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={themedStyles.container.center}
@@ -223,11 +243,11 @@ const LoginScreen = ({ navigation }) => {
                         >
                             Login
                         </Button>
-                        {/* {errorText ? (
+                        {errorText ? (
                             <Text style={[themedStyles.text.redCenter, { paddingTop: 10, fontSize: 16 }]}>
                                 {errorText}
                             </Text>
-                        ) : null} */}
+                        ) : null}
                         <Separator />
                         <Button
                             onPress={() => navigation.navigate("RegisterScreen")}
