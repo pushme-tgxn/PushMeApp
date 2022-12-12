@@ -1,0 +1,10 @@
+name: Build Android DevClient APK
+on: workflow_dispatch
+
+jobs:
+  build-dev-apk:
+    name: Build Android DevClient APK
+    uses: ./.github/workflows/bootstrap.yaml
+    secrets: inherit
+    with:
+      command: eas build -p android --profile develop --non-interactive --no-wait

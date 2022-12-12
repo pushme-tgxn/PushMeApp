@@ -5,28 +5,16 @@
     "build": {
         "develop": {
             "distribution": "internal",
-            "developmentClient": true,
-            "env": {
-                "BACKEND_URL": "https://pushme.tgxn.net",
-                "PROJECT_ID": "net.tgxn.pushme.develop"
-            }
+            "developmentClient": true
         },
         "preview": {
             "distribution": "internal",
             "android": {
                 "buildType": "apk"
-            },
-            "env": {
-                "BACKEND_URL": "https://pushme.tgxn.net",
-                "PROJECT_ID": "net.tgxn.pushme.preview"
             }
         },
         "production": {
-            "distribution": "store",
-            "env": {
-                "BACKEND_URL": "https://pushme.tgxn.net",
-                "PROJECT_ID": "net.tgxn.pushme"
-            }
+            "distribution": "store"
         }
     },
     "submit": {

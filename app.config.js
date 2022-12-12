@@ -25,11 +25,6 @@ export default ({ config }) => {
         backendUrl = process.env.BACKEND_URL;
     }
 
-    let packageIdentifier = "net.tgxn.pushme";
-    if (process.env.PACKAGE_ID) {
-        packageIdentifier = process.env.PACKAGE_ID;
-    }
-
     return {
         ...config,
         extra: {
@@ -38,22 +33,20 @@ export default ({ config }) => {
                 projectId: "dc94d550-9538-48ff-b051-43562cdcf34e",
             },
         },
-        // androidStatusBar: {
-        //     backgroundColor: "#222222",
-        //     translucent: true,
-        //     style: "dark",
-        // },
+        androidStatusBar: {
+            // backgroundColor: "#222222",
+            // translucent: true,
+            // style: "dark",
+        },
         splash: LIGHT_SPLASH,
         ios: {
             ...config.ios,
             ...SHARED_SPLASH,
-            bundleIdentifier: packageIdentifier,
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
         android: {
             ...config.android,
             ...SHARED_SPLASH,
-            package: packageIdentifier,
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
 

@@ -29,7 +29,7 @@ const TopicScreen = () => {
     );
 };
 
-const TopicList = ({ navigation }) => {
+const TopicList = ({ navigation, route }) => {
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
@@ -55,6 +55,13 @@ const TopicList = ({ navigation }) => {
     }, []);
 
     useEffect(onRefresh, []);
+
+    useEffect(() => {
+        if (route?.params?.refresh) {
+            console.log("refreshing topiclist");
+            onRefresh();
+        }
+    }, [route]);
 
     const createTopic = async () => {
         await apiService.topic.create();

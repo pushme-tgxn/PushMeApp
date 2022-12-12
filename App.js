@@ -60,6 +60,8 @@ Notifications.setNotificationHandler({
     }),
 });
 
+SplashScreen.preventAutoHideAsync();
+
 const App = () => {
     // DefaultTheme;
     const scheme = useColorScheme();
@@ -130,7 +132,7 @@ const App = () => {
 
     useEffect(() => {
         async function prepare() {
-            await SplashScreen.preventAutoHideAsync();
+            // await SplashScreen.preventAutoHideAsync();
             let loggedInUser, expoToken;
 
             try {
@@ -238,7 +240,7 @@ const App = () => {
                             // showHideTransition={statusBarTransition}
                             // hidden={true}
                             // style={scheme === "dark" ? "light" : "dark"}
-                            style={scheme === "dark" ? "light" : "dark"}
+                            // style={scheme === "dark" ? "light" : "dark"}
                             // translucent={false}
                             // backgroundColor={scheme === "dark" ? "#222222" : "#FFFFFF"}
                             backgroundColor={theme.colors.background}

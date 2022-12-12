@@ -19,10 +19,10 @@ const AppTabView = () => {
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
 
-                    if (route.name === "Push History") {
+                    if (route.name === "History") {
                         iconName = "history";
                     } else if (route.name === "Topics") {
-                        iconName = "key";
+                        iconName = "book";
                     } else if (route.name === "Settings") {
                         iconName = "user-cog";
                     }
@@ -32,7 +32,7 @@ const AppTabView = () => {
             })}
         >
             <Tab.Screen name="Topics" component={TopicScreen} />
-            <Tab.Screen name="Push History" component={PushScreen} />
+            <Tab.Screen name="History" component={PushScreen} />
             <Tab.Screen name="Settings" component={ConfigScreen} />
         </Tab.Navigator>
     );

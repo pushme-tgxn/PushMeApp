@@ -5,19 +5,12 @@ on:
       - main
 
 jobs:
-  build-prod-apk:
-    name: Build Android Prod APK
-    uses: ./.github/workflows/bootstrap.yaml
-    secrets: inherit
-    with:
-      command: eas build -p android --profile preview --non-interactive
-      
   build-prob-aab-and-submit:
     name: Build and Submit Android App Bundle
     uses: ./.github/workflows/bootstrap.yaml
     secrets: inherit
     with:
-      command: eas build -p android --profile production --auto-submit --non-interactive
+      command: eas build -p android --profile production --auto-submit --non-interactive --no-wait
     
   publish-update:
     name: Publish Expo App

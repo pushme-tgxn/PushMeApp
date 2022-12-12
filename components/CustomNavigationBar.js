@@ -26,7 +26,7 @@ function ViewTopicButtons({ navigation, topicData }) {
         await apiService.topic.delete(topicData.id);
         setDeleteVisible(false);
         console.log("deleted!");
-        navigation.navigate("TopicList");
+        navigation.navigate("TopicList", { refresh: true });
     };
 
     return (
@@ -88,7 +88,7 @@ function ViewDeviceButtons({ navigation, deviceData }) {
         await apiService.device.deleteRegistration(deviceData.id);
 
         setDeleteVisible(false);
-        navigation.navigate("ConfigScreen");
+        navigation.navigate("ConfigScreen", { refresh: true });
     };
 
     return (
