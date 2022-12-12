@@ -10,12 +10,12 @@ jobs:
     uses: ./.github/workflows/bootstrap.yaml
     secrets: inherit
     with:
-      command: eas build -p android --profile develop --non-interactive
+      command: eas build -p android --profile develop --non-interactive --no-wait
           
   publish-update:
     name: Publish Expo App
     uses: ./.github/workflows/bootstrap.yaml
     secrets: inherit
     with:
-      command: eas update --auto --non-interactive
+      command: eas update --auto --non-interactive --no-wait
 
