@@ -114,7 +114,7 @@ const ViewTopic = ({ navigation, route }) => {
                                 icon="check"
                                 mode="contained"
                                 color="purple"
-                                style={{ flex: 1, margin: 10 }}
+                                style={{ flex: 1, marginVertical: 10 }}
                             >
                                 Test Push
                             </Button>
@@ -129,7 +129,7 @@ const ViewTopic = ({ navigation, route }) => {
                             <CopyTextButton
                                 text={topicData.topicKey}
                                 successMessage={"✅ Copied topic key to clipboard. 🎉"}
-                                style={{ flex: 1, margin: 10 }}
+                                style={{ marginVertical: 5, marginRight: 10 }}
                                 mode="outlined"
                                 color="green"
                             >
@@ -139,17 +139,17 @@ const ViewTopic = ({ navigation, route }) => {
                             <CopyTextButton
                                 text={topicData.secretKey}
                                 successMessage={"✅ Copied topic secret to clipboard. 🤫"}
-                                style={{ flex: 1, margin: 10 }}
+                                style={{ marginVertical: 5 }}
                                 mode="outlined"
                                 color="orange"
                             >
                                 Copy Secret
                             </CopyTextButton>
                         </View>
-                        <Text variant="titleLarge">
+                        <Text variant="titleLarge" style={{ paddingTop: 10 }}>
                             {refreshing
                                 ? "Devices Loading..."
-                                : state.topicList.length == 0
+                                : deviceList.length == 0
                                 ? "No Devices!"
                                 : "Subscribed Devices"}
                         </Text>

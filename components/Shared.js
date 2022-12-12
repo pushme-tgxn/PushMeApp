@@ -34,7 +34,7 @@ export const CopyTextButton = (props) => {
             icon={props.icon || "copy"}
             mode={props.mode || "outlined"}
             color={props.color || "green"}
-            style={{ flex: 1, margin: 10 }}
+            style={{ ...props.style, flex: 1 }}
         >
             {props.children}
         </Button>
