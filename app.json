@@ -4,7 +4,7 @@
         "description": "Simple Push Notifications & Approvals",
         "slug": "pushme",
         "originalFullName": "@tgxn/pushme",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "githubUrl": "https://github.com/pushme-tgxn-net/PushMeApp",
         "orientation": "portrait",
         "userInterfaceStyle": "automatic",
@@ -24,7 +24,7 @@
         },
         "android": {
             "icon": "./assets/logo.png",
-            "versionCode": 200,
+            "versionCode": 201,
             "permissions": [],
             "package": "net.tgxn.pushme",
             "adaptiveIcon": {
@@ -37,7 +37,15 @@
         },
         "plugins": [
             "@react-native-google-signin/google-signin",
-            "./plugins/fix-night-mode"
+            "./plugins/fix-night-mode",
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "enableProguardInReleaseBuilds": true
+                    }
+                }
+            ]
         ]
     }
 }

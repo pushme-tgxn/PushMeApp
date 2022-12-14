@@ -234,16 +234,8 @@ const App = () => {
                 >
                     <NavigationContainer theme={theme}>
                         <StatusBar
-                            // animated={false}
-                            // backgroundColor="#222222"
                             backgroundColor={theme.colors.background}
-                            // barStyle={statusBarStyle}
-                            // showHideTransition={statusBarTransition}
-                            // hidden={true}
                             style={scheme === "dark" ? "light" : "dark"}
-                            // style={scheme === "dark" ? "light" : "dark"}
-                            // translucent={false}
-                            // backgroundColor={scheme === "dark" ? "#222222" : "#FFFFFF"}
                         />
                         {state.user && <AppTabView />}
                         {!state.user && <AuthView />}
