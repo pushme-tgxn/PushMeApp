@@ -1,12 +1,12 @@
 export default ({ config }) => {
     const LIGHT_SPLASH = {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#fffbff",
         resizeMode: "contain",
         image: "./assets/splash.png",
     };
 
     const DARK_SPLASH = {
-        backgroundColor: "#222222",
+        backgroundColor: "#1e1a1d",
         resizeMode: "contain",
         image: "./assets/splash.png",
     };
@@ -32,11 +32,6 @@ export default ({ config }) => {
             eas: {
                 projectId: "dc94d550-9538-48ff-b051-43562cdcf34e",
             },
-        },
-        androidStatusBar: {
-            // backgroundColor: "#222222",
-            // translucent: true,
-            // style: "dark",
         },
         splash: LIGHT_SPLASH,
         ios: {
