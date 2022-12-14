@@ -28,6 +28,8 @@ import styles from "../styles";
 const ViewDevice = ({ navigation, route }) => {
     const { deviceData } = route.params;
 
+    console.log("ViewDevice", deviceData);
+
     useEffect(() => {
         navigation.setOptions({
             title: `Device: ${deviceData.name}`,
@@ -49,7 +51,7 @@ const ViewDevice = ({ navigation, route }) => {
     // };
 
     // const deleteRegistration = async () => {
-    //     const fetchResponse = await apiService.device.deleteRegistration(deviceData.id);
+    //     const fetchResponse = await apiService.device.deleteDevice(deviceData.id);
 
     //     alert(JSON.stringify(fetchResponse));
     // };
@@ -74,8 +76,24 @@ const ViewDevice = ({ navigation, route }) => {
             {/* <Text style={themedStyles.headerText}>Device</Text> */}
 
             <Text variant="labelLarge">ID: {deviceData.id}</Text>
+            <Text variant="labelLarge">Device Ident: {deviceData.deviceKey}</Text>
             <Text variant="labelLarge">Name: {deviceData.name}</Text>
             <Text variant="labelLarge">Created: {deviceData.createdAt}</Text>
+
+            <Separator />
+
+            <Text variant="labelLarge">Token: {deviceData.token ? deviceData.token : "Not Set"}</Text>
+
+            {deviceData.nativeToken && (
+                <Text variant="labelLarge">
+                    Native Token:{" "}
+                    {deviceData.nativeToken
+                        ? `${JSON.parse(deviceData.nativeToken).type} ${JSON.parse(
+                              deviceData.nativeToken,
+                          ).data.substring(1, 20)}...`
+                        : "Not Set"}
+                </Text>
+            )}
 
             <Separator />
 

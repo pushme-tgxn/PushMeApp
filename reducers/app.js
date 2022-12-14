@@ -2,6 +2,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import apiService from "../service/api";
 
+export function setDeviceKey(deviceKey) {
+    console.info("setDeviceKey", deviceKey);
+    return {
+        type: "setDeviceKey",
+        payload: {
+            deviceKey,
+        },
+    };
+}
+
 export function setAppReadyState(isAppReady) {
     console.info("setAppReadyState", isAppReady);
     return {
@@ -26,6 +36,16 @@ export function setExpoPushToken(pushToken) {
     console.info("setExpoPushToken", pushToken);
     return {
         type: "setExpoPushToken",
+        payload: {
+            pushToken,
+        },
+    };
+}
+
+export function setNativePushToken(pushToken) {
+    console.info("setNativePushToken", pushToken);
+    return {
+        type: "setNativePushToken",
         payload: {
             pushToken,
         },
@@ -73,8 +93,11 @@ export function setPushResponse(pushResponse) {
 }
 
 export const initialState = {
+    deviceKey: null,
     appIsReady: false,
+
     expoPushToken: null,
+    nativePushToken: null,
 
     user: null,
     accessToken: null,
@@ -91,6 +114,9 @@ import { Platform } from "react-native";
 
 export function reducer(state, action) {
     switch (action.type) {
+        case "setDeviceKey":
+            return { ...state, deviceKey: action.payload.deviceKey };
+
         case "setAppReadyState":
             return { ...state, appIsReady: action.payload.isAppReady };
 
@@ -105,9 +131,12 @@ export function reducer(state, action) {
                 const defaultDeviceNameFormat = `${platform} (${Device.deviceName})`;
                 console.log("defaultDeviceNameFormat", defaultDeviceNameFormat);
 
-                apiService.device.createDeviceRegistration({
-                    token: state.expoPushToken,
+                // create registration
+                apiService.device.createDevice({
+                    deviceKey: state.deviceKey,
                     name: defaultDeviceNameFormat,
+                    token: state.expoPushToken,
+                    nativeToken: state.nativePushToken,
                 });
 
                 return {
@@ -124,7 +153,10 @@ export function reducer(state, action) {
             }
 
         case "setExpoPushToken":
-            return { ...state, expoPushToken: action.payload.pushToken };
+            return { ...state, expoPushToken: action.payload.pushToken.data };
+
+        case "setNativePushToken":
+            return { ...state, nativePushToken: action.payload.pushToken };
 
         case "setPushList":
             const pushList = {};

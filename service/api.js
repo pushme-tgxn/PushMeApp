@@ -48,15 +48,15 @@ class DeviceService {
         return this.apiService._callApi(`/device/${deviceId}`, "GET");
     }
 
-    createDeviceRegistration(deviceData) {
+    createDevice(deviceData) {
         return this.apiService._callApi("/device/create", "POST", deviceData);
     }
 
-    upsertRegistration(deviceData) {
-        return this.apiService._callApi("/device", "POST", deviceData);
+    upsertDevice(deviceId, deviceData) {
+        return this.apiService._callApi(`/device/${deviceId}`, "POST", deviceData);
     }
 
-    deleteRegistration(deviceId) {
+    deleteDevice(deviceId) {
         return this.apiService._callApi(`/device/${deviceId}`, "DELETE");
     }
 }
@@ -158,12 +158,12 @@ class APIService {
                 headers,
                 body: payload ? JSON.stringify(payload) : null,
             });
+
             const jsonResponse = await fetchResponse.json();
-            // console.log(jsonResponse);
 
             if (jsonResponse.message == "Unauthorized") {
                 showToast("❌ Unauthorized, please login again! 🔒");
-                throw new Error("Unauthorized");
+                // throw new Error("Unauthorized");
             }
 
             return jsonResponse;
