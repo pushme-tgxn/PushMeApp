@@ -68,7 +68,8 @@ const TopicList = ({ navigation, route }) => {
         onRefresh();
     };
 
-    // reverse topic list @TODO do server-side (request `order param)
+    // reverse topic list
+    // TODO(server) do server-side (request `order` param)
     let topicList = [].concat(state.topicList);
     topicList.reverse();
 

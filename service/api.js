@@ -52,12 +52,16 @@ class DeviceService {
         return this.apiService._callApi("/device/create", "POST", deviceData);
     }
 
-    upsertDevice(deviceId, deviceData) {
-        return this.apiService._callApi(`/device/${deviceId}`, "POST", deviceData);
+    upsertDevice(deviceKey, deviceData) {
+        return this.apiService._callApi(`/device/${deviceKey}`, "POST", deviceData);
     }
 
     deleteDevice(deviceId) {
         return this.apiService._callApi(`/device/${deviceId}`, "DELETE");
+    }
+
+    testDevice(deviceKey) {
+        return this.apiService._callApi(`/device/${deviceKey}/test`, "POST");
     }
 }
 

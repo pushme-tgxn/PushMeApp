@@ -45,6 +45,7 @@ const ConfigScreen = ({ navigation, route }) => {
 
     const [tokenList, setTokenList] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [currentUserData, setCurrentUserData] = useState(false);
 
     const onRefresh = useCallback(() => {
         async function prepare() {
@@ -73,6 +74,15 @@ const ConfigScreen = ({ navigation, route }) => {
         }
     }, [route]);
 
+    useEffect(() => {
+        async function prepare() {
+            const currentUser = await apiService.user.getCurrentUser();
+            console.log("currentUser", currentUser);
+            setCurrentUserData(currentUser);
+        }
+        prepare();
+    }, []);
+
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
             <FlatList
@@ -83,9 +93,13 @@ const ConfigScreen = ({ navigation, route }) => {
                         </Text>
 
                         <Text variant="labelLarge">User ID: {state.user.id}</Text>
-                        <Text variant="labelLarge" style={{ marginBottom: 10 }}>
-                            Registered: {state.user.createdAt}
-                        </Text>
+                        <Text variant="labelLarge">Registered: {state.user.createdAt}</Text>
+                        {currentUserData && (
+                            <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                                Login Method:{" "}
+                                {currentUserData.methods.map((method) => method.method).join(", ")}
+                            </Text>
+                        )}
 
                         <Button
                             onPress={async () => {

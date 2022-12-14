@@ -80,6 +80,20 @@ const ViewDevice = ({ navigation, route }) => {
             <Text variant="labelLarge">Name: {deviceData.name}</Text>
             <Text variant="labelLarge">Created: {deviceData.createdAt}</Text>
 
+            <View style={{ flexDirection: "row", alignContent: "center" }}>
+                <Button
+                    onPress={async () => {
+                        apiService.device.testDevice(deviceData.deviceKey);
+                    }}
+                    icon="check"
+                    mode="contained"
+                    color="purple"
+                    style={{ flex: 1, marginVertical: 10 }}
+                >
+                    Test FCM Push
+                </Button>
+            </View>
+
             <Separator />
 
             <Text variant="labelLarge">Token: {deviceData.token ? deviceData.token : "Not Set"}</Text>

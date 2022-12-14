@@ -73,7 +73,7 @@ export function setTopicList(topicList) {
 }
 
 export function pushRecieved(push) {
-    console.info("pushRecieved", push);
+    console.info("pushRecieved", JSON.stringify(push, null, 2));
     return {
         type: "pushRecieved",
         payload: {
@@ -240,7 +240,7 @@ export function reducer(state, action) {
 
                 return { ...state, pushList };
             } catch (e) {
-                console.error("cannot gather pushId", action.payload.push, e);
+                console.error("cannot gather pushId 1", action.payload.push, e);
             }
 
             return state;
@@ -313,7 +313,7 @@ export function reducer(state, action) {
 
                 return { ...state, pushList };
             } catch (e) {
-                console.error("cannot gather pushId", action.payload.push, e);
+                console.error("cannot gather pushId 2", action.payload.push, e);
             }
 
             return state;
