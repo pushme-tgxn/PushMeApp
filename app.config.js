@@ -1,12 +1,12 @@
 export default ({ config }) => {
     const LIGHT_SPLASH = {
-        backgroundColor: "#222222",
+        backgroundColor: "#fffbff",
         resizeMode: "contain",
         image: "./assets/splash.png",
     };
 
     const DARK_SPLASH = {
-        backgroundColor: "#222222",
+        backgroundColor: "#1e1a1d",
         resizeMode: "contain",
         image: "./assets/splash.png",
     };
@@ -33,20 +33,15 @@ export default ({ config }) => {
                 projectId: "dc94d550-9538-48ff-b051-43562cdcf34e",
             },
         },
-        androidStatusBar: {
-            backgroundColor: "#22222200",
-            translucent: true,
-            style: "dark-content",
-        },
-        // splash: LIGHT_SPLASH,
+        splash: LIGHT_SPLASH,
         ios: {
             ...config.ios,
-            // ...SHARED_SPLASH,
+            ...SHARED_SPLASH,
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
         android: {
             ...config.android,
-            // ...SHARED_SPLASH,
+            ...SHARED_SPLASH,
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import { SafeAreaView, FlatList, useColorScheme, View } from "react-native";
+import { useColorScheme } from "react-native";
 
-import { Appbar, Button, Colors, Dialog, IconButton, Paragraph, Portal, TextInput } from "react-native-paper";
+import { Appbar, Button, Dialog, IconButton, Paragraph, Portal, TextInput } from "react-native-paper";
 
 import apiService from "../service/api";
 
