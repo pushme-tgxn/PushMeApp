@@ -105,7 +105,7 @@ const LoginScreen = ({ navigation }) => {
                 // play services not available or outdated
                 setErrorText("PLAY_SERVICES_NOT_AVAILABLE");
             } else {
-                setErrorText("some other error happened");
+                setErrorText("some other error happened", error.code, error.toString());
                 // some other error happened
             }
         } finally {
