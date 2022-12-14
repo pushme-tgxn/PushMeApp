@@ -76,16 +76,15 @@ function ViewDeviceButtons({ navigation, deviceData }) {
     const [deleteVisible, setDeleteVisible] = useState(false);
 
     const saveDevice = async () => {
-        await apiService.device.upsertRegistration({
+        await apiService.device.upsertDevice(deviceData.deviceKey, {
             name: deviceName,
-            token: deviceData.token,
         });
 
         setEditVisible(false);
     };
 
     const deleteDevice = async () => {
-        await apiService.device.deleteRegistration(deviceData.id);
+        await apiService.device.deleteDevice(deviceData.id);
 
         setDeleteVisible(false);
         navigation.navigate("ConfigScreen", { refresh: true });

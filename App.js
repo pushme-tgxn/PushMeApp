@@ -4,6 +4,7 @@ import "expo-dev-client";
 
 import { Platform, useColorScheme } from "react-native";
 
+import * as Device from "expo-device";
 import {
     // DefaultTheme as PaperDefaultTheme,
     Provider as PaperProvider,
@@ -18,7 +19,8 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import * as TaskManager from "expo-task-manager";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
-import Constants from "expo-constants";
+
+import uuid from "react-native-uuid";
 
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -29,9 +31,11 @@ import { StatusBar } from "expo-status-bar";
 import { initialState, reducer } from "./reducers/app";
 
 import {
+    setDeviceKey,
     setAppReadyState,
     setUserData,
     setExpoPushToken,
+    setNativePushToken,
     pushRecieved,
     setPushResponse,
 } from "./reducers/app";
@@ -43,13 +47,12 @@ import { AppReducer, NotificationCategories } from "./const";
 
 import apiService from "./service/api";
 
+// background notificaiton listener
 const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
-
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }) => {
-    console.debug("Received a notification in the background!");
+    console.debug("Received a notification in the background!", data);
     // Do something with the notification data
 });
-
 Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 Notifications.setNotificationHandler({
@@ -75,8 +78,6 @@ const App = () => {
     // adpations
     theme = {
         ...theme,
-        // dark: scheme === "dark",
-        // dark: true,
         mode: "exact",
         backdrop: true,
         roundness: 1,
@@ -92,31 +93,9 @@ const App = () => {
     const notificationListener = useRef();
     const responseListener = useRef();
 
-    // register notification categories from client-side
-    const registerNotificationCategories = async () => {
-        for (const index in NotificationCategories) {
-            await Notifications.setNotificationCategoryAsync(index, NotificationCategories[index]);
-        }
-    };
-
     // register app for notifications
     const registerForPushNotificationsAsync = async () => {
-        let token;
-        if (Constants.isDevice) {
-            const { status: existingStatus } = await Notifications.getPermissionsAsync();
-            let finalStatus = existingStatus;
-            if (existingStatus !== "granted") {
-                const { status } = await Notifications.requestPermissionsAsync();
-                finalStatus = status;
-            }
-            if (finalStatus !== "granted") {
-                alert("Failed to get push token for push notification!");
-                return;
-            }
-            token = (await Notifications.getExpoPushTokenAsync()).data;
-        } else {
-            alert("Must use physical device for Push Notifications");
-        }
+        let token, nativeToken;
 
         if (Platform.OS === "android") {
             Notifications.setNotificationChannelAsync("default", {
@@ -127,25 +106,69 @@ const App = () => {
             });
         }
 
-        return token;
+        if (Device.isDevice) {
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+
+            if (existingStatus !== "granted") {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+
+            if (finalStatus !== "granted") {
+                alert("Failed to get push token for push notification!");
+                return;
+            }
+
+            token = await Notifications.getExpoPushTokenAsync();
+            nativeToken = await Notifications.getDevicePushTokenAsync();
+        } else {
+            alert("Must use physical device for Push Notifications");
+        }
+
+        return [token, nativeToken];
+    };
+
+    // register notification categories from client-side
+    const registerNotificationCategories = async () => {
+        for (const index in NotificationCategories) {
+            await Notifications.setNotificationCategoryAsync(index, NotificationCategories[index]);
+        }
     };
 
     useEffect(() => {
         async function prepare() {
-            // await SplashScreen.preventAutoHideAsync();
-            let loggedInUser, expoToken;
+            let deviceKey, loggedInUser;
 
+            // generate or load a unique device key, and save it.
             try {
-                await registerNotificationCategories();
+                const existingDeviceKey = await AsyncStorage.getItem("deviceKey");
+                if (existingDeviceKey !== null) {
+                    deviceKey = existingDeviceKey;
+                    console.debug("loaded deviceKey", deviceKey);
+                } else {
+                    deviceKey = uuid.v4();
+                    await AsyncStorage.setItem("deviceKey", deviceKey);
+                    console.debug("generated deviceKey", deviceKey);
+                }
+                dispatch(setDeviceKey(deviceKey));
+            } catch (e) {
+                console.warn(e);
+            }
 
-                expoToken = await registerForPushNotificationsAsync();
+            // get application push tokens, and register notification categories
+            try {
+                let [expoToken, nativeToken] = await registerForPushNotificationsAsync();
                 dispatch(setExpoPushToken(expoToken));
+                dispatch(setNativePushToken(nativeToken));
+
+                await registerNotificationCategories();
             } catch (error) {
                 console.error("error setting app up", error);
                 alert("error setting app up: " + error.toString());
             }
 
-            // attempt to load backedn URL
+            // attempt to load backend URL
             try {
                 const serializedBackendUrl = await AsyncStorage.getItem("backendUrl");
                 if (serializedBackendUrl !== null) {
@@ -171,7 +194,7 @@ const App = () => {
                             console.log("not a valid token", currentUser, userData);
                         }
                     } else {
-                        console.log("not valid userData", userData);
+                        console.log("no valid userData", userData);
                     }
                 }
             } catch (e) {
@@ -234,16 +257,8 @@ const App = () => {
                 >
                     <NavigationContainer theme={theme}>
                         <StatusBar
-                            // animated={false}
-                            // backgroundColor="#222222"
                             backgroundColor={theme.colors.background}
-                            // barStyle={statusBarStyle}
-                            // showHideTransition={statusBarTransition}
-                            // hidden={true}
                             style={scheme === "dark" ? "light" : "dark"}
-                            // style={scheme === "dark" ? "light" : "dark"}
-                            // translucent={false}
-                            // backgroundColor={scheme === "dark" ? "#222222" : "#FFFFFF"}
                         />
                         {state.user && <AppTabView />}
                         {!state.user && <AuthView />}

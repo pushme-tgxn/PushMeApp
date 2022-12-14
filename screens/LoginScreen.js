@@ -15,8 +15,6 @@ import { Button, TextInput } from "react-native-paper";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 
-import Loader from "../components/Loader";
-
 import { Separator } from "../components/Shared";
 
 import apiService from "../service/api";
@@ -120,8 +118,6 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
-            {/* <Loader loading={loading} /> */}
-
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={themedStyles.container.center}

@@ -107,8 +107,22 @@ const ConfigScreen = ({ navigation, route }) => {
                             This Device
                         </Text>
 
-                        <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                        <Text variant="labelLarge">
+                            Device Ident: {state.deviceKey ? state.deviceKey : "Loading..."}
+                        </Text>
+
+                        <Text variant="labelLarge">
                             Token: {state.expoPushToken ? state.expoPushToken : "Loading..."}
+                        </Text>
+
+                        <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                            Native Token:{" "}
+                            {state.nativePushToken
+                                ? `${state.nativePushToken.type} ${state.nativePushToken.data.substring(
+                                      1,
+                                      20,
+                                  )}...`
+                                : "Loading..."}
                         </Text>
 
                         <Separator />
@@ -126,7 +140,7 @@ const ConfigScreen = ({ navigation, route }) => {
                 refreshing={refreshing}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
-                    let isThisDevice = item.token == state.expoPushToken;
+                    let isThisDevice = item.deviceKey == state.deviceKey;
                     return (
                         <Button
                             style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
