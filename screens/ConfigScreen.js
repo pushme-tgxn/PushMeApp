@@ -74,6 +74,7 @@ const ConfigScreen = ({ navigation, route }) => {
         }
     }, [route]);
 
+    // load current user data
     useEffect(() => {
         async function prepare() {
             const currentUser = await apiService.user.getCurrentUser();

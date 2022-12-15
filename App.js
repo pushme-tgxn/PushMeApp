@@ -43,6 +43,8 @@ import {
 import AuthView from "./views/AuthView";
 import AppTabView from "./views/AppTabView";
 
+import NotificationPopup from "./components/NotificationPopup";
+
 import { AppReducer, NotificationCategories } from "./const";
 
 import apiService from "./service/api";
@@ -256,6 +258,7 @@ const App = () => {
                     theme={theme}
                 >
                     <NavigationContainer theme={theme}>
+                        <NotificationPopup />
                         <StatusBar
                             backgroundColor={theme.colors.background}
                             style={scheme === "dark" ? "light" : "dark"}

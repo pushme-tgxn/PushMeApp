@@ -110,6 +110,10 @@ class PushService {
             response,
         });
     }
+
+    getPushStatus(pushIdent) {
+        return this.apiService._callApi(`/push/${pushIdent}/status`, "GET");
+    }
 }
 
 class APIService {
