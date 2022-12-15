@@ -90,6 +90,7 @@ const PushList = ({ navigation, route }) => {
                 renderItem={({ item }) => {
                     return (
                         <Button
+                            key={item.id}
                             style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
                             onPress={async () => {
                                 navigation.navigate("ViewPush", { pushId: item.id });

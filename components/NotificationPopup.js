@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import { SafeAreaView, View, useColorScheme } from "react-native";
 
@@ -27,12 +27,17 @@ import { useTheme } from "react-native-paper";
 
 import { NotificationCategories } from "../const";
 
+import { AppReducer } from "../const";
+import { setPushResponse } from "../reducers/app";
+
 import apiService from "../service/api";
 import styles from "../styles";
 
 export default function NotificationPopup() {
     const theme = useTheme();
     const colorScheme = useColorScheme();
+
+    const { state, dispatch } = useContext(AppReducer);
 
     const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -88,8 +93,21 @@ export default function NotificationPopup() {
                 </Dialog.Content>
                 <Dialog.Actions>
                     <Button onPress={() => setVisible(false)}>Thanks</Button>
-                    {/* <Button loading={loading}>Approve</Button>
-                    <Button loading={loading}>Reject</Button> */}
+                    <Button
+                        onPress={() => {
+                            const responseData = {
+                                pushIdent: pushContent.data.pushIdent,
+                                pushId: pushContent.data.pushId,
+                                actionIdentifier: "allow", // TODO must get the actionIdentifier from the button AND categoryIdentifier OF REQUEST
+                                categoryIdentifier: pushContent.categoryIdentifier,
+                            };
+                            dispatch(setPushResponse(responseData));
+                        }}
+                        loading={loading}
+                    >
+                        Approve
+                    </Button>
+                    {/* <Button loading={loading}>Reject</Button>  */}
                 </Dialog.Actions>
             </Modal>
         </Portal>

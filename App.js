@@ -228,7 +228,15 @@ const App = () => {
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
             console.log("addNotificationResponseReceivedListener", response);
-            dispatch(setPushResponse(response));
+
+            const responseData = {
+                pushIdent: response.notification.request.content.data.pushIdent,
+                pushId: response.notification.request.content.data.pushId,
+                actionIdentifier: response.actionIdentifier,
+                categoryIdentifier: response.notification.request.content.categoryIdentifier,
+            };
+
+            dispatch(setPushResponse(responseData));
 
             Notifications.dismissNotificationAsync(response.notification.request.identifier);
         });

@@ -106,9 +106,7 @@ class PushService {
     }
 
     respondToPush(pushIdent, response) {
-        return this.apiService._callApi(`/push/${pushIdent}/response`, "POST", {
-            response,
-        });
+        return this.apiService._callApi(`/push/${pushIdent}/response`, "POST", response);
     }
 
     getPushStatus(pushIdent) {

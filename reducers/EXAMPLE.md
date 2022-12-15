@@ -11,14 +11,14 @@
                 "sentTime": 1671029018364,
                 "notification": null,
                 "data": {
-                    "categoryId": "button.approve_deny",
-                    "message": "Hello world! 🌐",
-                    "title": "📧 You've got mail",
-                    "data": "{\"pushId\":\"111\",\"pushIdent\":\"abc123\"}",
-                    "scopeKey": "@tgxn/pushme",
-                    "experienceId": "@tgxn/pushme",
-                    "pushIdent": "abc123",
-                    "pushId": "111"
+                "categoryId": "button.approve_deny",
+                "message": "Hello world! 🌐",
+                "title": "📧 You've got mail",
+                "data": "{\"pushId\":\"111\",\"pushIdent\":\"abc123\"}",
+                "scopeKey": "@tgxn/pushme",
+                "experienceId": "@tgxn/pushme",
+                "pushIdent": "abc123",
+                "pushId": "111"
                 },
                 "to": null,
                 "ttl": 2419200,
@@ -49,6 +49,7 @@
 ```
 
 # from Expo
+
 ```json
 {
   "request": {
@@ -96,3 +97,59 @@
   "date": 1671029185921
 }
 ```
+
+
+## push response
+
+
+```js
+/**
+      Object {
+        "actionIdentifier": "expo.modules.notifications.actions.DEFAULT",
+        "notification": Object {
+          "date": 1630234055767,
+          "request": Object {
+            "content": Object {
+              "autoDismiss": true,
+              "badge": null,
+              "body": "",
+              "categoryIdentifier": "default",
+              "data": Object {
+                "pushId": 30,
+              },
+              "sound": "default",
+              "sticky": false,
+              "subtitle": null,
+              "title": "",
+            },
+            "identifier": "0:1630234055770633%0ac519e6f9fd7ecd",
+            "trigger": Object {
+              "channelId": null,
+              "remoteMessage": Object {
+                "collapseKey": null,
+                "data": Object {
+                  "body": "{\"pushId\":30}",
+                  "categoryId": "default",
+                  "experienceId": "@tgxn/pushme",
+                  "message": "",
+                  "projectId": "dc94d550-9538-48ff-b051-43562cdcf34e",
+                  "scopeKey": "@tgxn/pushme",
+                  "title": "",
+                },
+                "from": "367315174693",
+                "messageId": "0:1630234055770633%0ac519e6f9fd7ecd",
+                "messageType": null,
+                "notification": null,
+                "originalPriority": 2,
+                "priority": 2,
+                "sentTime": 1630234055767,
+                "to": null,
+                "ttl": 2419200,
+              },
+              "type": "push",
+            },
+          },
+        },
+      }
+       */
+       ```

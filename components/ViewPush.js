@@ -34,6 +34,8 @@ const ViewPush = ({ navigation, route }) => {
 
     const onRefresh = useCallback(() => {
         async function prepare() {
+            if (!pushId) return;
+
             setRefreshing(true);
             setPushStatus(null);
 
@@ -50,7 +52,7 @@ const ViewPush = ({ navigation, route }) => {
             }
         }
         prepare();
-    }, []);
+    }, [pushId]);
 
     console.log("ViewPush: pushStatus", thisPush);
 
@@ -68,13 +70,24 @@ const ViewPush = ({ navigation, route }) => {
 
                             {/* service request */}
                             <Text variant="titleLarge">Request:</Text>
-                            <Text variant="labelLarge">{thisPush.pushPayload && thisPush.pushPayload}</Text>
+                            <Text variant="labelLarge">
+                                {thisPush.pushPayload && JSON.stringify(thisPush.pushPayload)}
+                            </Text>
                             <Separator />
 
                             {/* local response */}
                             <Text variant="titleLarge">Local Response</Text>
                             <Text variant="labelLarge">
                                 {thisPush.response && JSON.stringify(thisPush.response)}
+                            </Text>
+                            <Separator />
+
+                            {/* first valid response */}
+                            <Text variant="titleLarge">First Valid Response</Text>
+                            <Text variant="labelLarge">
+                                {pushStatus &&
+                                    pushStatus.firstValidResponse &&
+                                    JSON.stringify(pushStatus.firstValidResponse)}
                             </Text>
                             <Separator />
 
@@ -101,7 +114,7 @@ const ViewPush = ({ navigation, route }) => {
                     // let isThisDevice = item.deviceKey == state.deviceKey;
                     // console.log("ViewPushRESPONSE: item", item);
                     return (
-                        <View>
+                        <View key={item}>
                             <Text variant="labelLarge">
                                 ActionIdent {JSON.parse(item.serviceResponse).actionIdentifier}
                             </Text>

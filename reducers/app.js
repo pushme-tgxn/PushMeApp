@@ -87,7 +87,7 @@ export function setPushResponse(pushResponse) {
     return {
         type: "setPushResponse",
         payload: {
-            pushResponse,
+            ...pushResponse,
         },
     };
 }
@@ -172,55 +172,8 @@ export function reducer(state, action) {
             // });
             return { ...state, topicList: action.payload.topicList };
 
+        // push is recieved
         case "pushRecieved":
-            /**
-      Object {
-        "date": 1630230256230,
-        "request": Object {
-          "content": Object {
-            "autoDismiss": true,
-            "badge": null,
-            "body": "",
-            "categoryIdentifier": "default",
-            "data": Object {
-              "pushId": 19,
-            },
-            "sound": "default",
-            "sticky": false,
-            "subtitle": null,
-            "title": "",
-          },
-          "identifier": "0:1630230256233655%0ac519e6f9fd7ecd",
-          "trigger": Object {
-            "channelId": null,
-            "remoteMessage": Object {
-              "collapseKey": null,
-              "data": Object {
-                "body": "{\"pushId\":19}",
-                "categoryId": "default",
-                "experienceId": "@tgxn/pushme",
-                "message": "",
-                "projectId": "dc94d550-9538-48ff-b051-43562cdcf34e",
-                "scopeKey": "@tgxn/pushme",
-                "title": "",
-              },
-              "from": "367315174693",
-              "messageId": "0:1630230256233655%0ac519e6f9fd7ecd",
-              "messageType": null,
-              "notification": null,
-              "originalPriority": 2,
-              "priority": 2,
-              "sentTime": 1630230256230,
-              "to": null,
-              "ttl": 2419200,
-            },
-            "type": "push",
-          },
-        },
-      }
-       */
-
-            // all pushes should have id
             try {
                 const pushId = action.payload.push.request.content.data.pushId;
                 const pushIdent = action.payload.push.request.content.data.pushIdent;
@@ -245,75 +198,24 @@ export function reducer(state, action) {
 
             return state;
 
+        // user selected a response to the push
         case "setPushResponse":
-            /**
-      Object {
-        "actionIdentifier": "expo.modules.notifications.actions.DEFAULT",
-        "notification": Object {
-          "date": 1630234055767,
-          "request": Object {
-            "content": Object {
-              "autoDismiss": true,
-              "badge": null,
-              "body": "",
-              "categoryIdentifier": "default",
-              "data": Object {
-                "pushId": 30,
-              },
-              "sound": "default",
-              "sticky": false,
-              "subtitle": null,
-              "title": "",
-            },
-            "identifier": "0:1630234055770633%0ac519e6f9fd7ecd",
-            "trigger": Object {
-              "channelId": null,
-              "remoteMessage": Object {
-                "collapseKey": null,
-                "data": Object {
-                  "body": "{\"pushId\":30}",
-                  "categoryId": "default",
-                  "experienceId": "@tgxn/pushme",
-                  "message": "",
-                  "projectId": "dc94d550-9538-48ff-b051-43562cdcf34e",
-                  "scopeKey": "@tgxn/pushme",
-                  "title": "",
-                },
-                "from": "367315174693",
-                "messageId": "0:1630234055770633%0ac519e6f9fd7ecd",
-                "messageType": null,
-                "notification": null,
-                "originalPriority": 2,
-                "priority": 2,
-                "sentTime": 1630234055767,
-                "to": null,
-                "ttl": 2419200,
-              },
-              "type": "push",
-            },
-          },
-        },
-      }
-       */
             try {
-                const pushId = action.payload.pushResponse.notification.request.content.data.pushId;
-                const pushIdent = action.payload.pushResponse.notification.request.content.data.pushIdent;
-
-                apiService.push.respondToPush(pushIdent, action.payload.pushResponse);
+                apiService.push.respondToPush(action.payload.pushIdent, action.payload);
 
                 const pushList = state.pushList;
 
                 // update this push details
-                pushList[pushId] = {
-                    ...pushList[pushId],
-                    response: action.payload.pushResponse,
+                pushList[action.payload.pushId] = {
+                    ...pushList[action.payload.pushId],
+                    response: action.payload,
                 };
 
-                console.log("RESPONSE", pushList[pushId]);
+                console.log("RESPONSE", pushList[action.payload.pushId]);
 
                 return { ...state, pushList };
             } catch (e) {
-                console.error("cannot gather pushId 2", action.payload.push, e);
+                console.error("cannot gather pushId 2", action.payload, e);
             }
 
             return state;
