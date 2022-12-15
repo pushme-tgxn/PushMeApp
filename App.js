@@ -235,8 +235,11 @@ const App = () => {
                 actionIdentifier: response.actionIdentifier,
                 categoryIdentifier: response.notification.request.content.categoryIdentifier,
             };
-
-            dispatch(setPushResponse(responseData));
+            // only send non-default responses??
+            // TODO check if this is the right way to do this
+            if (response.actionIdentifier !== Notifications.DEFAULT_ACTION_IDENTIFIER) {
+                dispatch(setPushResponse(responseData));
+            }
 
             Notifications.dismissNotificationAsync(response.notification.request.identifier);
         });
