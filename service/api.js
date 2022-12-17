@@ -33,6 +33,10 @@ class UserService {
     getPushHistory() {
         return this.apiService._callApi("/user/history", "GET");
     }
+
+    deleteSelf() {
+        return this.apiService._callApi("/user", "DELETE");
+    }
 }
 
 class DeviceService {

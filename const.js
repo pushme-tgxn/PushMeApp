@@ -8,114 +8,118 @@ console.log("BACKEND_URL", BACKEND_URL);
 // contexts
 export const AppReducer = createContext(null);
 
-export const NotificationCategories = {
-    "button.yes_no": [
-        {
-            identifier: "yes",
-            buttonTitle: "Yes",
-            options: {
-                opensAppToForeground: false,
+// `actions` docs: https://docs.expo.dev/versions/latest/sdk/notifications/#arguments-21
+export const NotificationDefinitions = {
+    "simple.push": {
+        title: "Simple Push",
+        sendDefaultAction: true,
+    },
+    "button.approve_deny": {
+        title: "Approve/Deny Buttons",
+        sendDefaultAction: false, // dont send a default action when the notification is tapped
+        actions: [
+            {
+                identifier: "approve",
+                buttonTitle: "Approve",
+                options: {
+                    opensAppToForeground: false,
+                    isAuthenticationRequired: false,
+                },
             },
-        },
-        {
-            identifier: "no",
-            buttonTitle: "No",
-            options: {
-                opensAppToForeground: false,
+            {
+                identifier: "deny",
+                buttonTitle: "Deny",
+                options: {
+                    opensAppToForeground: false,
+                    isAuthenticationRequired: false,
+                },
             },
-        },
-    ],
-    "button.approve_deny": [
-        {
-            identifier: "approve",
-            buttonTitle: "Approve",
-            options: {
-                opensAppToForeground: false,
+        ],
+    },
+    "button.yes_no": {
+        title: "Yes/No Buttons",
+        sendDefaultAction: false, // dont send a default action when the notification is tapped
+        actions: [
+            {
+                identifier: "yes",
+                buttonTitle: "Yes",
+                options: {
+                    opensAppToForeground: false,
+                    isAuthenticationRequired: false,
+                },
             },
-        },
-        {
-            identifier: "deny",
-            buttonTitle: "Deny",
-            options: {
-                opensAppToForeground: false,
+            {
+                identifier: "no",
+                buttonTitle: "No",
+                options: {
+                    opensAppToForeground: false,
+                    isAuthenticationRequired: false,
+                },
             },
-        },
-    ],
-    "button.allow_reject": [
-        {
-            identifier: "allow",
-            buttonTitle: "Allow",
-            options: {
-                opensAppToForeground: false,
+        ],
+    },
+    "button.acknowledge": {
+        title: "Acknowledge Button",
+        sendDefaultAction: false, // dont send a default action when the notification is tapped
+        actions: [
+            {
+                identifier: "acknowledge",
+                buttonTitle: "Acknowledge",
+                options: {
+                    opensAppToForeground: false,
+                    isAuthenticationRequired: false,
+                },
             },
-        },
-        {
-            identifier: "reject",
-            buttonTitle: "Reject",
-            options: {
-                opensAppToForeground: false,
+        ],
+    },
+    "button.open_link": {
+        title: "Open Link Button",
+        sendDefaultAction: true,
+        actions: [
+            {
+                identifier: "open_link",
+                buttonTitle: "Open Link",
+                options: {
+                    opensAppToForeground: false,
+                    isAuthenticationRequired: false,
+                },
             },
-        },
-    ],
-    "button.acknowledge": [
-        {
-            identifier: "acknowledge",
-            buttonTitle: "Acknowledge",
-            options: {
-                opensAppToForeground: false,
+        ],
+    },
+    "input.reply": {
+        title: "Reply Input",
+        sendDefaultAction: true,
+        actions: [
+            {
+                identifier: "reply",
+                buttonTitle: "Reply",
+                textInput: {
+                    submitButtonTitle: "Reply",
+                    // placeholder: "Type a reply...", // https://github.com/expo/expo/issues/20500
+                },
+                options: {
+                    opensAppToForeground: false,
+                    // isAuthenticationRequired: false,
+                },
             },
-        },
-    ],
-    "button.open_link": [
-        {
-            identifier: "open_link",
-            buttonTitle: "Open Link",
-        },
-    ],
-    "input.submit": [
-        {
-            identifier: "submit",
-            buttonTitle: "Submit",
-            textInput: {
-                submitButtonTitle: "Submit",
-                placeholder: "Type a message...",
+        ],
+    },
+    "input.submit": {
+        title: "Submit Input",
+        sendDefaultAction: true,
+        actions: [
+            {
+                identifier: "submit",
+                buttonTitle: "Submit",
+                textInput: {
+                    submitButtonTitle: "Submit",
+                    // placeholder: "Type a message...", // https://github.com/expo/expo/issues/20500
+                },
+                options: {
+                    opensAppToForeground: false,
+                    // isAuthenticationRequired: false,
+                },
             },
-            isAuthenticationRequired: false,
-            // options: {},
-        },
-    ],
-    "input.reply": [
-        {
-            identifier: "reply",
-            buttonTitle: "Reply",
-            textInput: {
-                submitButtonTitle: "Reply",
-                placeholder: "Type a reply...",
-            },
-            isAuthenticationRequired: false,
-            // options: {},
-        },
-    ],
-    "input.approve_deny": [
-        {
-            identifier: "approve",
-            buttonTitle: "Approve",
-            textInput: {
-                submitButtonTitle: "Approve",
-                placeholder: "Type an approval message...",
-            },
-            isAuthenticationRequired: false,
-            // options: {},
-        },
-        {
-            identifier: "deny",
-            buttonTitle: "Deny",
-            textInput: {
-                submitButtonTitle: "Deny",
-                placeholder: "Type a deny message...",
-            },
-            isAuthenticationRequired: false,
-            // options: {},
-        },
-    ],
+        ],
+    },
 };

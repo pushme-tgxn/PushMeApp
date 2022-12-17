@@ -23,7 +23,7 @@ import DropDown from "react-native-paper-dropdown";
 import { useTheme } from "react-native-paper";
 import apiService from "../service/api";
 
-import { NotificationCategories } from "../const";
+import { NotificationDefinitions } from "../const";
 
 import styles from "../styles";
 
@@ -53,10 +53,11 @@ export default function PushPopup({ visible, setVisible, topicData, secretKey })
         setVisible(false);
     };
 
+    // generate list of push types
     let clientCategoryList = [{ value: "default", label: "Default" }];
-    // NotificationCategories;
-    for (const index in NotificationCategories) {
-        clientCategoryList.push({ value: index, label: index });
+    for (const index in NotificationDefinitions) {
+        const notificationCategory = NotificationDefinitions[index];
+        clientCategoryList.push({ value: index, label: notificationCategory.title });
     }
 
     console.log("clientCategoryList", clientCategoryList);

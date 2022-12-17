@@ -88,6 +88,7 @@ const TopicList = ({ navigation, route }) => {
                 renderItem={({ item, index }) => {
                     return (
                         <Button
+                            key={item.id}
                             style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
                             onPress={async () => {
                                 navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });

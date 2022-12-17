@@ -113,12 +113,14 @@ const ViewPush = ({ navigation, route }) => {
                 renderItem={({ item }) => {
                     // let isThisDevice = item.deviceKey == state.deviceKey;
                     // console.log("ViewPushRESPONSE: item", item);
+                    const parsedResponse = JSON.parse(item.serviceResponse);
                     return (
                         <View key={item}>
-                            <Text variant="labelLarge">
-                                ActionIdent {JSON.parse(item.serviceResponse).actionIdentifier}
-                            </Text>
+                            <Text variant="labelLarge">ActionIdent {parsedResponse.actionIdentifier}</Text>
                             <Text variant="labelLarge">createdAt: {item.createdAt}</Text>
+                            {parsedResponse.responseText && (
+                                <Text variant="labelLarge">responseText: {parsedResponse.responseText}</Text>
+                            )}
                             <Separator />
                         </View>
                     );

@@ -1,25 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import * as Device from "expo-device";
-
-import {
-    SafeAreaView,
-    View,
-    useColorScheme,
-    // TextInput,
-    StyleSheet,
-    FlatList,
-    ScrollView,
-} from "react-native";
-import { TextInput } from "react-native-paper";
+import { SafeAreaView, View, useColorScheme } from "react-native";
 
 import { Text, Button, FAB } from "react-native-paper";
 
-// import { Picker } from "@react-native-picker/picker";
-
 import { Separator } from "./Shared.js";
-
-import { NotificationCategories } from "../const";
 
 import apiService from "../service/api";
 
@@ -38,38 +23,6 @@ const ViewDevice = ({ navigation, route }) => {
 
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
-
-    const [deviceName, setDeviceName] = useState(deviceData.name || Device.deviceName);
-
-    // const createUpdateRegistration = async () => {
-    //     const fetchResponse = await apiService.device.upsertRegistration({
-    //         name: deviceName,
-    //         token: deviceData.token,
-    //     });
-
-    //     alert(JSON.stringify(fetchResponse));
-    // };
-
-    // const deleteRegistration = async () => {
-    //     const fetchResponse = await apiService.device.deleteDevice(deviceData.id);
-
-    //     alert(JSON.stringify(fetchResponse));
-    // };
-
-    // const onSend = async () => {
-    //     await apiService.push.pushToToken(deviceData.id, {
-    //         categoryId,
-    //         title,
-    //         body,
-    //         data,
-    //     });
-    // };
-
-    let clientCategoryList = [];
-    NotificationCategories;
-    for (const index in NotificationCategories) {
-        clientCategoryList.push({ label: index, value: index });
-    }
 
     return (
         <SafeAreaView style={themedStyles.container.pane}>
@@ -137,45 +90,3 @@ const ViewDevice = ({ navigation, route }) => {
 };
 
 export default ViewDevice;
-
-// const pickerSelectStyles = StyleSheet.create({
-//     inputIOS: {
-//         fontSize: 16,
-//         paddingVertical: 0,
-//         paddingHorizontal: 0,
-//         borderWidth: 0,
-//         flex: 1, // This flex is optional, but probably desired
-//         alignItems: "center",
-//         flexDirection: "row",
-//         width: "100%",
-//         borderColor: "gray",
-//         borderRadius: 4,
-//         color: "black",
-//         paddingRight: 30, // to ensure the text is never behind the icon
-//     },
-//     icon: {
-//         position: "absolute",
-//         backgroundColor: "transparent",
-//         borderTopWidth: 5,
-//         borderTopColor: "#00000099",
-//         borderRightWidth: 5,
-//         borderRightColor: "transparent",
-//         borderLeftWidth: 5,
-//         borderLeftColor: "transparent",
-//         width: 0,
-//         height: 0,
-//         top: 20,
-//         right: 15,
-//     },
-//     inputAndroid: {
-//         fontSize: 30,
-//         paddingHorizontal: 0,
-//         paddingVertical: 0,
-//         borderWidth: 10,
-//         borderColor: "red",
-//         borderRadius: 5,
-
-//         color: "black",
-//         paddingRight: 0, // to ensure the text is never behind the icon
-//     },
-// });

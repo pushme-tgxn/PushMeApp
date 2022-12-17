@@ -101,21 +101,35 @@ const ConfigScreen = ({ navigation, route }) => {
                                 {currentUserData.methods.map((method) => method.method).join(", ")}
                             </Text>
                         )}
+                        <View style={{ flexDirection: "row", alignContent: "center" }}>
+                            <Button
+                                onPress={async () => {
+                                    await apiService.user.deleteSelf();
+                                    await AsyncStorage.removeItem("userData");
+                                    dispatch(setUserData(null));
 
-                        <Button
-                            onPress={async () => {
-                                await AsyncStorage.removeItem("userData");
-                                dispatch(setUserData(null));
+                                    // navigation.replace("Auth");
+                                }}
+                                icon="trash"
+                                style={{ flex: 1, marginRight: 10 }}
+                                mode="contained-tonal"
+                            >
+                                Delete Account
+                            </Button>
+                            <Button
+                                onPress={async () => {
+                                    await AsyncStorage.removeItem("userData");
+                                    dispatch(setUserData(null));
 
-                                // navigation.replace("Auth");
-                            }}
-                            icon="sign-out-alt"
-                            contentStyle={themedStyles.button.iconRight}
-                            mode="contained"
-                        >
-                            Logout
-                        </Button>
-
+                                    // navigation.replace("Auth");
+                                }}
+                                icon="sign-out-alt"
+                                mode="contained"
+                                style={{ flex: 1 }}
+                            >
+                                Logout
+                            </Button>
+                        </View>
                         <Separator />
 
                         <Text variant="displaySmall" style={{ marginBottom: 10 }}>

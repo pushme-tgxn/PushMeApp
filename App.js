@@ -45,7 +45,7 @@ import AppTabView from "./views/AppTabView";
 
 import NotificationPopup from "./components/NotificationPopup";
 
-import { AppReducer, NotificationCategories } from "./const";
+import { AppReducer, NotificationDefinitions } from "./const";
 
 import apiService from "./service/api";
 
@@ -133,16 +133,19 @@ const App = () => {
 
     // register notification categories from client-side
     const registerNotificationCategories = async () => {
-        for (const index in NotificationCategories) {
-            await Notifications.setNotificationCategoryAsync(index, NotificationCategories[index]);
+        for (const index in NotificationDefinitions) {
+            const notificationCategory = NotificationDefinitions[index];
+            if (notificationCategory.actions) {
+                console.debug("registering notification actions", index, notificationCategory);
+                await Notifications.setNotificationCategoryAsync(index, notificationCategory.actions);
+            }
         }
     };
 
     useEffect(() => {
         async function prepare() {
-            let deviceKey, loggedInUser;
-
             // generate or load a unique device key, and save it.
+            let deviceKey;
             try {
                 const existingDeviceKey = await AsyncStorage.getItem("deviceKey");
                 if (existingDeviceKey !== null) {
@@ -181,6 +184,7 @@ const App = () => {
             }
 
             // attempt to load user
+            let loggedInUser;
             try {
                 const serializedUserData = await AsyncStorage.getItem("userData");
                 if (serializedUserData !== null) {
@@ -216,31 +220,51 @@ const App = () => {
 
             await SplashScreen.hideAsync();
         }
-
         prepare();
 
+        // notification recieved, append to local array
         notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
             console.log("addNotificationReceivedListener", notification);
             dispatch(pushRecieved(notification));
-
-            // Notifications.dismissNotificationAsync(notification.request.identifier);
         });
 
+        // notification response recieved
         responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-            console.log("addNotificationResponseReceivedListener", response);
+            console.log("addNotificationResponseReceivedListener", JSON.stringify(response, null, 4));
 
+            // get the notification response data
+            // TODO define this payload format
             const responseData = {
                 pushIdent: response.notification.request.content.data.pushIdent,
                 pushId: response.notification.request.content.data.pushId,
                 actionIdentifier: response.actionIdentifier,
                 categoryIdentifier: response.notification.request.content.categoryIdentifier,
+                responseText: null,
             };
-            // only send non-default responses??
-            // TODO check if this is the right way to do this
-            if (response.actionIdentifier !== Notifications.DEFAULT_ACTION_IDENTIFIER) {
+
+            // asttach user text is defined
+            if (response.userText) {
+                responseData.responseText = response.userText;
+            }
+
+            let foundNotificatonCategory = false;
+            for (const index in NotificationDefinitions) {
+                const notificationCategory = NotificationDefinitions[index];
+                if (index == responseData.categoryIdentifier) {
+                    foundNotificatonCategory = notificationCategory;
+                }
+            }
+
+            // send non-default responses if enabled for this type of notification
+            if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
+                if (foundNotificatonCategory && foundNotificatonCategory.sendDefaultAction) {
+                    dispatch(setPushResponse(responseData));
+                }
+            } else {
                 dispatch(setPushResponse(responseData));
             }
 
+            // dismiss the notificaqtion when it's tapped
             Notifications.dismissNotificationAsync(response.notification.request.identifier);
         });
 

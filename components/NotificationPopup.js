@@ -25,8 +25,6 @@ import { Separator } from "../components/Shared";
 
 import { useTheme } from "react-native-paper";
 
-import { NotificationCategories } from "../const";
-
 import { AppReducer } from "../const";
 import { setPushResponse } from "../reducers/app";
 
@@ -102,6 +100,7 @@ export default function NotificationPopup() {
                                 pushId: pushContent.data.pushId,
                                 actionIdentifier: "reject", // TODO must get the actionIdentifier from the button AND categoryIdentifier OF REQUEST
                                 categoryIdentifier: pushContent.categoryIdentifier,
+                                responseText: null,
                             };
                             dispatch(setPushResponse(responseData));
                             setVisible(false);
@@ -117,6 +116,7 @@ export default function NotificationPopup() {
                                 pushId: pushContent.data.pushId,
                                 actionIdentifier: "approve", // TODO must get the actionIdentifier from the button AND categoryIdentifier OF REQUEST
                                 categoryIdentifier: pushContent.categoryIdentifier,
+                                responseText: null,
                             };
                             dispatch(setPushResponse(responseData));
                             setVisible(false);
