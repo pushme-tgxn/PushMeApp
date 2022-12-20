@@ -51,6 +51,8 @@ import { AppReducer } from "./const";
 
 import apiService from "./service/api";
 
+import { Alert, Linking } from "react-native";
+
 // background notificaiton listener
 const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }) => {
@@ -119,9 +121,18 @@ const App = () => {
                 finalStatus = status;
             }
 
+            const openAppSettings = () => {
+                Linking.openSettings();
+            };
+
             if (finalStatus !== "granted") {
-                alert("Failed to get push token for push notification!");
-                return;
+                Alert.alert(
+                    `Notification Permissions were not granted`,
+                    "Please enable notifications in this app's settings.",
+                    [{ text: "Thanks" }, { text: "Open App Settings", onPress: openAppSettings }],
+                );
+
+                return [null, null];
             }
 
             token = await Notifications.getExpoPushTokenAsync();
@@ -166,13 +177,19 @@ const App = () => {
             // get application push tokens, and register notification categories
             try {
                 let [expoToken, nativeToken] = await registerForPushNotificationsAsync();
-                dispatch(setExpoPushToken(expoToken));
-                dispatch(setNativePushToken(nativeToken));
+
+                if (expoToken) {
+                    dispatch(setExpoPushToken(expoToken));
+                }
+
+                if (nativeToken) {
+                    dispatch(setNativePushToken(nativeToken));
+                }
 
                 await registerNotificationCategories();
             } catch (error) {
                 console.error("error setting app up", error);
-                alert("error setting app up: " + error.toString());
+                // alert("error setting app up: " + error.toString());
             }
 
             // attempt to load backend URL
