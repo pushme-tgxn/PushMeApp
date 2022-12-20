@@ -42,7 +42,7 @@ const TopicList = ({ navigation, route }) => {
             dispatch(setTopicList([]));
 
             try {
-                const response = await apiService.topic.getList();
+                const response = await apiService.topic.list();
                 dispatch(setTopicList(response.topics));
             } catch (error) {
                 alert(error);
