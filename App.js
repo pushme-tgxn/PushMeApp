@@ -45,7 +45,9 @@ import AppTabView from "./views/AppTabView";
 
 import NotificationPopup from "./components/NotificationPopup";
 
-import { AppReducer, NotificationDefinitions } from "./const";
+import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
+
+import { AppReducer } from "./const";
 
 import apiService from "./service/api";
 

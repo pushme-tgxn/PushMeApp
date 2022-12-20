@@ -2,28 +2,14 @@ import React, { useState } from "react";
 
 import { SafeAreaView, Text, View, useColorScheme, StyleSheet, FlatList, ScrollView } from "react-native";
 
-import {
-    Appbar,
-    Menu,
-    IconButton,
-    Colors,
-    Button,
-    Modal,
-    Dialog,
-    Portal,
-    TextInput,
-} from "react-native-paper";
+import { Button, Modal, Dialog, Portal, TextInput } from "react-native-paper";
 
-// import { Picker } from "@react-native-picker/picker";
-
-// import { PaperSelect } from "react-native-paper-select";
+import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
 
 import DropDown from "react-native-paper-dropdown";
 
 import { useTheme } from "react-native-paper";
 import apiService from "../service/api";
-
-import { NotificationDefinitions } from "../const";
 
 import styles from "../styles";
 

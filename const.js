@@ -1,14 +1,9 @@
+import Constants from "expo-constants";
 import { createContext } from "react";
 
-import Constants from "expo-constants";
-
-import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
-
+// load backend url from expo configuration file
 export const BACKEND_URL = Constants.expoConfig.extra.BACKEND_URL;
 console.log("BACKEND_URL", BACKEND_URL);
 
-// contexts
+// setup application state reducer
 export const AppReducer = createContext(null);
-
-// `actions` docs: https://docs.expo.dev/versions/latest/sdk/notifications/#arguments-21
-export const NotificationDefinitions = NotificationDefinitions;
