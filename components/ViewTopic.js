@@ -47,7 +47,7 @@ const ViewTopic = ({ navigation, route }) => {
 
                 const topicDeviceArray = topicData.devices.map((device) => device.id);
 
-                const response = await apiService.device.getList();
+                const response = await apiService.device.list();
 
                 setDeviceList(response.devices);
 

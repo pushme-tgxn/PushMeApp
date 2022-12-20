@@ -53,7 +53,7 @@ const ConfigScreen = ({ navigation, route }) => {
             setTokenList([]);
 
             try {
-                const response = await apiService.device.getList();
+                const response = await apiService.device.list();
                 setTokenList(response.devices);
             } catch (error) {
                 alert(error);

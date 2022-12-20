@@ -131,13 +131,17 @@ export function reducer(state, action) {
                 const defaultDeviceNameFormat = `${platform} (${Device.deviceName})`;
                 console.log("defaultDeviceNameFormat", defaultDeviceNameFormat);
 
-                // create registration
-                apiService.device.createDevice({
-                    deviceKey: state.deviceKey,
-                    name: defaultDeviceNameFormat,
-                    token: state.expoPushToken,
-                    nativeToken: state.nativePushToken,
-                });
+                // create registration only if we have an expo token
+                // TODO this should also update the device if the keys have changed
+                // currently it just tries to create the device every time
+                if (state.expoPushToken) {
+                    apiService.device.create({
+                        deviceKey: state.deviceKey,
+                        name: defaultDeviceNameFormat,
+                        token: state.expoPushToken,
+                        nativeToken: state.nativePushToken,
+                    });
+                }
 
                 return {
                     ...state,
