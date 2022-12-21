@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
-import { SafeAreaView, FlatList, ScrollView, useColorScheme, View } from "react-native";
-import { Text, Button, TextInput } from "react-native-paper";
+import { SafeAreaView, FlatList, Alert, useColorScheme, View } from "react-native";
+import { Text, Button, TextInput, IconButton } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -92,6 +92,22 @@ const ConfigScreen = ({ navigation, route }) => {
                         <Text variant="displaySmall" style={{ marginBottom: 10 }}>
                             Account
                         </Text>
+                        {!apiService.isDefaultBackend() && (
+                            <View style={{ position: "absolute", top: 10, right: 0 }}>
+                                <IconButton
+                                    icon="cog"
+                                    mode="outlined"
+                                    size={25}
+                                    onPress={() => {
+                                        Alert.alert(
+                                            `Non-Default Backend`,
+                                            `You are connected to a non-default backend:\n${apiService.getBackendUrl()}\n\nPlease logout to update the backend.`,
+                                            [{ text: "OK" }],
+                                        );
+                                    }}
+                                />
+                            </View>
+                        )}
 
                         <Text variant="labelLarge">User ID: {state.user.id}</Text>
                         <Text variant="labelLarge">Registered: {state.user.createdAt}</Text>

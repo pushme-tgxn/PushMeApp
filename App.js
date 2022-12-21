@@ -2,11 +2,11 @@ import React, { useReducer, useEffect, useRef } from "react";
 
 import "expo-dev-client";
 
-import { Platform, useColorScheme } from "react-native";
+import { Platform, Alert, Linking, useColorScheme } from "react-native";
 
 import * as Device from "expo-device";
+
 import {
-    // DefaultTheme as PaperDefaultTheme,
     Provider as PaperProvider,
     MD3LightTheme as DefaultLightTheme,
     MD3DarkTheme as DefaultDarkTheme,
@@ -50,8 +50,6 @@ import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
 import { AppReducer } from "./const";
 
 import apiService from "./service/api";
-
-import { Alert, Linking } from "react-native";
 
 // background notificaiton listener
 const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
