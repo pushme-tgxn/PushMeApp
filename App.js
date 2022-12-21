@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, useRef } from "react";
 
 import "expo-dev-client";
 
-import { Platform, Alert, Linking, useColorScheme } from "react-native";
+import { AppState, Platform, BackHandler, Alert, Linking, useColorScheme } from "react-native";
 
 import * as Device from "expo-device";
 
@@ -70,7 +70,8 @@ Notifications.setNotificationHandler({
 SplashScreen.preventAutoHideAsync();
 
 const App = () => {
-    // DefaultTheme;
+    const appState = useRef(AppState.currentState);
+
     const scheme = useColorScheme();
     const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -97,7 +98,7 @@ const App = () => {
     const notificationListener = useRef();
     const responseListener = useRef();
 
-    // register app for notifications
+    // register app for notifications (get tokens)
     const registerForPushNotificationsAsync = async () => {
         let token, nativeToken;
 
@@ -125,9 +126,12 @@ const App = () => {
 
             if (finalStatus !== "granted") {
                 Alert.alert(
-                    `Notification Permissions were not granted`,
-                    "Please enable notifications in this app's settings.",
-                    [{ text: "Thanks" }, { text: "Open App Settings", onPress: openAppSettings }],
+                    `Notification Permissions are not granted!`,
+                    "Please enable notifications in the app settings.",
+                    [
+                        { text: "Exit App", onPress: () => BackHandler.exitApp() },
+                        { text: "Open App Settings", onPress: openAppSettings },
+                    ],
                 );
 
                 return [null, null];
@@ -153,6 +157,43 @@ const App = () => {
         }
     };
 
+    const getAppPushTokens = async () => {
+        // get application push tokens, and register notification categories
+        try {
+            let [expoToken, nativeToken] = await registerForPushNotificationsAsync();
+
+            if (expoToken) {
+                dispatch(setExpoPushToken(expoToken));
+            }
+
+            if (nativeToken) {
+                dispatch(setNativePushToken(nativeToken));
+            }
+
+            await registerNotificationCategories();
+        } catch (error) {
+            console.error("error setting app up", error);
+            // alert("error setting app up: " + error.toString());
+        }
+    };
+
+    // listen for app state changes to detect foreground/background
+    useEffect(() => {
+        const subscription = AppState.addEventListener("change", (nextAppState) => {
+            if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+                console.log("App has come to the foreground!");
+                getAppPushTokens();
+            }
+
+            appState.current = nextAppState;
+            console.log("AppState Changed", appState.current);
+        });
+
+        return () => {
+            subscription.remove();
+        };
+    }, []);
+
     useEffect(() => {
         async function prepare() {
             // generate or load a unique device key, and save it.
@@ -172,23 +213,8 @@ const App = () => {
                 console.warn(e);
             }
 
-            // get application push tokens, and register notification categories
-            try {
-                let [expoToken, nativeToken] = await registerForPushNotificationsAsync();
-
-                if (expoToken) {
-                    dispatch(setExpoPushToken(expoToken));
-                }
-
-                if (nativeToken) {
-                    dispatch(setNativePushToken(nativeToken));
-                }
-
-                await registerNotificationCategories();
-            } catch (error) {
-                console.error("error setting app up", error);
-                // alert("error setting app up: " + error.toString());
-            }
+            // get application push tokens, and register notification categories on app start
+            getAppPushTokens();
 
             // attempt to load backend URL
             try {
