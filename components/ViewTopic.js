@@ -41,7 +41,7 @@ const ViewTopic = ({ navigation, route }) => {
             setDeviceList([]);
 
             try {
-                const freshData = await apiService.topic.getTopic(topicData.id);
+                const freshData = await apiService.topic.getById(topicData.id);
                 topicData = freshData.topic;
                 console.log("refreshed topicData", topicData.id);
 
