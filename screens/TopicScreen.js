@@ -42,7 +42,7 @@ const TopicList = ({ navigation, route }) => {
             dispatch(setTopicList([]));
 
             try {
-                const response = await apiService.topic.getList();
+                const response = await apiService.topic.list();
                 dispatch(setTopicList(response.topics));
             } catch (error) {
                 alert(error);
@@ -68,7 +68,8 @@ const TopicList = ({ navigation, route }) => {
         onRefresh();
     };
 
-    // reverse topic list @TODO do server-side (request `order param)
+    // reverse topic list
+    // TODO(server) do server-side (request `order` param)
     let topicList = [].concat(state.topicList);
     topicList.reverse();
 
@@ -87,6 +88,7 @@ const TopicList = ({ navigation, route }) => {
                 renderItem={({ item, index }) => {
                     return (
                         <Button
+                            key={item.id}
                             style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
                             onPress={async () => {
                                 navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });

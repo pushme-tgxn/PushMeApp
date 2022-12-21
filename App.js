@@ -43,9 +43,15 @@ import {
 import AuthView from "./views/AuthView";
 import AppTabView from "./views/AppTabView";
 
-import { AppReducer, NotificationCategories } from "./const";
+import NotificationPopup from "./components/NotificationPopup";
+
+import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
+
+import { AppReducer } from "./const";
 
 import apiService from "./service/api";
+
+import { Alert, Linking } from "react-native";
 
 // background notificaiton listener
 const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
@@ -115,9 +121,18 @@ const App = () => {
                 finalStatus = status;
             }
 
+            const openAppSettings = () => {
+                Linking.openSettings();
+            };
+
             if (finalStatus !== "granted") {
-                alert("Failed to get push token for push notification!");
-                return;
+                Alert.alert(
+                    `Notification Permissions were not granted`,
+                    "Please enable notifications in this app's settings.",
+                    [{ text: "Thanks" }, { text: "Open App Settings", onPress: openAppSettings }],
+                );
+
+                return [null, null];
             }
 
             token = await Notifications.getExpoPushTokenAsync();
@@ -131,16 +146,19 @@ const App = () => {
 
     // register notification categories from client-side
     const registerNotificationCategories = async () => {
-        for (const index in NotificationCategories) {
-            await Notifications.setNotificationCategoryAsync(index, NotificationCategories[index]);
+        for (const index in NotificationDefinitions) {
+            const notificationCategory = NotificationDefinitions[index];
+            if (notificationCategory.actions) {
+                console.debug("registering notification actions", index, notificationCategory);
+                await Notifications.setNotificationCategoryAsync(index, notificationCategory.actions);
+            }
         }
     };
 
     useEffect(() => {
         async function prepare() {
-            let deviceKey, loggedInUser;
-
             // generate or load a unique device key, and save it.
+            let deviceKey;
             try {
                 const existingDeviceKey = await AsyncStorage.getItem("deviceKey");
                 if (existingDeviceKey !== null) {
@@ -159,13 +177,19 @@ const App = () => {
             // get application push tokens, and register notification categories
             try {
                 let [expoToken, nativeToken] = await registerForPushNotificationsAsync();
-                dispatch(setExpoPushToken(expoToken));
-                dispatch(setNativePushToken(nativeToken));
+
+                if (expoToken) {
+                    dispatch(setExpoPushToken(expoToken));
+                }
+
+                if (nativeToken) {
+                    dispatch(setNativePushToken(nativeToken));
+                }
 
                 await registerNotificationCategories();
             } catch (error) {
                 console.error("error setting app up", error);
-                alert("error setting app up: " + error.toString());
+                // alert("error setting app up: " + error.toString());
             }
 
             // attempt to load backend URL
@@ -179,6 +203,7 @@ const App = () => {
             }
 
             // attempt to load user
+            let loggedInUser;
             try {
                 const serializedUserData = await AsyncStorage.getItem("userData");
                 if (serializedUserData !== null) {
@@ -214,20 +239,51 @@ const App = () => {
 
             await SplashScreen.hideAsync();
         }
-
         prepare();
 
+        // notification recieved, append to local array
         notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
             console.log("addNotificationReceivedListener", notification);
             dispatch(pushRecieved(notification));
-
-            // Notifications.dismissNotificationAsync(notification.request.identifier);
         });
 
+        // notification response recieved
         responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-            console.log("addNotificationResponseReceivedListener", response);
-            dispatch(setPushResponse(response));
+            console.log("addNotificationResponseReceivedListener", JSON.stringify(response, null, 4));
 
+            // get the notification response data
+            // TODO define this payload format
+            const responseData = {
+                pushIdent: response.notification.request.content.data.pushIdent,
+                pushId: response.notification.request.content.data.pushId,
+                actionIdentifier: response.actionIdentifier,
+                categoryIdentifier: response.notification.request.content.categoryIdentifier,
+                responseText: null,
+            };
+
+            // asttach user text is defined
+            if (response.userText) {
+                responseData.responseText = response.userText;
+            }
+
+            let foundNotificatonCategory = false;
+            for (const index in NotificationDefinitions) {
+                const notificationCategory = NotificationDefinitions[index];
+                if (index == responseData.categoryIdentifier) {
+                    foundNotificatonCategory = notificationCategory;
+                }
+            }
+
+            // send non-default responses if enabled for this type of notification
+            if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
+                if (foundNotificatonCategory && foundNotificatonCategory.sendDefaultAction) {
+                    dispatch(setPushResponse(responseData));
+                }
+            } else {
+                dispatch(setPushResponse(responseData));
+            }
+
+            // dismiss the notificaqtion when it's tapped
             Notifications.dismissNotificationAsync(response.notification.request.identifier);
         });
 
@@ -256,6 +312,7 @@ const App = () => {
                     theme={theme}
                 >
                     <NavigationContainer theme={theme}>
+                        <NotificationPopup />
                         <StatusBar
                             backgroundColor={theme.colors.background}
                             style={scheme === "dark" ? "light" : "dark"}

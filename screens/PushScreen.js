@@ -63,7 +63,8 @@ const PushList = ({ navigation, route }) => {
         }
     }, [route]);
 
-    // reverse push history list @TODO do server-side (request `order param)
+    // reverse push history list
+    // TODO(server) do server-side (request `order` param)
     const pushArray = [];
     Object.keys(state.pushList).map((pushId) => {
         pushArray.push(state.pushList[pushId]);
@@ -89,6 +90,7 @@ const PushList = ({ navigation, route }) => {
                 renderItem={({ item }) => {
                     return (
                         <Button
+                            key={item.id}
                             style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
                             onPress={async () => {
                                 navigation.navigate("ViewPush", { pushId: item.id });

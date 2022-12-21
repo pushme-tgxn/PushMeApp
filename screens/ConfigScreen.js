@@ -45,6 +45,7 @@ const ConfigScreen = ({ navigation, route }) => {
 
     const [tokenList, setTokenList] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [currentUserData, setCurrentUserData] = useState(false);
 
     const onRefresh = useCallback(() => {
         async function prepare() {
@@ -52,7 +53,7 @@ const ConfigScreen = ({ navigation, route }) => {
             setTokenList([]);
 
             try {
-                const response = await apiService.device.getList();
+                const response = await apiService.device.list();
                 setTokenList(response.devices);
             } catch (error) {
                 alert(error);
@@ -73,6 +74,16 @@ const ConfigScreen = ({ navigation, route }) => {
         }
     }, [route]);
 
+    // load current user data
+    useEffect(() => {
+        async function prepare() {
+            const currentUser = await apiService.user.getCurrentUser();
+            console.log("currentUser", currentUser);
+            setCurrentUserData(currentUser);
+        }
+        prepare();
+    }, []);
+
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
             <FlatList
@@ -83,24 +94,42 @@ const ConfigScreen = ({ navigation, route }) => {
                         </Text>
 
                         <Text variant="labelLarge">User ID: {state.user.id}</Text>
-                        <Text variant="labelLarge" style={{ marginBottom: 10 }}>
-                            Registered: {state.user.createdAt}
-                        </Text>
+                        <Text variant="labelLarge">Registered: {state.user.createdAt}</Text>
+                        {currentUserData && (
+                            <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                                Login Method:{" "}
+                                {currentUserData.methods.map((method) => method.method).join(", ")}
+                            </Text>
+                        )}
+                        <View style={{ flexDirection: "row", alignContent: "center" }}>
+                            <Button
+                                onPress={async () => {
+                                    await apiService.user.deleteSelf();
+                                    await AsyncStorage.removeItem("userData");
+                                    dispatch(setUserData(null));
 
-                        <Button
-                            onPress={async () => {
-                                await AsyncStorage.removeItem("userData");
-                                dispatch(setUserData(null));
+                                    // navigation.replace("Auth");
+                                }}
+                                icon="trash"
+                                style={{ flex: 1, marginRight: 10 }}
+                                mode="contained-tonal"
+                            >
+                                Delete Account
+                            </Button>
+                            <Button
+                                onPress={async () => {
+                                    await AsyncStorage.removeItem("userData");
+                                    dispatch(setUserData(null));
 
-                                // navigation.replace("Auth");
-                            }}
-                            icon="sign-out-alt"
-                            contentStyle={themedStyles.button.iconRight}
-                            mode="contained"
-                        >
-                            Logout
-                        </Button>
-
+                                    // navigation.replace("Auth");
+                                }}
+                                icon="sign-out-alt"
+                                mode="contained"
+                                style={{ flex: 1 }}
+                            >
+                                Logout
+                            </Button>
+                        </View>
                         <Separator />
 
                         <Text variant="displaySmall" style={{ marginBottom: 10 }}>

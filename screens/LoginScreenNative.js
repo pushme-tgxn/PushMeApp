@@ -105,7 +105,7 @@ const LoginScreen = ({ navigation }) => {
                 // play services not available or outdated
                 setErrorText("PLAY_SERVICES_NOT_AVAILABLE");
             } else {
-                setErrorText("some other error happened", error.code, error.toString());
+                setErrorText("some other error happened " + error.toString());
                 // some other error happened
             }
         } finally {
@@ -114,10 +114,6 @@ const LoginScreen = ({ navigation }) => {
     };
 
     const [configModalShown, setConfigModalShown] = useState(false);
-    const showConfigModal = () => {
-        console.log("show config");
-        setConfigModalShown(true);
-    };
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
@@ -128,13 +124,10 @@ const LoginScreen = ({ navigation }) => {
                 <View style={{ position: "absolute", top: 10, right: 0 }}>
                     <ServerPopup visible={configModalShown} setVisible={setConfigModalShown} />
                     <IconButton
-                        // disabled={false}
                         icon="cog"
                         mode="outlined"
                         size={25}
-                        // onPress={showConfigModal}
                         onPress={() => {
-                            console.log("show config");
                             setConfigModalShown(true);
                         }}
                     />
