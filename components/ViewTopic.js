@@ -58,7 +58,7 @@ const ViewTopic = ({ navigation, route }) => {
 
                 setCheckedDeviceList(checkedDeviceArray);
             } catch (error) {
-                dispatchSDKError(error, dispatch);
+                dispatchSDKError(dispatch, error);
             } finally {
                 setRefreshing(false);
             }
@@ -72,7 +72,7 @@ const ViewTopic = ({ navigation, route }) => {
                 deviceIds,
             });
         } catch (error) {
-            dispatchSDKError(error, dispatch);
+            dispatchSDKError(dispatch, error);
         }
     };
 

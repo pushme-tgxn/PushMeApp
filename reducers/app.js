@@ -101,7 +101,7 @@ export function dispatchSDKError(dispatch, sdkError) {
     console.info("dispatchSDKError", sdkError);
 
     if (sdkError instanceof UnauthorizedError) {
-        console.error("UnauthorizedError", sdkError.message);
+        console.debug("UnauthorizedError", sdkError.message);
         showToast("❌ Unauthorized, please login again! 🔒");
 
         // log user out
@@ -112,10 +112,10 @@ export function dispatchSDKError(dispatch, sdkError) {
             },
         });
     } else if (sdkError instanceof ServerError) {
-        // console.error("ServerError", sdkError.message);
+        console.debug("ServerError", sdkError.message);
         showToast("❌ Server error! 😭");
     } else {
-        // console.error("APIError", sdkError.message);
+        console.debug("APIError", sdkError.message);
         showToast("❌ API network request failed! 😭");
     }
 }

@@ -24,7 +24,7 @@ function ViewTopicButtons({ navigation, topicData }) {
             });
             console.log("saved topic!");
         } catch (error) {
-            dispatchSDKError(error, dispatch);
+            dispatchSDKError(dispatch, error);
         } finally {
             setEditVisible(false);
         }
@@ -36,7 +36,7 @@ function ViewTopicButtons({ navigation, topicData }) {
             console.log("deleted topic!");
             navigation.navigate("TopicList", { refresh: true });
         } catch (error) {
-            dispatchSDKError(error, dispatch);
+            dispatchSDKError(dispatch, error);
         } finally {
             setDeleteVisible(false);
         }
@@ -97,7 +97,7 @@ function ViewDeviceButtons({ navigation, deviceData }) {
             });
             console.log("saved device!");
         } catch (error) {
-            dispatchSDKError(error, dispatch);
+            dispatchSDKError(dispatch, error);
         } finally {
             setEditVisible(false);
         }
@@ -109,7 +109,7 @@ function ViewDeviceButtons({ navigation, deviceData }) {
             console.log("deleted device!");
             navigation.navigate("ConfigScreen", { refresh: true });
         } catch (error) {
-            dispatchSDKError(error, dispatch);
+            dispatchSDKError(dispatch, error);
         } finally {
             setDeleteVisible(false);
         }

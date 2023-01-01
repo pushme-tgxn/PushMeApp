@@ -39,7 +39,7 @@ export default function PushPopup({ visible, setVisible, topicData, secretKey })
                 data,
             });
         } catch (error) {
-            dispatchSDKError(error, dispatch);
+            dispatchSDKError(dispatch, error);
         } finally {
             // setLoading(false);
             setVisible(false);

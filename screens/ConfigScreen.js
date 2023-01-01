@@ -54,7 +54,7 @@ const ConfigScreen = ({ navigation, route }) => {
                 const response = await apiService.device.list();
                 setTokenList(response.devices);
             } catch (error) {
-                dispatchSDKError(error, dispatch);
+                dispatchSDKError(dispatch, error);
             } finally {
                 setRefreshing(false);
             }
@@ -79,7 +79,7 @@ const ConfigScreen = ({ navigation, route }) => {
                 console.log("currentUser", currentUser);
                 setCurrentUserData(currentUser);
             } catch (error) {
-                dispatchSDKError(error, dispatch);
+                dispatchSDKError(dispatch, error);
             }
         }
         prepare();
@@ -125,7 +125,7 @@ const ConfigScreen = ({ navigation, route }) => {
                                         await apiService.user.deleteSelf();
                                         dispatch(setUserData(null));
                                     } catch (error) {
-                                        dispatchSDKError(error, dispatch);
+                                        dispatchSDKError(dispatch, error);
                                     }
                                 }}
                                 icon="trash"

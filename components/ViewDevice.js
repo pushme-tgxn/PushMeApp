@@ -4,6 +4,8 @@ import { SafeAreaView, View, useColorScheme } from "react-native";
 
 import { Text, Button } from "react-native-paper";
 
+import { dispatchSDKError, setUserData } from "../reducers/app";
+
 import { Separator } from "./Shared.js";
 
 import apiService from "../service/api";
@@ -36,7 +38,7 @@ const ViewDevice = ({ navigation, route }) => {
                         try {
                             await apiService.device.testDevice(deviceData.deviceKey);
                         } catch (error) {
-                            dispatchSDKError(error, dispatch);
+                            dispatchSDKError(dispatch, error);
                         }
                     }}
                     icon="check"

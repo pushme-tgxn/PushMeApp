@@ -45,7 +45,7 @@ const TopicList = ({ navigation, route }) => {
                 const response = await apiService.topic.list();
                 dispatch(setTopicList(response.topics));
             } catch (error) {
-                dispatchSDKError(error, dispatch);
+                dispatchSDKError(dispatch, error);
             } finally {
                 setRefreshing(false);
             }

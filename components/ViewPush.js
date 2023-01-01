@@ -46,7 +46,7 @@ const ViewPush = ({ navigation, route }) => {
                 const response = await apiService.push.getPushStatus(thisPush.pushIdent);
                 setPushStatus(response);
             } catch (error) {
-                dispatchSDKError(error, dispatch);
+                dispatchSDKError(dispatch, error);
             } finally {
                 setRefreshing(false);
             }
