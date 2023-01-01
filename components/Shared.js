@@ -43,7 +43,7 @@ export const CopyTextButton = (props) => {
 export const showToast = (message) => {
     Toast.show(message, {
         duration: Toast.durations.SHORT,
-        position: -65,
+        position: -110,
         backgroundColor: "#222222",
         animation: true,
     });
