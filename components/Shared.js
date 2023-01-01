@@ -1,10 +1,9 @@
 import React from "react";
+import { View, useColorScheme } from "react-native";
+import { Button } from "react-native-paper";
+
 import * as Clipboard from "expo-clipboard";
 import Toast from "react-native-root-toast";
-
-import { View, useColorScheme } from "react-native";
-
-import { Button } from "react-native-paper";
 
 import styles from "../styles";
 

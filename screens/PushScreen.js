@@ -45,7 +45,7 @@ const PushList = ({ navigation, route }) => {
                 const response = await apiService.user.getPushHistory();
                 dispatch(setPushList(response.pushes));
             } catch (error) {
-                dispatchSDKError(dispatch, error);
+                dispatchSDKError(error, dispatch);
             } finally {
                 setRefreshing(false);
             }

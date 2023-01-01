@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { SafeAreaView, FlatList, View, ScrollView, useColorScheme } from "react-native";
-
-import { Button, List, Text, Checkbox } from "react-native-paper";
+import { SafeAreaView, FlatList, View, useColorScheme } from "react-native";
+import { Text } from "react-native-paper";
 
 import { Separator } from "../components/Shared";
 

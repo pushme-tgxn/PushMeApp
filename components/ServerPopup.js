@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-
 import { View, useColorScheme } from "react-native";
-
-import { Button, Modal, Dialog, Portal, TextInput } from "react-native-paper";
+import { Button, Modal, Dialog, Portal, TextInput, useTheme } from "react-native-paper";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { showToast } from "./Shared";
-
-import { useTheme } from "react-native-paper";
-
 import { BACKEND_URL } from "../const";
+
+import { showToast } from "./Shared";
 
 import apiService from "../service/api";
 import styles from "../styles";

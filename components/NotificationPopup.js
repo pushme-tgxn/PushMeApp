@@ -1,34 +1,14 @@
 import React, { useState, useContext } from "react";
-
-import { SafeAreaView, View, useColorScheme } from "react-native";
-
-import {
-    Appbar,
-    Menu,
-    IconButton,
-    Colors,
-    Button,
-    Modal,
-    Dialog,
-    Portal,
-    Paragraph,
-} from "react-native-paper";
+import { View, useColorScheme } from "react-native";
+import { Button, Modal, Dialog, Portal, Paragraph, useTheme } from "react-native-paper";
 
 import * as Notifications from "expo-notifications";
-// import { Picker } from "@react-native-picker/picker";
-
-// import { PaperSelect } from "react-native-paper-select";
-
-import DropDown from "react-native-paper-dropdown";
-
-import { Separator } from "../components/Shared";
-
-import { useTheme } from "react-native-paper";
 
 import { AppReducer } from "../const";
 import { setPushResponse } from "../reducers/app";
 
-import apiService from "../service/api";
+import { Separator } from "../components/Shared";
+
 import styles from "../styles";
 
 export default function NotificationPopup() {

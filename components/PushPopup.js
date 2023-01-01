@@ -1,15 +1,13 @@
 import React, { useState, useContext } from "react";
-
-import { SafeAreaView, Text, View, useColorScheme, StyleSheet, FlatList, ScrollView } from "react-native";
-
+import { View, useColorScheme } from "react-native";
 import { Button, Modal, Dialog, Portal, TextInput, useTheme } from "react-native-paper";
 
 import DropDown from "react-native-paper-dropdown";
 
 import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
 
-import { AppReducer, BACKEND_URL } from "../const";
-import { dispatchSDKError, setUserData } from "../reducers/app";
+import { AppReducer } from "../const";
+import { dispatchSDKError } from "../reducers/app";
 
 import apiService from "../service/api";
 import styles from "../styles";

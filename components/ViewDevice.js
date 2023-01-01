@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
-
 import { SafeAreaView, View, useColorScheme } from "react-native";
-
 import { Text, Button } from "react-native-paper";
 
-import { dispatchSDKError, setUserData } from "../reducers/app";
+import { dispatchSDKError } from "../reducers/app";
 
 import { Separator } from "./Shared.js";
 

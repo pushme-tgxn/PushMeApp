@@ -1,7 +1,5 @@
 import React, { useState, useContext } from "react";
-
 import { useColorScheme } from "react-native";
-
 import { Appbar, Button, Dialog, IconButton, Paragraph, Portal, TextInput } from "react-native-paper";
 
 import { AppReducer } from "../const";
@@ -12,6 +10,7 @@ import styles from "../styles";
 
 function ViewTopicButtons({ navigation, topicData }) {
     const { state, dispatch } = useContext(AppReducer);
+
     const [topicName, setTopicName] = useState(topicData.name || "Unnamed Topic");
 
     const [editVisible, setEditVisible] = useState(false);
