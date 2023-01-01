@@ -1,32 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import { useColorScheme } from "react-native";
 
 import { Appbar, Button, Dialog, IconButton, Paragraph, Portal, TextInput } from "react-native-paper";
 
-import apiService from "../service/api";
+import { AppReducer } from "../const";
+import { dispatchSDKError } from "../reducers/app";
 
+import apiService from "../service/api";
 import styles from "../styles";
 
 function ViewTopicButtons({ navigation, topicData }) {
+    const { state, dispatch } = useContext(AppReducer);
     const [topicName, setTopicName] = useState(topicData.name || "Unnamed Topic");
 
     const [editVisible, setEditVisible] = useState(false);
     const [deleteVisible, setDeleteVisible] = useState(false);
 
     const saveTopic = async () => {
-        await apiService.topic.update(topicData.id, {
-            name: topicName,
-        });
-        setEditVisible(false);
-        console.log("saved!");
+        try {
+            await apiService.topic.update(topicData.id, {
+                name: topicName,
+            });
+            console.log("saved topic!");
+        } catch (error) {
+            dispatchSDKError(error, dispatch);
+        } finally {
+            setEditVisible(false);
+        }
     };
 
     const deleteTopic = async () => {
-        await apiService.topic.delete(topicData.id);
-        setDeleteVisible(false);
-        console.log("deleted!");
-        navigation.navigate("TopicList", { refresh: true });
+        try {
+            await apiService.topic.delete(topicData.id);
+            console.log("deleted topic!");
+            navigation.navigate("TopicList", { refresh: true });
+        } catch (error) {
+            dispatchSDKError(error, dispatch);
+        } finally {
+            setDeleteVisible(false);
+        }
     };
 
     return (
@@ -70,24 +83,36 @@ function ViewDeviceButtons({ navigation, deviceData }) {
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
+    const { state, dispatch } = useContext(AppReducer);
+
     const [deviceName, setDeviceName] = useState(deviceData.name || "Unnamed Device");
 
     const [editVisible, setEditVisible] = useState(false);
     const [deleteVisible, setDeleteVisible] = useState(false);
 
     const saveDevice = async () => {
-        await apiService.device.update(deviceData.deviceKey, {
-            name: deviceName,
-        });
-
-        setEditVisible(false);
+        try {
+            await apiService.device.update(deviceData.deviceKey, {
+                name: deviceName,
+            });
+            console.log("saved device!");
+        } catch (error) {
+            dispatchSDKError(error, dispatch);
+        } finally {
+            setEditVisible(false);
+        }
     };
 
     const deleteDevice = async () => {
-        await apiService.device.delete(deviceData.id);
-
-        setDeleteVisible(false);
-        navigation.navigate("ConfigScreen", { refresh: true });
+        try {
+            await apiService.device.delete(deviceData.id);
+            console.log("deleted device!");
+            navigation.navigate("ConfigScreen", { refresh: true });
+        } catch (error) {
+            dispatchSDKError(error, dispatch);
+        } finally {
+            setDeleteVisible(false);
+        }
     };
 
     return (

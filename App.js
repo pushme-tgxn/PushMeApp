@@ -47,7 +47,7 @@ import NotificationPopup from "./components/NotificationPopup";
 
 import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
 
-import { AppReducer } from "./const";
+import { AppReducer, BACKEND_URL } from "./const";
 
 import apiService from "./service/api";
 
@@ -194,11 +194,13 @@ const App = () => {
         };
     }, []);
 
-    useEffect(() => {
-        async function prepare() {
-            // generate or load a unique device key, and save it.
-            let deviceKey;
-            try {
+    const initializeDeviceKey = async (state, dispatch) => {
+        let deviceKey;
+        try {
+            if (state.deviceKey) {
+                console.debug("using deviceKey from state", state.deviceKey);
+                deviceKey = state.deviceKey;
+            } else {
                 const existingDeviceKey = await AsyncStorage.getItem("deviceKey");
                 if (existingDeviceKey !== null) {
                     deviceKey = existingDeviceKey;
@@ -209,22 +211,33 @@ const App = () => {
                     console.debug("generated deviceKey", deviceKey);
                 }
                 dispatch(setDeviceKey(deviceKey));
-            } catch (e) {
-                console.warn(e);
             }
+        } catch (e) {
+            console.warn(e);
+            return null;
+        }
+    };
 
-            // get application push tokens, and register notification categories on app start
-            getAppPushTokens();
+    const initializeBackendUrl = async () => {
+        try {
+            const serializedBackendUrl = await AsyncStorage.getItem("backendUrl");
+            if (serializedBackendUrl !== null) {
+                apiService.setBackendUrl(serializedBackendUrl);
+            } else {
+                apiService.setBackendUrl(BACKEND_URL);
+            }
+        } catch (e) {
+            console.warn(e);
+        }
+    };
+
+    useEffect(() => {
+        async function prepare() {
+            // generate or load a unique device key, and save it.
+            await initializeDeviceKey(state, dispatch);
 
             // attempt to load backend URL
-            try {
-                const serializedBackendUrl = await AsyncStorage.getItem("backendUrl");
-                if (serializedBackendUrl !== null) {
-                    apiService.setBackendUrl(serializedBackendUrl);
-                }
-            } catch (e) {
-                console.warn(e);
-            }
+            await initializeBackendUrl();
 
             // attempt to load user
             let loggedInUser;
@@ -232,11 +245,15 @@ const App = () => {
                 const serializedUserData = await AsyncStorage.getItem("userData");
                 if (serializedUserData !== null) {
                     const userData = JSON.parse(serializedUserData);
-                    console.debug("loaded serializedUserData", userData.id);
+                    console.debug("loaded serializedUserData", userData.id, userData.token);
 
                     if (userData) {
+                        // test access token
                         apiService.setAccessToken(userData.token);
                         const currentUser = await apiService.user.getCurrentUser();
+
+                        console.debug("currentUser", currentUser, userData);
+
                         if (currentUser && currentUser.user.id == userData.id) {
                             loggedInUser = userData;
                         } else {
@@ -247,11 +264,10 @@ const App = () => {
                     }
                 }
             } catch (e) {
-                console.warn(e);
+                // console.warn("error attempting to login user from saved token", e);
             } finally {
                 if (loggedInUser) {
                     // only if a valid token was found
-
                     dispatch(setUserData(loggedInUser));
 
                     startState.current = "AppView";
@@ -263,7 +279,12 @@ const App = () => {
 
             await SplashScreen.hideAsync();
         }
+
+        // load user data, and app state
         prepare();
+
+        // kick off application push tokens, and register notification categories on app start
+        getAppPushTokens();
 
         // notification recieved, append to local array
         notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {

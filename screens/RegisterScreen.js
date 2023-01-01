@@ -58,8 +58,9 @@ const RegisterScreen = (props) => {
                 setErrorText(responseJson.message);
             }
         } catch (error) {
-            // setErrorText(error.toString());
-            console.error(error);
+            setErrorText(error.toString());
+            // console.error(error);
+            dispatchSDKError(error, dispatch);
         } finally {
             setLoading(false);
         }

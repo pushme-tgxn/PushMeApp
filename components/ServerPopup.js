@@ -10,6 +10,8 @@ import { showToast } from "./Shared";
 
 import { useTheme } from "react-native-paper";
 
+import { BACKEND_URL } from "../const";
+
 import apiService from "../service/api";
 import styles from "../styles";
 
@@ -19,7 +21,7 @@ export default function ModalPopup({ visible, setVisible }) {
     const themedStyles = styles(colorScheme);
 
     let currentBackendUrl = apiService.getBackendUrl();
-    let isDefaultBackend = apiService.isDefaultBackend();
+    let isDefaultBackend = currentBackendUrl == BACKEND_URL;
 
     const [backendUrl, setBackendUrl] = useState("");
 
@@ -34,7 +36,7 @@ export default function ModalPopup({ visible, setVisible }) {
     };
 
     const onReset = async () => {
-        apiService.resetBackend();
+        apiService.setBackendUrl(BACKEND_URL);
         AsyncStorage.removeItem("backendUrl");
         setBackendUrl("");
         setVisible(false);
@@ -44,7 +46,7 @@ export default function ModalPopup({ visible, setVisible }) {
     /// update variables when popup is shown
     useEffect(() => {
         currentBackendUrl = apiService.getBackendUrl();
-        isDefaultBackend = apiService.isDefaultBackend();
+        isDefaultBackend = currentBackendUrl == BACKEND_URL;
     }, [visible]);
 
     return (

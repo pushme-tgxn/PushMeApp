@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
-import { SafeAreaView, FlatList, useColorScheme } from "react-native";
+import { SafeAreaView, FlatList, RefreshControl, useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { Text, Button } from "react-native-paper";
 
 import { AppReducer } from "../const";
-import { setPushList } from "../reducers/app";
+import { dispatchSDKError, setPushList } from "../reducers/app";
 
 import ViewPush from "../components/ViewPush";
 import CustomNavigationBar from "../components/CustomNavigationBar";
@@ -45,8 +45,7 @@ const PushList = ({ navigation, route }) => {
                 const response = await apiService.user.getPushHistory();
                 dispatch(setPushList(response.pushes));
             } catch (error) {
-                alert(error);
-                console.error(error);
+                dispatchSDKError(error, dispatch);
             } finally {
                 setRefreshing(false);
             }
@@ -84,8 +83,7 @@ const PushList = ({ navigation, route }) => {
                     </Text>
                 )}
                 data={pushArray}
-                onRefresh={onRefresh}
-                refreshing={refreshing}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     return (

@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { SafeAreaView, View, useColorScheme } from "react-native";
 
-import { Text, Button, FAB } from "react-native-paper";
+import { Text, Button } from "react-native-paper";
 
 import { Separator } from "./Shared.js";
 
 import apiService from "../service/api";
-
 import styles from "../styles";
 
 const ViewDevice = ({ navigation, route }) => {
@@ -26,8 +25,6 @@ const ViewDevice = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={themedStyles.container.pane}>
-            {/* <Text style={themedStyles.headerText}>Device</Text> */}
-
             <Text variant="labelLarge">ID: {deviceData.id}</Text>
             <Text variant="labelLarge">Device Ident: {deviceData.deviceKey}</Text>
             <Text variant="labelLarge">Name: {deviceData.name}</Text>
@@ -36,7 +33,11 @@ const ViewDevice = ({ navigation, route }) => {
             <View style={{ flexDirection: "row", alignContent: "center" }}>
                 <Button
                     onPress={async () => {
-                        apiService.device.testDevice(deviceData.deviceKey);
+                        try {
+                            await apiService.device.testDevice(deviceData.deviceKey);
+                        } catch (error) {
+                            dispatchSDKError(error, dispatch);
+                        }
                     }}
                     icon="check"
                     mode="contained"
@@ -74,11 +75,6 @@ const ViewDevice = ({ navigation, route }) => {
                         <Button
                             style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
                             key={item.id}
-                            // onPress={async () => {
-                            //     navigation.push("ViewTopic", {
-                            //         topicData: item,
-                            //     });
-                            // }}
                             mode="contained-tonal"
                         >
                             {item.id} : {item.secretKey}

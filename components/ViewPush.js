@@ -6,6 +6,7 @@ import { Button, List, Text, Checkbox } from "react-native-paper";
 import { Separator } from "../components/Shared";
 
 import { AppReducer } from "../const";
+import { dispatchSDKError } from "../reducers/app";
 
 import apiService from "../service/api";
 import styles from "../styles";
@@ -16,7 +17,7 @@ const ViewPush = ({ navigation, route }) => {
 
     const { pushId } = route.params;
 
-    const { state } = useContext(AppReducer);
+    const { state, dispatch } = useContext(AppReducer);
     const thisPush = state.pushList[pushId];
 
     const [pushStatus, setPushStatus] = useState(null);
@@ -45,8 +46,7 @@ const ViewPush = ({ navigation, route }) => {
                 const response = await apiService.push.getPushStatus(thisPush.pushIdent);
                 setPushStatus(response);
             } catch (error) {
-                alert(error);
-                console.error(error);
+                dispatchSDKError(error, dispatch);
             } finally {
                 setRefreshing(false);
             }
