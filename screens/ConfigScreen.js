@@ -154,7 +154,7 @@ const ConfigScreen = ({ navigation, route }) => {
                                 }}
                                 icon="sign-out-alt"
                                 mode="contained"
-                                style={{ flex: 1 }}
+                                style={{ flex: 1, marginRight: 10 }}
                             >
                                 Logout
                             </Button>
@@ -164,7 +164,7 @@ const ConfigScreen = ({ navigation, route }) => {
                                 style={[
                                     {
                                         flex: 1,
-                                        marginRight: 10,
+
                                         backgroundColor: theme.colors.onError,
                                     },
                                 ]}

@@ -79,12 +79,12 @@ const baseStyles = {
         iconRight: {
             flexDirection: "row-reverse",
         },
-        listButton: {
-            marginBottom: 10,
-        },
-        bigButton: {
-            paddingVertical: 8,
-        },
+        // listButton: {
+        //     marginBottom: 10,
+        // },
+        // bigButton: {
+        //     paddingVertical: 8,
+        // },
     },
 
     text: {
