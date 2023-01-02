@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { SafeAreaView, FlatList, RefreshControl, Alert, useColorScheme, View } from "react-native";
-import { Text, Button, IconButton } from "react-native-paper";
+// import {  } from "react-native-paper";
+import { Text, Button, IconButton, Dialog, Paragraph, Portal, TextInput } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -44,6 +45,19 @@ const ConfigScreen = ({ navigation, route }) => {
     const [tokenList, setTokenList] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [currentUserData, setCurrentUserData] = useState(false);
+    const [deleteVisible, setDeleteVisible] = useState(false);
+
+    const deleteUser = async () => {
+        try {
+            await apiService.user.deleteSelf();
+            console.log("deleted self!");
+            dispatch(setUserData(null));
+        } catch (error) {
+            dispatchSDKError(dispatch, error);
+        } finally {
+            setDeleteVisible(false);
+        }
+    };
 
     const onRefresh = useCallback(() => {
         async function prepare() {
@@ -87,6 +101,18 @@ const ConfigScreen = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
+            <Portal>
+                <Dialog visible={deleteVisible} onDismiss={() => setDeleteVisible(false)}>
+                    <Dialog.Title>Delete Account?</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Your account and related data will be forever deleted!</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => setDeleteVisible(false)}>Cancel</Button>
+                        <Button onPress={deleteUser}>Delete</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
             <FlatList
                 ListHeaderComponent={() => (
                     <View>
@@ -120,14 +146,7 @@ const ConfigScreen = ({ navigation, route }) => {
                         )}
                         <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <Button
-                                onPress={async () => {
-                                    try {
-                                        await apiService.user.deleteSelf();
-                                        dispatch(setUserData(null));
-                                    } catch (error) {
-                                        dispatchSDKError(dispatch, error);
-                                    }
-                                }}
+                                onPress={() => setDeleteVisible(true)}
                                 icon="trash"
                                 style={{ flex: 1, marginRight: 10 }}
                                 mode="contained-tonal"
