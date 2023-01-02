@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { SafeAreaView, FlatList, RefreshControl, Alert, useColorScheme, View } from "react-native";
 // import {  } from "react-native-paper";
-import { Text, Button, IconButton, Dialog, Paragraph, Portal, TextInput } from "react-native-paper";
+import { Text, Button, IconButton, Dialog, Paragraph, Portal, useTheme } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -37,6 +37,7 @@ const ConfigStack = () => {
 };
 
 const ConfigScreen = ({ navigation, route }) => {
+    const theme = useTheme();
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
@@ -136,19 +137,28 @@ const ConfigScreen = ({ navigation, route }) => {
                             </View>
                         )}
 
-                        <Text variant="labelLarge">User ID: {state.user.id}</Text>
-                        <Text variant="labelLarge">Registered: {state.user.createdAt}</Text>
                         {currentUserData && (
-                            <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                            <Text variant="labelLarge">
                                 Login Method:{" "}
                                 {currentUserData.methods.map((method) => method.method).join(", ")}
                             </Text>
                         )}
+                        <Text variant="labelLarge">User ID: {state.user.id}</Text>
+                        <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                            Registered: {state.user.createdAt}
+                        </Text>
+
                         <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <Button
                                 onPress={() => setDeleteVisible(true)}
                                 icon="trash"
-                                style={{ flex: 1, marginRight: 10 }}
+                                style={[
+                                    {
+                                        flex: 1,
+                                        marginRight: 10,
+                                        backgroundColor: theme.colors.onError,
+                                    },
+                                ]}
                                 mode="contained-tonal"
                             >
                                 Delete Account
