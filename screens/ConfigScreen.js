@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-
 import { SafeAreaView, FlatList, RefreshControl, Alert, useColorScheme, View } from "react-native";
-// import {  } from "react-native-paper";
 import { Text, Button, IconButton, Dialog, Paragraph, Portal, useTheme } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -38,6 +36,7 @@ const ConfigStack = () => {
 
 const ConfigScreen = ({ navigation, route }) => {
     const theme = useTheme();
+
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
@@ -150,6 +149,16 @@ const ConfigScreen = ({ navigation, route }) => {
 
                         <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <Button
+                                onPress={async () => {
+                                    dispatch(setUserData(null));
+                                }}
+                                icon="sign-out-alt"
+                                mode="contained"
+                                style={{ flex: 1 }}
+                            >
+                                Logout
+                            </Button>
+                            <Button
                                 onPress={() => setDeleteVisible(true)}
                                 icon="trash"
                                 style={[
@@ -162,16 +171,6 @@ const ConfigScreen = ({ navigation, route }) => {
                                 mode="contained-tonal"
                             >
                                 Delete Account
-                            </Button>
-                            <Button
-                                onPress={async () => {
-                                    dispatch(setUserData(null));
-                                }}
-                                icon="sign-out-alt"
-                                mode="contained"
-                                style={{ flex: 1 }}
-                            >
-                                Logout
                             </Button>
                         </View>
                         <Separator />

@@ -22,8 +22,6 @@ const ViewPush = ({ navigation, route }) => {
     const [pushStatus, setPushStatus] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
-    if (!thisPush) return null;
-
     // when the screen's pushId changes
     useEffect(() => {
         navigation.setOptions({
@@ -33,6 +31,8 @@ const ViewPush = ({ navigation, route }) => {
         onRefresh();
     }, [thisPush]);
     console.log("ViewPush: thisPush", thisPush);
+
+    if (!thisPush) return null;
 
     const onRefresh = useCallback(() => {
         async function prepare() {
