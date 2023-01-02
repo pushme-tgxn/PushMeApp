@@ -22,7 +22,7 @@ const ViewPush = ({ navigation, route }) => {
     const [pushStatus, setPushStatus] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
-    if (!thisPush) return <View />;
+    if (!thisPush) return null;
 
     // when the screen's pushId changes
     useEffect(() => {
