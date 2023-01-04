@@ -89,7 +89,7 @@ const PushList = ({ navigation, route }) => {
                 renderItem={({ item }) => {
                     return (
                         <TwoLineButton
-                            key={item.id}
+                            // key={item.id}
                             onPress={async () => {
                                 navigation.navigate("ViewPush", { pushId: item.id });
                             }}

@@ -87,7 +87,7 @@ const TopicList = ({ navigation, route }) => {
                 renderItem={({ item, index }) => {
                     return (
                         <TwoLineButton
-                            key={item.id}
+                            // key={item.id}
                             onPress={async () => {
                                 navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
                             }}
