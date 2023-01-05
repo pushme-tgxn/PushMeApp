@@ -153,6 +153,11 @@ export const PushListButton = (props) => {
         responseData = apiService.getNotificationAction(categoryIdentifier, actionIdentifier);
     }
 
+    if (!push.pushPayload) {
+        console.log("PushListButton", push);
+        return null;
+    }
+
     return (
         <Surface
             style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: theme.colors.surfaceVariant }]}

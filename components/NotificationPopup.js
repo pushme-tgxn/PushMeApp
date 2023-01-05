@@ -19,7 +19,6 @@ export default function NotificationPopup() {
     const { state, dispatch } = useContext(AppReducer);
 
     const [visible, setVisible] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const [pushContent, setPushContent] = useState(null);
     const [pushCategory, setPushCategory] = useState(null);
@@ -42,15 +41,22 @@ export default function NotificationPopup() {
         setPushCategory(foundCategory);
         console.log("pushCategory", foundCategory);
 
-        // only load for the default type, or if default action is not sent
+        // only load for the default type (clicked it) and  if the category is set to not send the default action
         if (
             lastNotificationResponse &&
             lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER &&
-            (!pushCategory || !pushCategory.sendDefaultAction)
+            pushCategory &&
+            !pushCategory.sendDefaultAction
         ) {
             setVisible(true);
         }
     }, [lastNotificationResponse]);
+
+    const resetPopup = () => {
+        setPushResponseText("");
+        setPushCategory(null);
+        setVisible(false);
+    };
 
     if (!pushCategory) return null;
 
@@ -59,7 +65,7 @@ export default function NotificationPopup() {
             <Modal
                 style={{ backgroundColor: "#000000FF" }}
                 visible={visible}
-                onDismiss={() => setVisible(false)}
+                onDismiss={() => resetPopup()}
                 contentContainerStyle={{
                     backgroundColor: theme.colors.backdrop,
                     margin: 20,
@@ -93,6 +99,7 @@ export default function NotificationPopup() {
                 <Dialog.Actions>
                     {pushCategory.actions.map((action) => (
                         <Button
+                            key={action.identifier}
                             disabled={pushCategory.hasTextInput ? pushResponseText.length == 0 : false}
                             onPress={() => {
                                 const responseData = {
@@ -112,7 +119,9 @@ export default function NotificationPopup() {
                             {action.title}
                         </Button>
                     ))}
-                    <Button onPress={() => setVisible(false)}>Dismiss</Button>
+                    {/* <Button key="default" onPress={() => resetPopup()}>
+                        Dismiss
+                    </Button> */}
                 </Dialog.Actions>
             </Modal>
         </Portal>
