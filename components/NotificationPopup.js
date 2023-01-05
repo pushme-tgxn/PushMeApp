@@ -1,35 +1,16 @@
-import React, { useState, useContext } from "react";
-
-import { SafeAreaView, View, useColorScheme } from "react-native";
-
-import {
-    Appbar,
-    Menu,
-    IconButton,
-    Colors,
-    Button,
-    Modal,
-    Dialog,
-    Portal,
-    Paragraph,
-} from "react-native-paper";
+import React, { useState, useEffect, useContext } from "react";
+import { View, useColorScheme } from "react-native";
+import { Button, Modal, Dialog, Portal, Paragraph, TextInput, useTheme } from "react-native-paper";
 
 import * as Notifications from "expo-notifications";
-// import { Picker } from "@react-native-picker/picker";
-
-// import { PaperSelect } from "react-native-paper-select";
-
-import DropDown from "react-native-paper-dropdown";
-
-import { Separator } from "../components/Shared";
-
-import { useTheme } from "react-native-paper";
 
 import { AppReducer } from "../const";
 import { setPushResponse } from "../reducers/app";
 
-import apiService from "../service/api";
+import { Separator } from "../components/Shared";
+
 import styles from "../styles";
+import apiService from "../service/api";
 
 export default function NotificationPopup() {
     const theme = useTheme();
@@ -41,27 +22,37 @@ export default function NotificationPopup() {
     const [loading, setLoading] = useState(false);
 
     const [pushContent, setPushContent] = useState(null);
+    const [pushCategory, setPushCategory] = useState(null);
+
+    const [pushResponseText, setPushResponseText] = useState("");
 
     const themedStyles = styles(colorScheme);
 
     const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!lastNotificationResponse) return;
 
-        console.log("lastNotificationResponse", lastNotificationResponse);
+        console.log("lastNotificationResponse", lastNotificationResponse.notification.request.content);
         setPushContent(lastNotificationResponse.notification.request.content);
 
-        // only load for the default type
+        const foundCategory = apiService.getNotificationCategory(
+            lastNotificationResponse.notification.request.content.categoryIdentifier,
+        );
+        setPushCategory(foundCategory);
+        console.log("pushCategory", foundCategory);
+
+        // only load for the default type, or if default action is not sent
         if (
             lastNotificationResponse &&
-            lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER
+            lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER &&
+            (!pushCategory || !pushCategory.sendDefaultAction)
         ) {
             setVisible(true);
         }
     }, [lastNotificationResponse]);
 
-    // TODO build a list of categories and functions to generate action buttons
+    if (!pushCategory) return null;
 
     return (
         <Portal>
@@ -74,57 +65,54 @@ export default function NotificationPopup() {
                     margin: 20,
                 }}
             >
-                <Dialog.Title>Incoming Push</Dialog.Title>
+                <Dialog.Title>{pushContent.title}</Dialog.Title>
                 <Dialog.Content>
                     {lastNotificationResponse && pushContent && (
                         <View>
-                            <Paragraph>
+                            {/* <Paragraph>
                                 actionIdentifier: {lastNotificationResponse.actionIdentifier}
-                            </Paragraph>
-                            <Paragraph>title: {pushContent.title}</Paragraph>
-                            <Paragraph>body: {pushContent.body}</Paragraph>
-                            <Paragraph>categoryIdentifier: {pushContent.categoryIdentifier}</Paragraph>
-                            <Paragraph>pushIdent: {pushContent.data.pushIdent}</Paragraph>
-                            <Paragraph>pushId: {pushContent.data.pushId}</Paragraph>
-                            <Separator />
-                            <Paragraph>{JSON.stringify(lastNotificationResponse)}</Paragraph>
+                            </Paragraph> */}
+                            {/* <Paragraph>{pushContent.title}</Paragraph> */}
+                            <Paragraph>{pushContent.body}</Paragraph>
+                            {/* <Paragraph>categoryIdentifier: {pushContent.categoryIdentifier}</Paragraph> */}
+                            {/* <Paragraph>pushIdent: {pushContent.data.pushIdent}</Paragraph> */}
+                            {/* <Paragraph>pushId: {pushContent.data.pushId}</Paragraph> */}
+                            {/* <Separator /> */}
+                            {/* <Paragraph>{JSON.stringify(lastNotificationResponse)}</Paragraph> */}
                         </View>
+                    )}
+                    {pushCategory.hasTextInput && (
+                        <TextInput
+                            mode="outlined"
+                            style={{ backgroundColor: theme.colors.surface }}
+                            value={pushResponseText}
+                            onChangeText={setPushResponseText}
+                        />
                     )}
                 </Dialog.Content>
                 <Dialog.Actions>
-                    <Button onPress={() => setVisible(false)}>Thanks</Button>
-                    <Button
-                        onPress={() => {
-                            const responseData = {
-                                pushIdent: pushContent.data.pushIdent,
-                                pushId: pushContent.data.pushId,
-                                actionIdentifier: "reject", // TODO must get the actionIdentifier from the button AND categoryIdentifier OF REQUEST
-                                categoryIdentifier: pushContent.categoryIdentifier,
-                                responseText: null,
-                            };
-                            dispatch(setPushResponse(responseData));
-                            setVisible(false);
-                        }}
-                        loading={loading}
-                    >
-                        Reject
-                    </Button>
-                    <Button
-                        onPress={() => {
-                            const responseData = {
-                                pushIdent: pushContent.data.pushIdent,
-                                pushId: pushContent.data.pushId,
-                                actionIdentifier: "approve", // TODO must get the actionIdentifier from the button AND categoryIdentifier OF REQUEST
-                                categoryIdentifier: pushContent.categoryIdentifier,
-                                responseText: null,
-                            };
-                            dispatch(setPushResponse(responseData));
-                            setVisible(false);
-                        }}
-                        loading={loading}
-                    >
-                        Approve
-                    </Button>
+                    {pushCategory.actions.map((action) => (
+                        <Button
+                            disabled={pushCategory.hasTextInput ? pushResponseText.length == 0 : false}
+                            onPress={() => {
+                                const responseData = {
+                                    pushIdent: pushContent.data.pushIdent,
+                                    pushId: pushContent.data.pushId,
+                                    actionIdentifier: action.identifier,
+                                    categoryIdentifier: pushContent.categoryIdentifier,
+                                    responseText: pushCategory.hasTextInput ? pushResponseText : null,
+                                };
+                                dispatch(setPushResponse(responseData));
+
+                                setPushResponseText("");
+                                setPushCategory(null);
+                                setVisible(false);
+                            }}
+                        >
+                            {action.title}
+                        </Button>
+                    ))}
+                    <Button onPress={() => setVisible(false)}>Dismiss</Button>
                 </Dialog.Actions>
             </Modal>
         </Portal>

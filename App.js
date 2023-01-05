@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, useRef } from "react";
 
 import "expo-dev-client";
 
-import { Platform, Alert, Linking, useColorScheme } from "react-native";
+import { AppState, Platform, BackHandler, Alert, Linking, useColorScheme } from "react-native";
 
 import * as Device from "expo-device";
 
@@ -45,9 +45,9 @@ import AppTabView from "./views/AppTabView";
 
 import NotificationPopup from "./components/NotificationPopup";
 
-import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
 
-import { AppReducer } from "./const";
+import { AppReducer, BACKEND_URL } from "./const";
 
 import apiService from "./service/api";
 
@@ -70,7 +70,8 @@ Notifications.setNotificationHandler({
 SplashScreen.preventAutoHideAsync();
 
 const App = () => {
-    // DefaultTheme;
+    const appState = useRef(AppState.currentState);
+
     const scheme = useColorScheme();
     const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -97,7 +98,7 @@ const App = () => {
     const notificationListener = useRef();
     const responseListener = useRef();
 
-    // register app for notifications
+    // register app for notifications (get tokens)
     const registerForPushNotificationsAsync = async () => {
         let token, nativeToken;
 
@@ -125,9 +126,12 @@ const App = () => {
 
             if (finalStatus !== "granted") {
                 Alert.alert(
-                    `Notification Permissions were not granted`,
-                    "Please enable notifications in this app's settings.",
-                    [{ text: "Thanks" }, { text: "Open App Settings", onPress: openAppSettings }],
+                    `Notification Permissions are not granted!`,
+                    "Please enable notifications in the app settings.",
+                    [
+                        { text: "Exit App", onPress: () => BackHandler.exitApp() },
+                        { text: "Open App Settings", onPress: openAppSettings },
+                    ],
                 );
 
                 return [null, null];
@@ -144,20 +148,69 @@ const App = () => {
 
     // register notification categories from client-side
     const registerNotificationCategories = async () => {
-        for (const index in NotificationDefinitions) {
-            const notificationCategory = NotificationDefinitions[index];
+        for (const index in PushMeSDK.NotificationDefinitions) {
+            const notificationCategory = PushMeSDK.NotificationDefinitions[index];
             if (notificationCategory.actions) {
                 console.debug("registering notification actions", index, notificationCategory);
-                await Notifications.setNotificationCategoryAsync(index, notificationCategory.actions);
+                await Notifications.setNotificationCategoryAsync(
+                    index,
+                    notificationCategory.actions.map((action) => {
+                        return {
+                            buttonTitle: action.title,
+                            identifier: action.identifier,
+                            options: action.options,
+                            textInput: action.textInput,
+                        };
+                    }),
+                );
             }
         }
     };
 
+    const getAppPushTokens = async () => {
+        // get application push tokens, and register notification categories
+        try {
+            let [expoToken, nativeToken] = await registerForPushNotificationsAsync();
+
+            if (expoToken) {
+                dispatch(setExpoPushToken(expoToken));
+            }
+
+            if (nativeToken) {
+                dispatch(setNativePushToken(nativeToken));
+            }
+
+            await registerNotificationCategories();
+        } catch (error) {
+            console.error("error setting app up", error);
+            // alert("error setting app up: " + error.toString());
+        }
+    };
+
+    // listen for app state changes to detect foreground/background
     useEffect(() => {
-        async function prepare() {
-            // generate or load a unique device key, and save it.
-            let deviceKey;
-            try {
+        const subscription = AppState.addEventListener("change", (nextAppState) => {
+            if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+                console.log("App has come to the foreground!");
+                getAppPushTokens();
+            }
+
+            appState.current = nextAppState;
+            console.log("AppState Changed", appState.current);
+        });
+
+        return () => {
+            subscription.remove();
+        };
+    }, []);
+
+    const initializeDeviceKey = async (state, dispatch) => {
+        let deviceKey;
+        try {
+            if (state.deviceKey) {
+                console.debug("using deviceKey from state", state.deviceKey);
+                deviceKey = state.deviceKey;
+            } else {
                 const existingDeviceKey = await AsyncStorage.getItem("deviceKey");
                 if (existingDeviceKey !== null) {
                     deviceKey = existingDeviceKey;
@@ -168,37 +221,33 @@ const App = () => {
                     console.debug("generated deviceKey", deviceKey);
                 }
                 dispatch(setDeviceKey(deviceKey));
-            } catch (e) {
-                console.warn(e);
             }
+        } catch (e) {
+            console.warn(e);
+            return null;
+        }
+    };
 
-            // get application push tokens, and register notification categories
-            try {
-                let [expoToken, nativeToken] = await registerForPushNotificationsAsync();
-
-                if (expoToken) {
-                    dispatch(setExpoPushToken(expoToken));
-                }
-
-                if (nativeToken) {
-                    dispatch(setNativePushToken(nativeToken));
-                }
-
-                await registerNotificationCategories();
-            } catch (error) {
-                console.error("error setting app up", error);
-                // alert("error setting app up: " + error.toString());
+    const initializeBackendUrl = async () => {
+        try {
+            const serializedBackendUrl = await AsyncStorage.getItem("backendUrl");
+            if (serializedBackendUrl !== null) {
+                apiService.setBackendUrl(serializedBackendUrl);
+            } else {
+                apiService.setBackendUrl(BACKEND_URL);
             }
+        } catch (e) {
+            console.warn(e);
+        }
+    };
+
+    useEffect(() => {
+        async function prepare() {
+            // generate or load a unique device key, and save it.
+            await initializeDeviceKey(state, dispatch);
 
             // attempt to load backend URL
-            try {
-                const serializedBackendUrl = await AsyncStorage.getItem("backendUrl");
-                if (serializedBackendUrl !== null) {
-                    apiService.setBackendUrl(serializedBackendUrl);
-                }
-            } catch (e) {
-                console.warn(e);
-            }
+            await initializeBackendUrl();
 
             // attempt to load user
             let loggedInUser;
@@ -206,11 +255,15 @@ const App = () => {
                 const serializedUserData = await AsyncStorage.getItem("userData");
                 if (serializedUserData !== null) {
                     const userData = JSON.parse(serializedUserData);
-                    console.debug("loaded serializedUserData", userData.id);
+                    console.debug("loaded serializedUserData", userData.id, userData.token);
 
                     if (userData) {
+                        // test access token
                         apiService.setAccessToken(userData.token);
                         const currentUser = await apiService.user.getCurrentUser();
+
+                        console.debug("currentUser", currentUser, userData);
+
                         if (currentUser && currentUser.user.id == userData.id) {
                             loggedInUser = userData;
                         } else {
@@ -221,11 +274,10 @@ const App = () => {
                     }
                 }
             } catch (e) {
-                console.warn(e);
+                // console.warn("error attempting to login user from saved token", e);
             } finally {
                 if (loggedInUser) {
                     // only if a valid token was found
-
                     dispatch(setUserData(loggedInUser));
 
                     startState.current = "AppView";
@@ -237,7 +289,12 @@ const App = () => {
 
             await SplashScreen.hideAsync();
         }
+
+        // load user data, and app state
         prepare();
+
+        // kick off application push tokens, and register notification categories on app start
+        getAppPushTokens();
 
         // notification recieved, append to local array
         notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
@@ -259,22 +316,27 @@ const App = () => {
                 responseText: null,
             };
 
-            // asttach user text is defined
+            // perform actions based on response
+            if (
+                responseData.categoryIdentifier == "button.open_link" &&
+                response?.notification?.request?.content?.data?.linkUrl
+            ) {
+                console.log("open link", response.notification.request.content.data.linkUrl);
+                Linking.openURL(response.notification.request.content.data.linkUrl);
+            }
+
+            // attach user text is defined
             if (response.userText) {
                 responseData.responseText = response.userText;
             }
 
-            let foundNotificatonCategory = false;
-            for (const index in NotificationDefinitions) {
-                const notificationCategory = NotificationDefinitions[index];
-                if (index == responseData.categoryIdentifier) {
-                    foundNotificatonCategory = notificationCategory;
-                }
-            }
+            const foundNotificationCategory = apiService.getNotificationCategory(
+                responseData.categoryIdentifier,
+            );
 
             // send non-default responses if enabled for this type of notification
             if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
-                if (foundNotificatonCategory && foundNotificatonCategory.sendDefaultAction) {
+                if (foundNotificationCategory && foundNotificationCategory.sendDefaultAction) {
                     dispatch(setPushResponse(responseData));
                 }
             } else {

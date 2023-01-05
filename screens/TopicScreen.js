@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
-import { SafeAreaView, View, FlatList, useColorScheme } from "react-native";
+import { SafeAreaView, FlatList, RefreshControl, useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { Text, Button, FAB } from "react-native-paper";
 
 import { AppReducer } from "../const";
-import { setTopicList } from "../reducers/app";
+import { dispatchSDKError, setTopicList } from "../reducers/app";
 
+import { TwoLineButton } from "../components/Shared";
 import ViewTopic from "../components/ViewTopic";
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
@@ -45,8 +46,7 @@ const TopicList = ({ navigation, route }) => {
                 const response = await apiService.topic.list();
                 dispatch(setTopicList(response.topics));
             } catch (error) {
-                alert(error);
-                console.error(error);
+                dispatchSDKError(dispatch, error);
             } finally {
                 setRefreshing(false);
             }
@@ -82,21 +82,18 @@ const TopicList = ({ navigation, route }) => {
                     </Text>
                 )}
                 data={topicList}
-                onRefresh={onRefresh}
-                refreshing={refreshing}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item, index }) => {
                     return (
-                        <Button
-                            key={item.id}
-                            style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
+                        <TwoLineButton
+                            // key={item.id}
                             onPress={async () => {
                                 navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
                             }}
-                            mode="contained-tonal"
-                        >
-                            {item.createdAt} (ID: {item.id})
-                        </Button>
+                            title={`${item.createdAt} (ID: ${item.id})`}
+                            subtitle={`ID: ${item.id}`}
+                        />
                     );
                 }}
             />

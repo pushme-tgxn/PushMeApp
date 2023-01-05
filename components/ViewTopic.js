@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-
 import { SafeAreaView, FlatList, useColorScheme, View } from "react-native";
-
 import { Button, List, Text, Checkbox } from "react-native-paper";
 
 import { CopyTextButton } from "../components/Shared";
 
 import { AppReducer } from "../const";
+import { dispatchSDKError } from "../reducers/app";
 
 import PushPopup from "./PushPopup";
 
@@ -17,7 +16,7 @@ const ViewTopic = ({ navigation, route }) => {
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
-    const { state } = useContext(AppReducer);
+    const { state, dispatch } = useContext(AppReducer);
 
     const [deviceList, setDeviceList] = useState([]);
     const [checkedDeviceList, setCheckedDeviceList] = useState([]);
@@ -57,8 +56,7 @@ const ViewTopic = ({ navigation, route }) => {
 
                 setCheckedDeviceList(checkedDeviceArray);
             } catch (error) {
-                alert(error);
-                console.error(error);
+                dispatchSDKError(dispatch, error);
             } finally {
                 setRefreshing(false);
             }
@@ -72,7 +70,7 @@ const ViewTopic = ({ navigation, route }) => {
                 deviceIds,
             });
         } catch (error) {
-            alert(error);
+            dispatchSDKError(dispatch, error);
         }
     };
 

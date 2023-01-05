@@ -13,6 +13,8 @@ import {
 
 import { Button, TextInput } from "react-native-paper";
 
+import { dispatchSDKError } from "../reducers/app";
+
 import { showToast } from "../components/Shared";
 
 import apiService from "../service/api";
@@ -58,8 +60,9 @@ const RegisterScreen = (props) => {
                 setErrorText(responseJson.message);
             }
         } catch (error) {
-            // setErrorText(error.toString());
-            console.error(error);
+            setErrorText(error.toString());
+            // console.error(error);
+            dispatchSDKError(dispatch, error);
         } finally {
             setLoading(false);
         }

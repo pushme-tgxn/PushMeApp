@@ -5,6 +5,7 @@ const baseColors = {
     primaryColor: "#a845ff",
     backgroundColor: "#fff",
 };
+
 const baseStyles = {
     separator: {
         marginVertical: 8,
@@ -19,8 +20,8 @@ const baseStyles = {
         position: "absolute",
         backgroundColor: "#a845ff",
         margin: 16,
-        right: 0,
-        bottom: 0,
+        right: 5,
+        bottom: 5,
         borderRadius: 20,
     },
 
@@ -51,18 +52,22 @@ const baseStyles = {
     },
 
     container: {
-        base: { // base container for top-level screens
+        base: {
+            // base container for top-level screens
             flex: 1,
             marginTop: 10,
-            paddingHorizontal: 16,
+            // shadowOffset: { width: 0, height: 0 },
+            paddingHorizontal: 10,
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
-        pane: { // container for tab panes
+        pane: {
+            // container for tab panes
             flex: 1,
             paddingTop: 15,
             paddingHorizontal: 16,
         },
-        center: { // center pane for login screen
+        center: {
+            // center pane for login screen
             flex: 1,
             paddingHorizontal: 10,
             justifyContent: "center",
@@ -74,12 +79,12 @@ const baseStyles = {
         iconRight: {
             flexDirection: "row-reverse",
         },
-        listButton: {
-            marginBottom: 10,
-        },
-        bigButton: {
-            paddingVertical: 8,
-        },
+        // listButton: {
+        //     marginBottom: 10,
+        // },
+        // bigButton: {
+        //     paddingVertical: 8,
+        // },
     },
 
     text: {

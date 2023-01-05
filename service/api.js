@@ -1,15 +1,10 @@
-import { showToast } from "../components/Shared";
-
 import { BACKEND_URL } from "../const";
 
-import APIService from "@pushme-tgxn/pushmesdk";
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
 
-const apiService = new APIService({
+const apiService = new PushMeSDK({
     backendUrl: BACKEND_URL,
-    // logging: (message) => {
-    //     console.log(message);
-    //     showToast(message);
-    // },
+    // logging: console.debug,
 });
 console.log("createApiService", apiService.backendUrl);
 

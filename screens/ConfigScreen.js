@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-
-import { SafeAreaView, FlatList, Alert, useColorScheme, View } from "react-native";
-import { Text, Button, TextInput, IconButton } from "react-native-paper";
+import { SafeAreaView, FlatList, RefreshControl, Alert, useColorScheme, View } from "react-native";
+import { Text, Button, IconButton, Dialog, Paragraph, Portal, useTheme } from "react-native-paper";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import { AppReducer } from "../const";
-import { setUserData } from "../reducers/app";
+import { AppReducer, BACKEND_URL } from "../const";
+import { dispatchSDKError, setUserData } from "../reducers/app";
 
 import { Separator } from "../components/Shared";
 
@@ -38,6 +35,8 @@ const ConfigStack = () => {
 };
 
 const ConfigScreen = ({ navigation, route }) => {
+    const theme = useTheme();
+
     const colorScheme = useColorScheme();
     const themedStyles = styles(colorScheme);
 
@@ -46,6 +45,19 @@ const ConfigScreen = ({ navigation, route }) => {
     const [tokenList, setTokenList] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [currentUserData, setCurrentUserData] = useState(false);
+    const [deleteVisible, setDeleteVisible] = useState(false);
+
+    const deleteUser = async () => {
+        try {
+            await apiService.user.deleteSelf();
+            console.log("deleted self!");
+            dispatch(setUserData(null));
+        } catch (error) {
+            dispatchSDKError(dispatch, error);
+        } finally {
+            setDeleteVisible(false);
+        }
+    };
 
     const onRefresh = useCallback(() => {
         async function prepare() {
@@ -56,8 +68,7 @@ const ConfigScreen = ({ navigation, route }) => {
                 const response = await apiService.device.list();
                 setTokenList(response.devices);
             } catch (error) {
-                alert(error);
-                console.error(error);
+                dispatchSDKError(dispatch, error);
             } finally {
                 setRefreshing(false);
             }
@@ -77,22 +88,38 @@ const ConfigScreen = ({ navigation, route }) => {
     // load current user data
     useEffect(() => {
         async function prepare() {
-            const currentUser = await apiService.user.getCurrentUser();
-            console.log("currentUser", currentUser);
-            setCurrentUserData(currentUser);
+            try {
+                const currentUser = await apiService.user.getCurrentUser();
+                console.log("currentUser", currentUser);
+                setCurrentUserData(currentUser);
+            } catch (error) {
+                dispatchSDKError(dispatch, error);
+            }
         }
         prepare();
     }, []);
 
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
+            <Portal>
+                <Dialog visible={deleteVisible} onDismiss={() => setDeleteVisible(false)}>
+                    <Dialog.Title>Delete Account?</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Your account and related data will be forever deleted!</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => setDeleteVisible(false)}>Cancel</Button>
+                        <Button onPress={deleteUser}>Delete</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
             <FlatList
                 ListHeaderComponent={() => (
                     <View>
                         <Text variant="displaySmall" style={{ marginBottom: 10 }}>
                             Account
                         </Text>
-                        {!apiService.isDefaultBackend() && (
+                        {apiService.getBackendUrl() != BACKEND_URL && (
                             <View style={{ position: "absolute", top: 10, right: 0 }}>
                                 <IconButton
                                     icon="cog"
@@ -109,41 +136,41 @@ const ConfigScreen = ({ navigation, route }) => {
                             </View>
                         )}
 
-                        <Text variant="labelLarge">User ID: {state.user.id}</Text>
-                        <Text variant="labelLarge">Registered: {state.user.createdAt}</Text>
                         {currentUserData && (
-                            <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                            <Text variant="labelLarge">
                                 Login Method:{" "}
                                 {currentUserData.methods.map((method) => method.method).join(", ")}
                             </Text>
                         )}
+                        <Text variant="labelLarge">User ID: {state.user.id}</Text>
+                        <Text variant="labelLarge" style={{ marginBottom: 10 }}>
+                            Registered: {state.user.createdAt}
+                        </Text>
+
                         <View style={{ flexDirection: "row", alignContent: "center" }}>
                             <Button
                                 onPress={async () => {
-                                    await apiService.user.deleteSelf();
-                                    await AsyncStorage.removeItem("userData");
                                     dispatch(setUserData(null));
-
-                                    // navigation.replace("Auth");
-                                }}
-                                icon="trash"
-                                style={{ flex: 1, marginRight: 10 }}
-                                mode="contained-tonal"
-                            >
-                                Delete Account
-                            </Button>
-                            <Button
-                                onPress={async () => {
-                                    await AsyncStorage.removeItem("userData");
-                                    dispatch(setUserData(null));
-
-                                    // navigation.replace("Auth");
                                 }}
                                 icon="sign-out-alt"
                                 mode="contained"
-                                style={{ flex: 1 }}
+                                style={{ flex: 1, marginRight: 10 }}
                             >
                                 Logout
+                            </Button>
+                            <Button
+                                onPress={() => setDeleteVisible(true)}
+                                icon="trash"
+                                style={[
+                                    {
+                                        flex: 1,
+
+                                        backgroundColor: theme.colors.onError,
+                                    },
+                                ]}
+                                mode="contained-tonal"
+                            >
+                                Delete Account
                             </Button>
                         </View>
                         <Separator />
@@ -181,8 +208,9 @@ const ConfigScreen = ({ navigation, route }) => {
                     </View>
                 )}
                 data={tokenList}
-                onRefresh={onRefresh}
-                refreshing={refreshing}
+                // onRefresh={onRefresh}
+                // refreshing={refreshing}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     let isThisDevice = item.deviceKey == state.deviceKey;

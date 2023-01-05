@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-
 import { View, useColorScheme } from "react-native";
-
-import { Button, Modal, Dialog, Portal, TextInput } from "react-native-paper";
+import { Button, Modal, Dialog, Portal, TextInput, useTheme } from "react-native-paper";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { showToast } from "./Shared";
+import { BACKEND_URL } from "../const";
 
-import { useTheme } from "react-native-paper";
+import { showToast } from "./Shared";
 
 import apiService from "../service/api";
 import styles from "../styles";
@@ -19,7 +17,7 @@ export default function ModalPopup({ visible, setVisible }) {
     const themedStyles = styles(colorScheme);
 
     let currentBackendUrl = apiService.getBackendUrl();
-    let isDefaultBackend = apiService.isDefaultBackend();
+    let isDefaultBackend = currentBackendUrl == BACKEND_URL;
 
     const [backendUrl, setBackendUrl] = useState("");
 
@@ -34,7 +32,7 @@ export default function ModalPopup({ visible, setVisible }) {
     };
 
     const onReset = async () => {
-        apiService.resetBackend();
+        apiService.setBackendUrl(BACKEND_URL);
         AsyncStorage.removeItem("backendUrl");
         setBackendUrl("");
         setVisible(false);
@@ -44,7 +42,7 @@ export default function ModalPopup({ visible, setVisible }) {
     /// update variables when popup is shown
     useEffect(() => {
         currentBackendUrl = apiService.getBackendUrl();
-        isDefaultBackend = apiService.isDefaultBackend();
+        isDefaultBackend = currentBackendUrl == BACKEND_URL;
     }, [visible]);
 
     return (

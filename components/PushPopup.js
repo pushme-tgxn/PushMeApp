@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-
-import { SafeAreaView, Text, View, useColorScheme, StyleSheet, FlatList, ScrollView } from "react-native";
-
-import { Button, Modal, Dialog, Portal, TextInput } from "react-native-paper";
-
-import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
+import React, { useState, useContext } from "react";
+import { View, useColorScheme } from "react-native";
+import { Button, Modal, Dialog, Portal, TextInput, useTheme } from "react-native-paper";
 
 import DropDown from "react-native-paper-dropdown";
 
-import { useTheme } from "react-native-paper";
-import apiService from "../service/api";
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
 
+import { AppReducer } from "../const";
+import { dispatchSDKError } from "../reducers/app";
+
+import apiService from "../service/api";
 import styles from "../styles";
 
 export default function PushPopup({ visible, setVisible, topicData, secretKey }) {
     const theme = useTheme();
     const colorScheme = useColorScheme();
-
     const themedStyles = styles(colorScheme);
+
+    const { state, dispatch } = useContext(AppReducer);
 
     const [loading, setLoading] = useState(false);
     const [showDropDown, setShowDropDown] = useState(false);
@@ -29,20 +29,25 @@ export default function PushPopup({ visible, setVisible, topicData, secretKey })
 
     const onSend = async () => {
         setLoading(true);
-        await apiService.push.pushToTopic(secretKey, {
-            categoryId,
-            title,
-            body,
-            data,
-        });
-        // setLoading(false);
-        setVisible(false);
+        try {
+            await apiService.push.pushToTopic(secretKey, {
+                categoryId,
+                title,
+                body,
+                data,
+            });
+        } catch (error) {
+            dispatchSDKError(dispatch, error);
+        } finally {
+            // setLoading(false);
+            setVisible(false);
+        }
     };
 
     // generate list of push types
     let clientCategoryList = [{ value: "default", label: "Default" }];
-    for (const index in NotificationDefinitions) {
-        const notificationCategory = NotificationDefinitions[index];
+    for (const index in PushMeSDK.NotificationDefinitions) {
+        const notificationCategory = PushMeSDK.NotificationDefinitions[index];
         clientCategoryList.push({ value: index, label: notificationCategory.title });
     }
 

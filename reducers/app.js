@@ -1,5 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
+
+import { showToast } from "../components/Shared";
+
 import apiService from "../service/api";
 
 export function setDeviceKey(deviceKey) {
@@ -92,6 +96,30 @@ export function setPushResponse(pushResponse) {
     };
 }
 
+// action that dispatches
+export function dispatchSDKError(dispatch, sdkError) {
+    console.info("dispatchSDKError", sdkError);
+
+    if (sdkError instanceof PushMeSDK.UnauthorizedError) {
+        console.debug("UnauthorizedError", sdkError.message);
+        showToast("❌ Unauthorized, please login again! 🔒");
+
+        // log user out
+        dispatch({
+            type: "setUserData",
+            payload: {
+                userData: null,
+            },
+        });
+    } else if (sdkError instanceof PushMeSDK.ServerError) {
+        console.debug("ServerError", sdkError.message);
+        showToast("❌ Server error! 😭");
+    } else {
+        console.debug("APIError", sdkError.message);
+        showToast("❌ API network request failed! 😭");
+    }
+}
+
 export const initialState = {
     deviceKey: null,
     appIsReady: false,
@@ -127,14 +155,14 @@ export function reducer(state, action) {
                 apiService.setAccessToken(action.payload.userData.token);
                 console.log("setAccessToken", Device);
 
-                const platform = Platform.OS === "android" ? "Android" : "iOS";
-                const defaultDeviceNameFormat = `${platform} (${Device.deviceName})`;
-                console.log("defaultDeviceNameFormat", defaultDeviceNameFormat);
-
                 // create registration only if we have an expo token
                 // TODO this should also update the device if the keys have changed
                 // currently it just tries to create the device every time
                 if (state.expoPushToken) {
+                    const platform = Platform.OS === "android" ? "Android" : "iOS";
+                    const defaultDeviceNameFormat = `${platform} (${Device.deviceName})`;
+                    console.log("defaultDeviceNameFormat", defaultDeviceNameFormat);
+
                     apiService.device.create({
                         deviceKey: state.deviceKey,
                         name: defaultDeviceNameFormat,
@@ -149,6 +177,7 @@ export function reducer(state, action) {
                     accessToken: action.payload.userData.token,
                 };
             } else {
+                AsyncStorage.removeItem("userData");
                 return {
                     ...state,
                     user: null,
