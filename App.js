@@ -159,6 +159,7 @@ const App = () => {
                             buttonTitle: action.title,
                             identifier: action.identifier,
                             options: action.options,
+                            textInput: action.textInput,
                         };
                     }),
                 );
@@ -315,22 +316,27 @@ const App = () => {
                 responseText: null,
             };
 
-            // asttach user text is defined
+            // perform actions based on response
+            if (
+                responseData.categoryIdentifier == "button.open_link" &&
+                response?.notification?.request?.content?.data?.linkUrl
+            ) {
+                console.log("open link", response.notification.request.content.data.linkUrl);
+                Linking.openURL(response.notification.request.content.data.linkUrl);
+            }
+
+            // attach user text is defined
             if (response.userText) {
                 responseData.responseText = response.userText;
             }
 
-            let foundNotificatonCategory = false;
-            for (const index in PushMeSDK.NotificationDefinitions) {
-                const notificationCategory = PushMeSDK.NotificationDefinitions[index];
-                if (index == responseData.categoryIdentifier) {
-                    foundNotificatonCategory = notificationCategory;
-                }
-            }
+            const foundNotificationCategory = apiService.getNotificationCategory(
+                responseData.categoryIdentifier,
+            );
 
             // send non-default responses if enabled for this type of notification
             if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
-                if (foundNotificatonCategory && foundNotificatonCategory.sendDefaultAction) {
+                if (foundNotificationCategory && foundNotificationCategory.sendDefaultAction) {
                     dispatch(setPushResponse(responseData));
                 }
             } else {
