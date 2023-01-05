@@ -57,7 +57,7 @@ export function setNativePushToken(pushToken) {
 }
 
 export function setPushList(pushList) {
-    console.info("setPushList", pushList);
+    // console.info("setPushList", pushList);
     return {
         type: "setPushList",
         payload: {
@@ -77,7 +77,7 @@ export function setTopicList(topicList) {
 }
 
 export function pushRecieved(push) {
-    console.info("pushRecieved", JSON.stringify(push, null, 2));
+    // console.info("pushRecieved", JSON.stringify(push, null, 2));
     return {
         type: "pushRecieved",
         payload: {
@@ -209,19 +209,21 @@ export function reducer(state, action) {
         // push is recieved
         case "pushRecieved":
             try {
-                const pushId = action.payload.push.request.content.data.pushId;
-                const pushIdent = action.payload.push.request.content.data.pushIdent;
+                const { content } = action.payload.push.request;
+                console.log("pushRecieved", pushIdent);
+
                 const pushList = state.pushList;
+                const { pushId, pushIdent } = content.data.pushId;
 
                 // update this push details
                 pushList[pushId] = {
                     id: pushId,
                     pushIdent,
                     pushPayload: {
-                        categoryId: action.payload.push.request.content.data.categoryIdentifier,
-                        title: action.payload.push.request.content.title,
-                        body: action.payload.push.request.content.body,
-                        data: action.payload.push.request.content.data,
+                        categoryId: content.data.categoryIdentifier,
+                        title: content.title,
+                        body: content.body,
+                        data: content.data,
                     },
                 };
 
