@@ -8,7 +8,7 @@ import { Text, Button } from "react-native-paper";
 import { AppReducer } from "../const";
 import { dispatchSDKError, setPushList } from "../reducers/app";
 
-import { TwoLineButton } from "../components/Shared";
+import { PushListButton } from "../components/Shared";
 import ViewPush from "../components/ViewPush";
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
@@ -88,13 +88,11 @@ const PushList = ({ navigation, route }) => {
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     return (
-                        <TwoLineButton
-                            // key={item.id}
+                        <PushListButton
                             onPress={async () => {
                                 navigation.navigate("ViewPush", { pushId: item.id });
                             }}
-                            title={`${item.id}: ${item.createdAt}`}
-                            subtitle={item.createdAt}
+                            push={item}
                         />
                     );
                 }}

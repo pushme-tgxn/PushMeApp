@@ -7,7 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { AppReducer, BACKEND_URL } from "../const";
 import { dispatchSDKError, setUserData } from "../reducers/app";
 
-import { Separator } from "../components/Shared";
+import { Separator, DeviceButton } from "../components/Shared";
 
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
@@ -208,23 +208,17 @@ const ConfigScreen = ({ navigation, route }) => {
                     </View>
                 )}
                 data={tokenList}
-                // onRefresh={onRefresh}
-                // refreshing={refreshing}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     let isThisDevice = item.deviceKey == state.deviceKey;
                     return (
-                        <Button
-                            style={[themedStyles.button.bigButton, themedStyles.button.listButton]}
+                        <DeviceButton
                             onPress={async () => {
                                 navigation.navigate("ViewDevice", { deviceData: item });
                             }}
-                            mode={isThisDevice ? "contained" : "contained-tonal"}
-                        >
-                            {item.name ? item.name : "Unnamed Device"}
-                            {isThisDevice && " (This Device)"}
-                        </Button>
+                            device={item}
+                        />
                     );
                 }}
             />
