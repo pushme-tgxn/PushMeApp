@@ -67,7 +67,7 @@ export const TwoLineButton = (props) => {
             <TouchableRipple style={[{ flex: 1, padding: 10 }]} onPress={onPress}>
                 <View>
                     {icon && (
-                        <Icon
+                        <MultiIcon
                             style={{
                                 position: "absolute",
                                 left: 0,
@@ -115,16 +115,42 @@ export const PushListButton = (props) => {
         }
     };
 
-    // // console.log("PushListButton", push);
+    const getNotificationColor = (categoryId, actionId) => {
+        const actionColorMap = {
+            "simple.push": "green",
+            "button.approve_deny": {
+                approve: "green",
+                deny: "red",
+            },
+            "button.yes_no": {
+                yes: "green",
+                no: "red",
+            },
+            "button.acknowledge": "green",
+            "button.open_link": "green",
+            "input.reply": "green",
+            "input.submit": "green",
+        };
+
+        // none set
+        if (!actionColorMap[categoryId]) {
+            return theme.colors.onSurfaceVariant;
+        }
+
+        if (typeof actionColorMap[categoryId] == "string") {
+            return actionColorMap[categoryId];
+        }
+
+        return actionColorMap[categoryId][actionId];
+    };
 
     let responseColor = theme.colors.onSurfaceVariant;
     let responseData = false;
     if (push.firstValidResponse) {
-        responseColor = "green";
-        responseData = apiService.getNotificationAction(
-            push.firstValidResponse.categoryIdentifier,
-            push.firstValidResponse.actionIdentifier,
-        );
+        const { categoryIdentifier, actionIdentifier } = push.firstValidResponse;
+
+        responseColor = getNotificationColor(categoryIdentifier, actionIdentifier);
+        responseData = apiService.getNotificationAction(categoryIdentifier, actionIdentifier);
     }
 
     return (
