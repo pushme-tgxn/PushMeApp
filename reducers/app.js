@@ -168,6 +168,7 @@ export function reducer(state, action) {
                         name: defaultDeviceNameFormat,
                         token: state.expoPushToken,
                         nativeToken: state.nativePushToken,
+                        type: Platform.OS,
                     });
                 }
 
