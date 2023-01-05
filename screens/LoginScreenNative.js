@@ -84,6 +84,7 @@ const LoginScreen = ({ navigation }) => {
 
     const loginFlowGoogle = async () => {
         setGoogleLoading(true);
+        setErrorText(false);
 
         try {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });

@@ -45,7 +45,7 @@ import AppTabView from "./views/AppTabView";
 
 import NotificationPopup from "./components/NotificationPopup";
 
-import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
 
 import { AppReducer, BACKEND_URL } from "./const";
 
@@ -148,11 +148,20 @@ const App = () => {
 
     // register notification categories from client-side
     const registerNotificationCategories = async () => {
-        for (const index in NotificationDefinitions) {
-            const notificationCategory = NotificationDefinitions[index];
+        for (const index in PushMeSDK.NotificationDefinitions) {
+            const notificationCategory = PushMeSDK.NotificationDefinitions[index];
             if (notificationCategory.actions) {
                 console.debug("registering notification actions", index, notificationCategory);
-                await Notifications.setNotificationCategoryAsync(index, notificationCategory.actions);
+                await Notifications.setNotificationCategoryAsync(
+                    index,
+                    notificationCategory.actions.map((action) => {
+                        return {
+                            buttonTitle: action.title,
+                            identifier: action.identifier,
+                            options: action.options,
+                        };
+                    }),
+                );
             }
         }
     };
@@ -312,8 +321,8 @@ const App = () => {
             }
 
             let foundNotificatonCategory = false;
-            for (const index in NotificationDefinitions) {
-                const notificationCategory = NotificationDefinitions[index];
+            for (const index in PushMeSDK.NotificationDefinitions) {
+                const notificationCategory = PushMeSDK.NotificationDefinitions[index];
                 if (index == responseData.categoryIdentifier) {
                     foundNotificatonCategory = notificationCategory;
                 }

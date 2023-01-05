@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { APIError, ServerError, UnauthorizedError } from "@pushme-tgxn/pushmesdk";
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
 
 import { showToast } from "../components/Shared";
 
@@ -100,7 +100,7 @@ export function setPushResponse(pushResponse) {
 export function dispatchSDKError(dispatch, sdkError) {
     console.info("dispatchSDKError", sdkError);
 
-    if (sdkError instanceof UnauthorizedError) {
+    if (sdkError instanceof PushMeSDK.UnauthorizedError) {
         console.debug("UnauthorizedError", sdkError.message);
         showToast("❌ Unauthorized, please login again! 🔒");
 
@@ -111,7 +111,7 @@ export function dispatchSDKError(dispatch, sdkError) {
                 userData: null,
             },
         });
-    } else if (sdkError instanceof ServerError) {
+    } else if (sdkError instanceof PushMeSDK.ServerError) {
         console.debug("ServerError", sdkError.message);
         showToast("❌ Server error! 😭");
     } else {

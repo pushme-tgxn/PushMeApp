@@ -4,7 +4,7 @@ import { Button, Modal, Dialog, Portal, TextInput, useTheme } from "react-native
 
 import DropDown from "react-native-paper-dropdown";
 
-import { NotificationDefinitions } from "@pushme-tgxn/pushmesdk";
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
 
 import { AppReducer } from "../const";
 import { dispatchSDKError } from "../reducers/app";
@@ -46,8 +46,8 @@ export default function PushPopup({ visible, setVisible, topicData, secretKey })
 
     // generate list of push types
     let clientCategoryList = [{ value: "default", label: "Default" }];
-    for (const index in NotificationDefinitions) {
-        const notificationCategory = NotificationDefinitions[index];
+    for (const index in PushMeSDK.NotificationDefinitions) {
+        const notificationCategory = PushMeSDK.NotificationDefinitions[index];
         clientCategoryList.push({ value: index, label: notificationCategory.title });
     }
 

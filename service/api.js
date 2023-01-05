@@ -1,8 +1,8 @@
 import { BACKEND_URL } from "../const";
 
-import APIService from "@pushme-tgxn/pushmesdk";
+import PushMeSDK from "@pushme-tgxn/pushmesdk";
 
-const apiService = new APIService({
+const apiService = new PushMeSDK({
     backendUrl: BACKEND_URL,
     // logging: console.debug,
 });
