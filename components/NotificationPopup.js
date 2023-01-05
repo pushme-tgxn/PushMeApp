@@ -12,75 +12,6 @@ import { Separator } from "../components/Shared";
 import styles from "../styles";
 import apiService from "../service/api";
 
-function GenerateActionButtons({ categoryId, setVisible }) {
-    const foundCategory = pushMeInstance.getNotificationCategory(categoryId);
-
-    let buttons = [<Button onPress={() => setVisible(false)}>Dismiss</Button>];
-
-    // no category found
-    if (!foundCategory) return <Dialog.Actions>{buttons}</Dialog.Actions>;
-
-    // category found
-    for (const action of foundCategory.actions) {
-        buttons.push(
-            <Button
-                onPress={() => {
-                    const responseData = {
-                        pushIdent: pushContent.data.pushIdent,
-                        pushId: pushContent.data.pushId,
-                        actionIdentifier: action.identifier,
-                        categoryIdentifier: pushContent.categoryIdentifier,
-                        responseText: null,
-                    };
-                    dispatch(setPushResponse(responseData));
-                    setVisible(false);
-                }}
-            >
-                {action.title}
-            </Button>,
-        );
-    }
-
-    return (
-        <Dialog.Actions>
-            <Button onPress={() => setVisible(false)}>Thanks</Button>
-
-            <Button
-                onPress={() => {
-                    const responseData = {
-                        pushIdent: pushContent.data.pushIdent,
-                        pushId: pushContent.data.pushId,
-                        actionIdentifier: "reject", // TODO must get the actionIdentifier from the button AND categoryIdentifier OF REQUEST
-                        categoryIdentifier: pushContent.categoryIdentifier,
-                        responseText: null,
-                    };
-                    dispatch(setPushResponse(responseData));
-                    setVisible(false);
-                }}
-                loading={loading}
-            >
-                Reject
-            </Button>
-            <Button
-                onPress={() => {
-                    const responseData = {
-                        pushIdent: pushContent.data.pushIdent,
-                        pushId: pushContent.data.pushId,
-                        actionIdentifier: "approve", // TODO must get the actionIdentifier from the button AND categoryIdentifier OF REQUEST
-                        categoryIdentifier: pushContent.categoryIdentifier,
-                        responseText: null,
-                    };
-                    dispatch(setPushResponse(responseData));
-                    setVisible(false);
-                }}
-                loading={loading}
-            >
-                Approve
-            </Button>
-        </Dialog.Actions>
-    );
-}
-
 export default function NotificationPopup() {
     const theme = useTheme();
     const colorScheme = useColorScheme();
@@ -121,7 +52,6 @@ export default function NotificationPopup() {
         }
     }, [lastNotificationResponse]);
 
-    // TODO build a list of categories and functions to generate action buttons
     if (!pushCategory) return null;
 
     return (
