@@ -4,7 +4,7 @@ A simple application + web server to push interactive notifications to yourself 
 
 ## Installation
 
-Install APK from somewhere...
+Install APK from https://play.google.com/store/apps/details?id=net.tgxn.pushme
 
 
 ## Usage

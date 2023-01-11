@@ -45,7 +45,7 @@ import AppTabView from "./views/AppTabView";
 
 import NotificationPopup from "./components/NotificationPopup";
 
-import PushMeSDK from "@pushme-tgxn/pushmesdk";
+import PushMeSDK, { Consts } from "@pushme-tgxn/pushmesdk";
 
 import { AppReducer, BACKEND_URL } from "./const";
 
@@ -152,6 +152,8 @@ const App = () => {
             const notificationCategory = PushMeSDK.NotificationDefinitions[index];
             if (notificationCategory.actions) {
                 console.debug("registering notification actions", index, notificationCategory);
+
+                // `actions` docs: https://docs.expo.dev/versions/latest/sdk/notifications/#arguments-21
                 await Notifications.setNotificationCategoryAsync(
                     index,
                     notificationCategory.actions.map((action) => {
