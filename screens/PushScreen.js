@@ -8,7 +8,7 @@ import { Text, Button } from "react-native-paper";
 import { AppReducer } from "../const";
 import { dispatchSDKError, setPushList } from "../reducers/app";
 
-import { PushListButton } from "../components/Shared";
+import { PushListButton } from "../components/CustomButtons";
 import ViewPush from "../components/ViewPush";
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
@@ -89,6 +89,7 @@ const PushList = ({ navigation, route }) => {
                 renderItem={({ item }) => {
                     return (
                         <PushListButton
+                            key={item.id}
                             onPress={async () => {
                                 navigation.navigate("ViewPush", { pushId: item.id });
                             }}

@@ -8,7 +8,7 @@ import { Text, Button, FAB } from "react-native-paper";
 import { AppReducer } from "../const";
 import { dispatchSDKError, setTopicList } from "../reducers/app";
 
-import { TwoLineButton } from "../components/Shared";
+import { TwoLineButton } from "../components/CustomButtons";
 import ViewTopic from "../components/ViewTopic";
 import CustomNavigationBar from "../components/CustomNavigationBar";
 
@@ -87,7 +87,7 @@ const TopicList = ({ navigation, route }) => {
                 renderItem={({ item, index }) => {
                     return (
                         <TwoLineButton
-                            // key={item.id}
+                            key={item.id}
                             onPress={async () => {
                                 navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
                             }}
