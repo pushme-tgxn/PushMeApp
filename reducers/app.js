@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import PushMeSDK from "@pushme-tgxn/pushmesdk";
+import { Errors } from "@pushme-tgxn/pushmesdk";
 
 import { showToast } from "../components/Shared";
 
@@ -100,7 +100,7 @@ export function setPushResponse(pushResponse) {
 export function dispatchSDKError(dispatch, sdkError) {
     console.info("dispatchSDKError", sdkError);
 
-    if (sdkError instanceof PushMeSDK.UnauthorizedError) {
+    if (sdkError instanceof Errors.UnauthorizedError) {
         console.debug("UnauthorizedError", sdkError.message);
         showToast("❌ Unauthorized, please login again! 🔒");
 
@@ -111,7 +111,7 @@ export function dispatchSDKError(dispatch, sdkError) {
                 userData: null,
             },
         });
-    } else if (sdkError instanceof PushMeSDK.ServerError) {
+    } else if (sdkError instanceof Errors.ServerError) {
         console.debug("ServerError", sdkError.message);
         showToast("❌ Server error! 😭");
     } else {
@@ -206,7 +206,7 @@ export function reducer(state, action) {
             // });
             return { ...state, topicList: action.payload.topicList };
 
-        // push is recieved
+        // push is recieved from addNotificationReceivedListener
         case "pushRecieved":
             try {
                 const { content } = action.payload.push.request;
