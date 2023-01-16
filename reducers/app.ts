@@ -255,14 +255,14 @@ export function reducer(state, action) {
 
                 const pushList = state.pushList;
 
-                console.log("RESPONSE", action.payload);
+                // console.log("RESPONSE", action.payload);
 
-                const parsedResponse = {
+                const  parsedResponse: PushResponse = {
                     ...action.payload,
                 };
 
                 // update this push details
-                pushList[action.payload.pushId] = {
+                pushList[action.payload.pushId] = <PushResponses>{
                     ...pushList[action.payload.pushId],
                     firstValidResponse: parsedResponse,
                     serviceResponses: [parsedResponse],

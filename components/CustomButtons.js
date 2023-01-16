@@ -45,6 +45,7 @@ export const TwoLineButton = (props) => {
     return (
         <Surface
             style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: theme.colors.surfaceVariant }]}
+            key={title}
         >
             <TouchableRipple style={[{ flex: 1, padding: 10 }]} onPress={onPress}>
                 <View>
@@ -143,6 +144,7 @@ export const PushListButton = (props) => {
     return (
         <Surface
             style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: theme.colors.surfaceVariant }]}
+            key={push.id}
         >
             <TouchableRipple style={[{ flex: 1, padding: 10 }]} onPress={onPress}>
                 <View>
@@ -223,7 +225,10 @@ export const DeviceButton = (props) => {
     };
 
     return (
-        <Surface style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: buttonColor }]}>
+        <Surface
+            style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: buttonColor }]}
+            key={device.id}
+        >
             <TouchableRipple style={[{ flex: 1, padding: 10 }]} onPress={onPress}>
                 <View>
                     <MultiIcon name={getPlatformIcon(device.type)} {...buttonProps} />
