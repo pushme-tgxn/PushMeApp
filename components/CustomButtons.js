@@ -5,7 +5,6 @@ import { Button, Text, Surface, TouchableRipple, useTheme } from "react-native-p
 import * as Clipboard from "expo-clipboard";
 
 import { AppReducer } from "../const";
-
 import MultiIcon from "./MultiIcon";
 
 import styles from "../styles";

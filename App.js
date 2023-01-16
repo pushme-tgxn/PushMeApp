@@ -318,15 +318,6 @@ const App = () => {
                 responseText: null,
             };
 
-            // perform actions based on response
-            if (
-                responseData.categoryIdentifier == "button.open_link" &&
-                response?.notification?.request?.content?.data?.linkUrl
-            ) {
-                console.log("open link", response.notification.request.content.data.linkUrl);
-                Linking.openURL(response.notification.request.content.data.linkUrl);
-            }
-
             // attach user text is defined
             if (response.userText) {
                 responseData.responseText = response.userText;
@@ -343,6 +334,15 @@ const App = () => {
                 }
             } else {
                 dispatch(setPushResponse(responseData));
+            }
+
+            // perform actions based on category
+            if (
+                responseData.categoryIdentifier == "button.open_link" &&
+                response?.notification?.request?.content?.data?.linkUrl
+            ) {
+                console.log("open link", response.notification.request.content.data.linkUrl);
+                Linking.openURL(response.notification.request.content.data.linkUrl);
             }
 
             // dismiss the notificaqtion when it's tapped

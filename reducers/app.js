@@ -1,3 +1,4 @@
+import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Errors } from "@pushme-tgxn/pushmesdk";
@@ -193,6 +194,7 @@ export function reducer(state, action) {
             return { ...state, nativePushToken: action.payload.pushToken };
 
         case "setPushList":
+            console.log("setPushList", action.payload.pushList);
             const pushList = {};
             action.payload.pushList.map((pushItem) => {
                 pushList[pushItem.id] = pushItem;
@@ -210,17 +212,28 @@ export function reducer(state, action) {
         case "pushRecieved":
             try {
                 const { content } = action.payload.push.request;
-                console.log("pushRecieved", pushIdent);
 
                 const pushList = state.pushList;
-                const { pushId, pushIdent } = content.data.pushId;
 
-                // update this push details
+                // extract data values added by the server
+                const { pushId, pushIdent } = content.data;
+                console.log("pushRecieved", content);
+
+                // send push receipt to the backend if requested
+                if (content.data.sendReceipt) {
+                    console.debug("sending push receipt", pushIdent);
+                    apiService._callApi(`/push/${pushIdent}/receipt`, "POST", action.payload.push);
+                    // sdk 1.10.2+
+                    // apiService.sendReceipt(pushIdent, action.payload.push);
+                }
+
+                // update this push details locally
                 pushList[pushId] = {
                     id: pushId,
                     pushIdent,
+                    createdAt: moment(action.payload.push.date).toISOString(),
                     pushPayload: {
-                        categoryId: content.data.categoryIdentifier,
+                        categoryId: content.categoryIdentifier,
                         title: content.title,
                         body: content.body,
                         data: content.data,
@@ -237,17 +250,25 @@ export function reducer(state, action) {
         // user selected a response to the push
         case "setPushResponse":
             try {
+                // send push response to the backend
                 apiService.push.respondToPush(action.payload.pushIdent, action.payload);
 
                 const pushList = state.pushList;
 
+                console.log("RESPONSE", action.payload);
+
+                const parsedResponse = {
+                    ...action.payload,
+                };
+
                 // update this push details
                 pushList[action.payload.pushId] = {
                     ...pushList[action.payload.pushId],
-                    response: action.payload,
+                    firstValidResponse: parsedResponse,
+                    serviceResponses: [parsedResponse],
                 };
 
-                console.log("RESPONSE", pushList[action.payload.pushId]);
+                // console.log("RESPONSE", pushList[action.payload.pushId]);
 
                 return { ...state, pushList };
             } catch (e) {

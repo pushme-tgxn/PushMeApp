@@ -22,7 +22,8 @@ const ViewTopic = ({ navigation, route }) => {
     const [checkedDeviceList, setCheckedDeviceList] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
-    let { topicData } = route.params;
+    const { topicData } = route.params;
+    console.log("ViewTopic:", topicData);
 
     useEffect(() => {
         // set navigation title

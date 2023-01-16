@@ -9,8 +9,9 @@ import { AppReducer } from "../const";
 import { dispatchSDKError, setTopicList } from "../reducers/app";
 
 import { TwoLineButton } from "../components/CustomButtons";
-import ViewTopic from "../components/ViewTopic";
 import CustomNavigationBar from "../components/CustomNavigationBar";
+
+import ViewTopic from "../components/ViewTopic";
 
 import apiService from "../service/api";
 import styles from "../styles";
