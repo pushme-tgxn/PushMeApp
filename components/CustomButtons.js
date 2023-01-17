@@ -154,6 +154,27 @@ export const PushListButton = (props) => {
         };
     }
 
+    let statusIcon = (
+        <Text style={{ paddingLeft: 5, textAlignVertical: "center" }}>
+            <MultiIcon name={"fa5.check"} size={14} color={"grey"} />
+        </Text>
+    );
+
+    if (push?.pushPayload?.data?.sendReceipt) {
+        statusIcon = (
+            <Text style={{ paddingLeft: 5, textAlignVertical: "center" }}>
+                <MultiIcon name={"fa5.check-double"} size={14} color={"grey"} />
+            </Text>
+        );
+        if (push.pushReceipt) {
+            statusIcon = (
+                <Text style={{ paddingLeft: 5, textAlignVertical: "center" }}>
+                    <MultiIcon name={"fa5.check-double"} size={14} color={"green"} />
+                </Text>
+            );
+        }
+    }
+
     return (
         <Surface
             style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: theme.colors.surfaceVariant }]}
@@ -186,6 +207,7 @@ export const PushListButton = (props) => {
                             <Text style={{ flex: 1, flexGrow: 6 }}>{foundCategory.title}</Text>
                             <Moment
                                 element={Text}
+                                interval={1000}
                                 style={{
                                     fontStyle: "italic",
                                     flex: 6,
@@ -199,6 +221,7 @@ export const PushListButton = (props) => {
                             >
                                 {push.createdAt}
                             </Moment>
+                            {statusIcon}
                         </View>
                         <Text
                             style={{ fontWeight: "bold", fontSize: 18, flex: 1 }}
