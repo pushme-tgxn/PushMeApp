@@ -74,6 +74,44 @@ export const TwoLineButton = (props) => {
     );
 };
 
+export const TopicButton = (props) => {
+    const { topic, onPress } = props;
+
+    const theme = useTheme();
+    const colorScheme = useColorScheme();
+    const themedStyles = styles(colorScheme);
+
+    return (
+        <Surface
+            style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: theme.colors.surfaceVariant }]}
+            key={topic.id}
+        >
+            <TouchableRipple style={[{ flex: 1, padding: 10 }]} onPress={onPress}>
+                <View>
+                    <MultiIcon
+                        style={{
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                        }}
+                        name={"mi.topic"}
+                        size={32}
+                        color={colorScheme == "dark" ? "grey" : "grey"}
+                    />
+
+                    <Text style={{ paddingLeft: 40, padding: 0 }}>
+                        <Text
+                            style={{ fontWeight: "bold", fontSize: 18 }}
+                        >{`${topic.createdAt} (ID: ${topic.id})`}</Text>
+                        <Text style={{ height: 20 }}>{"\n"}</Text>
+                        <Text style={{ fontWeight: "italic", fontSize: 16 }}>{`ID: ${topic.id}`}</Text>
+                    </Text>
+                </View>
+            </TouchableRipple>
+        </Surface>
+    );
+};
+
 export const PushListButton = (props) => {
     const { push, onPress } = props;
 
@@ -179,7 +217,6 @@ export const PushListButton = (props) => {
         <Surface
             style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: theme.colors.surfaceVariant }]}
             key={push.id}
-            elevation={5}
         >
             <TouchableRipple style={[{ padding: 10 }]} onPress={onPress}>
                 <View>
