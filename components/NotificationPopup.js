@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, useColorScheme } from "react-native";
-import { Button, Modal, Dialog, Portal, Paragraph, TextInput, useTheme } from "react-native-paper";
+import { Button, Modal, Dialog, Portal, Text, Paragraph, TextInput, useTheme } from "react-native-paper";
 
 import * as Notifications from "expo-notifications";
 
@@ -19,6 +19,7 @@ export default function NotificationPopup() {
     const { state, dispatch } = useContext(AppReducer);
 
     const [visible, setVisible] = useState(false);
+    const [lastClosedPushIdent, setLastPushClosedIdent] = useState(false);
 
     const [pushContent, setPushContent] = useState(null);
     const [pushCategory, setPushCategory] = useState(null);
@@ -32,6 +33,10 @@ export default function NotificationPopup() {
     useEffect(() => {
         if (!lastNotificationResponse) return;
 
+        const { pushIdent } = lastNotificationResponse.notification.request.content.data;
+        if (pushIdent == lastClosedPushIdent) return; // unchanged
+
+        console.log("pushIdent", pushIdent, lastClosedPushIdent);
         console.log("lastNotificationResponse", lastNotificationResponse.notification.request.content);
         setPushContent(lastNotificationResponse.notification.request.content);
 
@@ -55,6 +60,9 @@ export default function NotificationPopup() {
     }, [lastNotificationResponse]);
 
     const resetPopup = () => {
+        const { pushIdent } = lastNotificationResponse.notification.request.content.data;
+
+        setLastPushClosedIdent(pushIdent);
         setPushResponseText("");
         setPushCategory(null);
         setVisible(false);
@@ -65,11 +73,11 @@ export default function NotificationPopup() {
     return (
         <Portal>
             <Modal
-                style={{ backgroundColor: "#000000FF" }}
+                style={{ backgroundColor: colorScheme == "dark" ? "#000000FF" : "#FFFFFFFF" }}
                 visible={visible}
                 onDismiss={() => resetPopup()}
                 contentContainerStyle={{
-                    backgroundColor: theme.colors.backdrop,
+                    backgroundColor: theme.colors.surfaceVariant,
                     margin: 20,
                 }}
             >
@@ -99,33 +107,37 @@ export default function NotificationPopup() {
                         />
                     )}
                 </Dialog.Content>
-                <Dialog.Actions>
-                    {pushCategory.actions &&
-                        pushCategory.actions.map((action) => (
-                            <Button
-                                key={action.identifier}
-                                disabled={pushCategory.hasTextInput ? pushResponseText.length == 0 : false}
-                                onPress={() => {
-                                    const responseData = {
-                                        pushIdent: pushContent.data.pushIdent,
-                                        pushId: pushContent.data.pushId,
-                                        actionIdentifier: action.identifier,
-                                        categoryIdentifier: pushContent.categoryIdentifier,
-                                        responseText: pushCategory.hasTextInput ? pushResponseText : null,
-                                    };
-                                    dispatch(setPushResponse(responseData));
-
-                                    setPushResponseText("");
-                                    setPushCategory(null);
-                                    setVisible(false);
-                                }}
-                            >
-                                {action.title}
-                            </Button>
-                        ))}
-                    {/* <Button key="default" onPress={() => resetPopup()}>
+                <Dialog.Actions
+                    style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}
+                >
+                    <Button key="default" onPress={() => resetPopup()} style={{ flex: 1 }}>
                         Dismiss
-                    </Button> */}
+                    </Button>
+                    <Text style={{ flex: 1 }}>
+                        {pushCategory.actions &&
+                            pushCategory.actions.map((action) => (
+                                <Button
+                                    key={action.identifier}
+                                    disabled={
+                                        pushCategory.hasTextInput ? pushResponseText.length == 0 : false
+                                    }
+                                    onPress={() => {
+                                        const responseData = {
+                                            pushIdent: pushContent.data.pushIdent,
+                                            pushId: pushContent.data.pushId,
+                                            actionIdentifier: action.identifier,
+                                            categoryIdentifier: pushContent.categoryIdentifier,
+                                            responseText: pushCategory.hasTextInput ? pushResponseText : null,
+                                        };
+                                        dispatch(setPushResponse(responseData));
+
+                                        resetPopup();
+                                    }}
+                                >
+                                    {action.title}
+                                </Button>
+                            ))}
+                    </Text>
                 </Dialog.Actions>
             </Modal>
         </Portal>
