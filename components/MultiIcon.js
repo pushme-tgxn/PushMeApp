@@ -9,6 +9,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+// https://oblador.github.io/react-native-vector-icons/
 const MultiIcon = ({ name, ...props }) => {
     const iconSet = name.split(".")[0];
     const iconName = name.split(".")[1];
