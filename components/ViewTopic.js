@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import { SafeAreaView, FlatList, useColorScheme, View } from "react-native";
 import { Button, List, Text, Checkbox } from "react-native-paper";
 
-import { CopyTextButton } from "../components/Shared";
+import { CopyTextButton } from "../components/CustomButtons";
 
 import { AppReducer } from "../const";
 import { dispatchSDKError } from "../reducers/app";
@@ -22,7 +22,8 @@ const ViewTopic = ({ navigation, route }) => {
     const [checkedDeviceList, setCheckedDeviceList] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
-    let { topicData } = route.params;
+    let { topicId, topicData } = route.params;
+    console.log("ViewTopic:", topicData);
 
     useEffect(() => {
         // set navigation title
@@ -32,7 +33,7 @@ const ViewTopic = ({ navigation, route }) => {
 
         // fetch devices, init list
         onRefresh();
-    }, [topicData]);
+    }, [topicId]);
 
     const onRefresh = useCallback(() => {
         async function prepare() {

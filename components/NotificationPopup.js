@@ -41,14 +41,16 @@ export default function NotificationPopup() {
         setPushCategory(foundCategory);
         console.log("pushCategory", foundCategory);
 
-        // only load for the default type (clicked it) and  if the category is set to not send the default action
+        // only load for the default type (clicked it) and if the category is set to not send the default action
         if (
             lastNotificationResponse &&
             lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER &&
-            pushCategory &&
-            !pushCategory.sendDefaultAction
+            foundCategory &&
+            !foundCategory.sendDefaultAction
         ) {
             setVisible(true);
+        } else {
+            console.log("not showing popup", lastNotificationResponse, foundCategory);
         }
     }, [lastNotificationResponse]);
 
@@ -97,28 +99,29 @@ export default function NotificationPopup() {
                     )}
                 </Dialog.Content>
                 <Dialog.Actions>
-                    {pushCategory.actions.map((action) => (
-                        <Button
-                            key={action.identifier}
-                            disabled={pushCategory.hasTextInput ? pushResponseText.length == 0 : false}
-                            onPress={() => {
-                                const responseData = {
-                                    pushIdent: pushContent.data.pushIdent,
-                                    pushId: pushContent.data.pushId,
-                                    actionIdentifier: action.identifier,
-                                    categoryIdentifier: pushContent.categoryIdentifier,
-                                    responseText: pushCategory.hasTextInput ? pushResponseText : null,
-                                };
-                                dispatch(setPushResponse(responseData));
+                    {pushCategory.actions &&
+                        pushCategory.actions.map((action) => (
+                            <Button
+                                key={action.identifier}
+                                disabled={pushCategory.hasTextInput ? pushResponseText.length == 0 : false}
+                                onPress={() => {
+                                    const responseData = {
+                                        pushIdent: pushContent.data.pushIdent,
+                                        pushId: pushContent.data.pushId,
+                                        actionIdentifier: action.identifier,
+                                        categoryIdentifier: pushContent.categoryIdentifier,
+                                        responseText: pushCategory.hasTextInput ? pushResponseText : null,
+                                    };
+                                    dispatch(setPushResponse(responseData));
 
-                                setPushResponseText("");
-                                setPushCategory(null);
-                                setVisible(false);
-                            }}
-                        >
-                            {action.title}
-                        </Button>
-                    ))}
+                                    setPushResponseText("");
+                                    setPushCategory(null);
+                                    setVisible(false);
+                                }}
+                            >
+                                {action.title}
+                            </Button>
+                        ))}
                     {/* <Button key="default" onPress={() => resetPopup()}>
                         Dismiss
                     </Button> */}

@@ -1,6 +1,7 @@
+import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import PushMeSDK from "@pushme-tgxn/pushmesdk";
+import { Errors } from "@pushme-tgxn/pushmesdk";
 
 import { showToast } from "../components/Shared";
 
@@ -100,7 +101,7 @@ export function setPushResponse(pushResponse) {
 export function dispatchSDKError(dispatch, sdkError) {
     console.info("dispatchSDKError", sdkError);
 
-    if (sdkError instanceof PushMeSDK.UnauthorizedError) {
+    if (sdkError instanceof Errors.UnauthorizedError) {
         console.debug("UnauthorizedError", sdkError.message);
         showToast("❌ Unauthorized, please login again! 🔒");
 
@@ -111,7 +112,7 @@ export function dispatchSDKError(dispatch, sdkError) {
                 userData: null,
             },
         });
-    } else if (sdkError instanceof PushMeSDK.ServerError) {
+    } else if (sdkError instanceof Errors.ServerError) {
         console.debug("ServerError", sdkError.message);
         showToast("❌ Server error! 😭");
     } else {
@@ -193,6 +194,7 @@ export function reducer(state, action) {
             return { ...state, nativePushToken: action.payload.pushToken };
 
         case "setPushList":
+            console.log("setPushList", action.payload.pushList);
             const pushList = {};
             action.payload.pushList.map((pushItem) => {
                 pushList[pushItem.id] = pushItem;
@@ -206,21 +208,31 @@ export function reducer(state, action) {
             // });
             return { ...state, topicList: action.payload.topicList };
 
-        // push is recieved
+        // push is recieved from addNotificationReceivedListener
         case "pushRecieved":
             try {
                 const { content } = action.payload.push.request;
-                console.log("pushRecieved", pushIdent);
 
                 const pushList = state.pushList;
-                const { pushId, pushIdent } = content.data.pushId;
 
-                // update this push details
+                // extract data values added by the server
+                const { pushId, pushIdent } = content.data;
+                console.log("pushRecieved", content);
+
+                // send push receipt to the backend if requested
+                if (content.data.sendReceipt) {
+                    console.debug("sending push receipt", pushIdent);
+                    apiService.sendReceipt(pushIdent, action.payload.push);
+                }
+
+                // update this push details locally
                 pushList[pushId] = {
                     id: pushId,
                     pushIdent,
+                    // createdAt: moment(action.payload.push.date).toISOString(),
+                    createdAt: moment().toISOString(), // use now instead of the time in the push
                     pushPayload: {
-                        categoryId: content.data.categoryIdentifier,
+                        categoryId: content.categoryIdentifier,
                         title: content.title,
                         body: content.body,
                         data: content.data,
@@ -237,17 +249,25 @@ export function reducer(state, action) {
         // user selected a response to the push
         case "setPushResponse":
             try {
+                // send push response to the backend
                 apiService.push.respondToPush(action.payload.pushIdent, action.payload);
 
                 const pushList = state.pushList;
 
-                // update this push details
-                pushList[action.payload.pushId] = {
-                    ...pushList[action.payload.pushId],
-                    response: action.payload,
+                // console.log("RESPONSE", action.payload);
+
+                const  parsedResponse: PushResponse = {
+                    ...action.payload,
                 };
 
-                console.log("RESPONSE", pushList[action.payload.pushId]);
+                // update this push details
+                pushList[action.payload.pushId] = <PushResponses>{
+                    ...pushList[action.payload.pushId],
+                    firstValidResponse: parsedResponse,
+                    serviceResponses: [parsedResponse],
+                };
+
+                // console.log("RESPONSE", pushList[action.payload.pushId]);
 
                 return { ...state, pushList };
             } catch (e) {
