@@ -207,7 +207,7 @@ export const PushListButton = (props) => {
                             <Text style={{ flex: 1, flexGrow: 6 }}>{foundCategory.title}</Text>
                             <Moment
                                 element={Text}
-                                interval={1000}
+                                interval={20000}
                                 style={{
                                     fontStyle: "italic",
                                     flex: 6,
