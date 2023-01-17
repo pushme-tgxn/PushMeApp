@@ -4,6 +4,8 @@ import { Button, Text, Surface, TouchableRipple, useTheme } from "react-native-p
 
 import * as Clipboard from "expo-clipboard";
 
+import Moment from "react-moment";
+
 import { AppReducer } from "../const";
 import MultiIcon from "./MultiIcon";
 
@@ -80,7 +82,7 @@ export const PushListButton = (props) => {
     const getIconName = (iconSet) => {
         switch (iconSet) {
             case "simple.push":
-                return "fmi.circle-notifications";
+                return "mi.circle-notifications";
             case "button.approve_deny":
                 return "mi.verified-user";
             case "button.yes_no":
@@ -134,19 +136,34 @@ export const PushListButton = (props) => {
 
         responseColor = getNotificationColor(categoryIdentifier, actionIdentifier);
         responseData = apiService.getNotificationAction(categoryIdentifier, actionIdentifier);
+        console.log("responseData", categoryIdentifier, actionIdentifier);
     }
+
+    console.log("responseData", responseData, push.firstValidResponse);
 
     if (!push.pushPayload) {
         // console.log("PushListButton", push);
         return null;
     }
 
+    let foundCategory = apiService.getNotificationCategory(push.pushPayload.categoryId);
+
+    if (!foundCategory) {
+        foundCategory = {
+            title: "Unknown",
+            description: "Unknown",
+            identifier: "unknown",
+            actions: [],
+        };
+    }
+
     return (
         <Surface
             style={[{ marginBottom: 10, borderRadius: 5, backgroundColor: theme.colors.surfaceVariant }]}
             key={push.id}
+            elevation={5}
         >
-            <TouchableRipple style={[{ flex: 1, padding: 10 }]} onPress={onPress}>
+            <TouchableRipple style={[{ padding: 10 }]} onPress={onPress}>
                 <View>
                     <MultiIcon
                         style={{
@@ -158,15 +175,41 @@ export const PushListButton = (props) => {
                         size={32}
                         color={responseColor}
                     />
-                    <Text style={{ paddingLeft: 40, padding: 0 }}>
+
+                    <View style={{ padding: 0, paddingLeft: 40, display: "flex", flexDirection: "column" }}>
+                        <View
+                            style={{
+                                fontSize: 12,
+                                flex: 1,
+                                flexDirection: "row",
+                                width: "100%",
+                                display: "flex",
+                            }}
+                        >
+                            <Text style={{ flex: 1, flexGrow: 6 }}>{foundCategory.title}</Text>
+                            <Moment
+                                element={Text}
+                                style={{
+                                    fontStyle: "italic",
+                                    flex: 6,
+                                    alignSelf: "stretch",
+                                    textAlign: "right",
+
+                                    justifyContent: "flex-end",
+                                    // marginLeft: "auto",
+                                }}
+                                fromNow
+                            >
+                                {push.createdAt}
+                            </Moment>
+                        </View>
                         <Text
-                            style={{ fontWeight: "bold", fontSize: 18 }}
+                            style={{ fontWeight: "bold", fontSize: 18, flex: 1 }}
                         >{`${push.pushPayload.title}`}</Text>
 
-                        {push.firstValidResponse && <Text>{"\n"}</Text>}
                         {push.firstValidResponse && (
                             <Text style={{ fontSize: 16 }}>
-                                {`Action: ${responseData.title}`}
+                                {`You Responded: ${responseData.title}`}
                                 {push.firstValidResponse.responseText ? (
                                     <Text style={{ fontWeight: "bold" }}>
                                         {` "${push.firstValidResponse.responseText}"`}
@@ -174,12 +217,7 @@ export const PushListButton = (props) => {
                                 ) : null}
                             </Text>
                         )}
-
-                        <Text>{"\n"}</Text>
-                        <Text
-                            style={{ fontWeight: "italic", fontSize: 16 }}
-                        >{`${push.pushPayload.categoryId} (${push.createdAt})`}</Text>
-                    </Text>
+                    </View>
                 </View>
             </TouchableRipple>
         </Surface>

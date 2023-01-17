@@ -90,7 +90,7 @@ const TopicList = ({ navigation, route }) => {
                         <TwoLineButton
                             key={item.id}
                             onPress={async () => {
-                                navigation.navigate("ViewTopic", { topicData: item, topicIndex: index });
+                                navigation.navigate("ViewTopic", { topicId: item.id, topicData: item });
                             }}
                             title={`${item.createdAt} (ID: ${item.id})`}
                             subtitle={`ID: ${item.id}`}

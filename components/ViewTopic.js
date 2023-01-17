@@ -22,7 +22,7 @@ const ViewTopic = ({ navigation, route }) => {
     const [checkedDeviceList, setCheckedDeviceList] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
-    const { topicData } = route.params;
+    let { topicId, topicData } = route.params;
     console.log("ViewTopic:", topicData);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const ViewTopic = ({ navigation, route }) => {
 
         // fetch devices, init list
         onRefresh();
-    }, [topicData]);
+    }, [topicId]);
 
     const onRefresh = useCallback(() => {
         async function prepare() {

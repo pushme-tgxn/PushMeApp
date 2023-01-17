@@ -90,7 +90,7 @@ const PushList = ({ navigation, route }) => {
                     return (
                         <PushListButton
                             onPress={async () => {
-                                navigation.navigate("ViewPush", { pushId: item.id });
+                                navigation.navigate("ViewPush", { pushId: item.id, pushData: item });
                             }}
                             push={item}
                         />

@@ -231,7 +231,8 @@ export function reducer(state, action) {
                 pushList[pushId] = {
                     id: pushId,
                     pushIdent,
-                    createdAt: moment(action.payload.push.date).toISOString(),
+                    // createdAt: moment(action.payload.push.date).toISOString(),
+                    createdAt: moment().toISOString(), // use now instead of the time in the push
                     pushPayload: {
                         categoryId: content.categoryIdentifier,
                         title: content.title,

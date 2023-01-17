@@ -31,8 +31,8 @@ const AppTabView = () => {
                 },
             })}
         >
-            <Tab.Screen name="Topics" component={TopicScreen} />
             <Tab.Screen name="History" component={PushScreen} />
+            <Tab.Screen name="Topics" component={TopicScreen} />
             <Tab.Screen name="Settings" component={ConfigScreen} />
         </Tab.Navigator>
     );

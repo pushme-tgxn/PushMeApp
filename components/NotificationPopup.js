@@ -97,28 +97,29 @@ export default function NotificationPopup() {
                     )}
                 </Dialog.Content>
                 <Dialog.Actions>
-                    {pushCategory.actions.map((action) => (
-                        <Button
-                            key={action.identifier}
-                            disabled={pushCategory.hasTextInput ? pushResponseText.length == 0 : false}
-                            onPress={() => {
-                                const responseData = {
-                                    pushIdent: pushContent.data.pushIdent,
-                                    pushId: pushContent.data.pushId,
-                                    actionIdentifier: action.identifier,
-                                    categoryIdentifier: pushContent.categoryIdentifier,
-                                    responseText: pushCategory.hasTextInput ? pushResponseText : null,
-                                };
-                                dispatch(setPushResponse(responseData));
+                    {pushCategory.actions &&
+                        pushCategory.actions.map((action) => (
+                            <Button
+                                key={action.identifier}
+                                disabled={pushCategory.hasTextInput ? pushResponseText.length == 0 : false}
+                                onPress={() => {
+                                    const responseData = {
+                                        pushIdent: pushContent.data.pushIdent,
+                                        pushId: pushContent.data.pushId,
+                                        actionIdentifier: action.identifier,
+                                        categoryIdentifier: pushContent.categoryIdentifier,
+                                        responseText: pushCategory.hasTextInput ? pushResponseText : null,
+                                    };
+                                    dispatch(setPushResponse(responseData));
 
-                                setPushResponseText("");
-                                setPushCategory(null);
-                                setVisible(false);
-                            }}
-                        >
-                            {action.title}
-                        </Button>
-                    ))}
+                                    setPushResponseText("");
+                                    setPushCategory(null);
+                                    setVisible(false);
+                                }}
+                            >
+                                {action.title}
+                            </Button>
+                        ))}
                     {/* <Button key="default" onPress={() => resetPopup()}>
                         Dismiss
                     </Button> */}
