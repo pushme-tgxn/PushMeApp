@@ -222,7 +222,7 @@ export function reducer(state, action) {
                 // send push receipt to the backend if requested
                 if (content.data.sendReceipt) {
                     console.debug("sending push receipt", pushIdent);
-                    apiService.sendReceipt(pushIdent, action.payload.push);
+                    apiService.push.sendReceipt(pushIdent, action.payload.push);
                 }
 
                 // update this push details locally

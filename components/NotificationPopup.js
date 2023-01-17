@@ -95,6 +95,7 @@ export default function NotificationPopup() {
                             style={{ backgroundColor: theme.colors.surface }}
                             value={pushResponseText}
                             onChangeText={setPushResponseText}
+                            autoFocus
                         />
                     )}
                 </Dialog.Content>
