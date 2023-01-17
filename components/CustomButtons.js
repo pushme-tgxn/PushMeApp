@@ -136,10 +136,7 @@ export const PushListButton = (props) => {
 
         responseColor = getNotificationColor(categoryIdentifier, actionIdentifier);
         responseData = apiService.getNotificationAction(categoryIdentifier, actionIdentifier);
-        console.log("responseData", categoryIdentifier, actionIdentifier);
     }
-
-    console.log("responseData", responseData, push.firstValidResponse);
 
     if (!push.pushPayload) {
         // console.log("PushListButton", push);

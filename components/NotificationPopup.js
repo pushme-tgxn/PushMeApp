@@ -41,14 +41,16 @@ export default function NotificationPopup() {
         setPushCategory(foundCategory);
         console.log("pushCategory", foundCategory);
 
-        // only load for the default type (clicked it) and  if the category is set to not send the default action
+        // only load for the default type (clicked it) and if the category is set to not send the default action
         if (
             lastNotificationResponse &&
             lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER &&
-            pushCategory &&
-            !pushCategory.sendDefaultAction
+            foundCategory &&
+            !foundCategory.sendDefaultAction
         ) {
             setVisible(true);
+        } else {
+            console.log("not showing popup", lastNotificationResponse, foundCategory);
         }
     }, [lastNotificationResponse]);
 
