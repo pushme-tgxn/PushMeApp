@@ -148,8 +148,8 @@ const App = () => {
 
     // register notification categories from client-side
     const registerNotificationCategories = async () => {
-        for (const index in PushMeSDK.NotificationDefinitions) {
-            const notificationCategory = PushMeSDK.NotificationDefinitions[index];
+        for (const index in Consts.PushDefinition) {
+            const notificationCategory = Consts.PushDefinition[index];
             if (notificationCategory.actions) {
                 console.debug("registering notification actions", index, notificationCategory);
 
