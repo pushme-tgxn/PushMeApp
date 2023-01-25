@@ -151,7 +151,7 @@ const App = () => {
         for (const index in Consts.PushDefinition) {
             const notificationCategory = Consts.PushDefinition[index];
             if (notificationCategory.actions) {
-                console.log("registering notification actions", index, notificationCategory);
+                console.debug("registering notification actions", index, notificationCategory);
 
                 // `actions` docs: https://docs.expo.dev/versions/latest/sdk/notifications/#arguments-21
                 await Notifications.setNotificationCategoryAsync(
