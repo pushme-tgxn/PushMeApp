@@ -243,6 +243,60 @@ const App = () => {
         }
     };
 
+    const lastNotificationResponse = Notifications.useLastNotificationResponse();
+
+    const responseRecieved = (response) => {
+        console.log("addNotificationResponseReceivedListener", JSON.stringify(response, null, 4));
+
+        // get the notification response data
+        // TODO define this payload format
+        const responseData = {
+            pushIdent: response.notification.request.content.data.pushIdent,
+            pushId: response.notification.request.content.data.pushId,
+            actionIdentifier: response.actionIdentifier,
+            categoryIdentifier: response.notification.request.content.categoryIdentifier,
+            responseText: null,
+        };
+
+        // attach user text is defined
+        if (response.userText) {
+            responseData.responseText = response.userText;
+        }
+
+        const foundNotificationCategory = apiService.getNotificationCategory(responseData.categoryIdentifier);
+
+        // send non-default responses if enabled for this type of notification
+        if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
+            if (foundNotificationCategory && foundNotificationCategory.sendDefaultAction) {
+                dispatch(setPushResponse(responseData));
+            }
+        } else {
+            dispatch(setPushResponse(responseData));
+        }
+
+        // perform actions based on category
+        if (
+            responseData.categoryIdentifier == "button.open_link" &&
+            response?.notification?.request?.content?.data?.linkUrl
+        ) {
+            console.log("open link", response.notification.request.content.data.linkUrl);
+            Linking.openURL(response.notification.request.content.data.linkUrl);
+        }
+
+        // dismiss the notificaqtion when it's tapped
+        Notifications.dismissNotificationAsync(response.notification.request.identifier);
+    };
+
+    useEffect(() => {
+        console.log("action", Notifications);
+        if (
+            lastNotificationResponse &&
+            lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER
+        ) {
+            responseRecieved(lastNotificationResponse);
+        }
+    }, [lastNotificationResponse]);
+
     useEffect(() => {
         async function prepare() {
             // generate or load a unique device key, and save it.
@@ -305,49 +359,7 @@ const App = () => {
         });
 
         // notification response recieved
-        responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-            console.log("addNotificationResponseReceivedListener", JSON.stringify(response, null, 4));
-
-            // get the notification response data
-            // TODO define this payload format
-            const responseData = {
-                pushIdent: response.notification.request.content.data.pushIdent,
-                pushId: response.notification.request.content.data.pushId,
-                actionIdentifier: response.actionIdentifier,
-                categoryIdentifier: response.notification.request.content.categoryIdentifier,
-                responseText: null,
-            };
-
-            // attach user text is defined
-            if (response.userText) {
-                responseData.responseText = response.userText;
-            }
-
-            const foundNotificationCategory = apiService.getNotificationCategory(
-                responseData.categoryIdentifier,
-            );
-
-            // send non-default responses if enabled for this type of notification
-            if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
-                if (foundNotificationCategory && foundNotificationCategory.sendDefaultAction) {
-                    dispatch(setPushResponse(responseData));
-                }
-            } else {
-                dispatch(setPushResponse(responseData));
-            }
-
-            // perform actions based on category
-            if (
-                responseData.categoryIdentifier == "button.open_link" &&
-                response?.notification?.request?.content?.data?.linkUrl
-            ) {
-                console.log("open link", response.notification.request.content.data.linkUrl);
-                Linking.openURL(response.notification.request.content.data.linkUrl);
-            }
-
-            // dismiss the notificaqtion when it's tapped
-            Notifications.dismissNotificationAsync(response.notification.request.identifier);
-        });
+        // responseListener.current = Notifications.addNotificationResponseReceivedListener(responseRecieved);
 
         return () => {
             Notifications.removeNotificationSubscription(notificationListener.current);
