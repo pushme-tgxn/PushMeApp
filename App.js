@@ -289,10 +289,7 @@ const App = () => {
 
     useEffect(() => {
         console.log("action", Notifications);
-        if (
-            lastNotificationResponse &&
-            lastNotificationResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER
-        ) {
+        if (lastNotificationResponse) {
             responseRecieved(lastNotificationResponse);
         }
     }, [lastNotificationResponse]);
