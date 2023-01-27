@@ -160,7 +160,10 @@ const App = () => {
                         return {
                             buttonTitle: action.title,
                             identifier: action.identifier,
-                            options: action.options,
+                            options: {
+                                opensAppToForeground: true,
+                                ...action.options,
+                            },
                             textInput: action.textInput,
                         };
                     }),
@@ -245,8 +248,15 @@ const App = () => {
 
     const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
+    const recievedIds = [];
     const responseRecieved = (response) => {
         console.log("addNotificationResponseReceivedListener", JSON.stringify(response, null, 4));
+
+        if (recievedIds.includes(response.notification.request.identifier)) {
+            console.log("already recieved this response");
+            return;
+        }
+        recievedIds.push(response.notification.request.identifier);
 
         // get the notification response data
         // TODO define this payload format
@@ -356,7 +366,7 @@ const App = () => {
         });
 
         // notification response recieved
-        // responseListener.current = Notifications.addNotificationResponseReceivedListener(responseRecieved);
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(responseRecieved);
 
         return () => {
             Notifications.removeNotificationSubscription(notificationListener.current);
