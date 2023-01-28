@@ -161,7 +161,7 @@ const App = () => {
                             buttonTitle: action.title,
                             identifier: action.identifier,
                             options: {
-                                opensAppToForeground: true,
+                                opensAppToForeground: true, // force app to foreground when action is pressed
                                 ...action.options,
                             },
                             textInput: action.textInput,
