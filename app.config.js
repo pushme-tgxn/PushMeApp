@@ -1,5 +1,5 @@
 // https://docs.expo.dev/build-reference/variants/
-const IS_DEV = process.env.APP_VARIANT === "development";
+const IS_DEV = process.env.APP_VARIANT === "develop";
 
 export default ({ config }) => {
     const LIGHT_SPLASH = {
