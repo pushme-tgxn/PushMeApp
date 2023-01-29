@@ -6,7 +6,6 @@ A simple application + web server to push interactive notifications to yourself 
 
 Install APK from https://play.google.com/store/apps/details?id=net.tgxn.pushme
 
-
 ## Usage
 
 This app does nothing on it's own, only allowing registration and enrolment.
@@ -14,10 +13,6 @@ This app does nothing on it's own, only allowing registration and enrolment.
 Use the web service along with your username to choose a device and push a notification to it.
 
 API Docs can be found on the server.
-
-## Features
-
-- diudn't create tables before mariadb was available (docker)
 
 ## Colors
 
