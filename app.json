@@ -1,10 +1,9 @@
 {
     "expo": {
-        "name": "PushMe",
         "description": "Simple Push Notifications & Approvals",
         "slug": "pushme",
         "originalFullName": "@tgxn/pushme",
-        "version": "2.2.9",
+        "version": "2.3.0",
         "githubUrl": "https://github.com/pushme-tgxn/PushMeApp",
         "orientation": "portrait",
         "userInterfaceStyle": "automatic",
@@ -24,7 +23,7 @@
         },
         "android": {
             "icon": "./assets/logo.png",
-            "versionCode": 229,
+            "versionCode": 230,
             "permissions": [],
             "package": "net.tgxn.pushme",
             "useNextNotificationsApi": true,
