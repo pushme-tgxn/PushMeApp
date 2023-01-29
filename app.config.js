@@ -1,3 +1,6 @@
+// https://docs.expo.dev/build-reference/variants/
+const IS_DEV = process.env.APP_VARIANT === "development";
+
 export default ({ config }) => {
     const LIGHT_SPLASH = {
         backgroundColor: "#fffbff",
@@ -27,6 +30,7 @@ export default ({ config }) => {
 
     return {
         ...config,
+        name: IS_DEV ? "PushMe (Dev)" : "PushMe",
         extra: {
             BACKEND_URL: backendUrl,
             eas: {
@@ -37,11 +41,13 @@ export default ({ config }) => {
         ios: {
             ...config.ios,
             ...SHARED_SPLASH,
+            bundleIdentifier: IS_DEV ? "net.tgxn.pushme.dev" : "net.tgxn.pushme",
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
         android: {
             ...config.android,
             ...SHARED_SPLASH,
+            package: IS_DEV ? "net.tgxn.pushme.dev" : "net.tgxn.pushme",
             googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
         },
 
