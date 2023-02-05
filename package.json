@@ -7,7 +7,8 @@
         "build": "eas build -p android --profile develop",
         "android": "expo start --android",
         "ios": "expo start --ios",
-        "web": "expo start --web"
+        "web": "expo start --web",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@pushme-tgxn/pushmesdk": "^1.10.6",
