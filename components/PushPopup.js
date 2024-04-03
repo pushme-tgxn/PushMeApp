@@ -81,7 +81,7 @@ export default function PushPopup({ visible, setVisible, topicData, secretKey })
 
                         <View style={themedStyles.dropdown.containerView}>
                             <DropDown
-                                label={"Gender"}
+                                label={"Push Category"}
                                 mode={"outlined"}
                                 visible={showDropDown}
                                 showDropDown={() => setShowDropDown(true)}
