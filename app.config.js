@@ -1,7 +1,7 @@
-// https://docs.expo.dev/build-reference/variants/
-const IS_DEV = process.env.APP_VARIANT === "develop";
-
 export default ({ config }) => {
+    // https://docs.expo.dev/build-reference/variants/
+    const IS_DEV = process.env.EAS_BUILD_PROFILE !== "production";
+
     const LIGHT_SPLASH = {
         backgroundColor: "#fffbff",
         resizeMode: "contain",

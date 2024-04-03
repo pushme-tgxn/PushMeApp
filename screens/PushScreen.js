@@ -3,7 +3,8 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import { SafeAreaView, FlatList, RefreshControl, useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Text, Button } from "react-native-paper";
+import { Text, Button, TouchableHighlight } from "react-native-paper";
+import Swipeable from "react-native-swipeable";
 
 import { AppReducer } from "../const";
 import { dispatchSDKError, setPushList } from "../reducers/app";
@@ -22,8 +23,7 @@ const PushScreen = () => {
             initialRouteName="PushList"
             screenOptions={{
                 header: CustomNavigationBar,
-            }}
-        >
+            }}>
             <Stack.Screen name="PushList" component={PushList} options={{ headerShown: false }} />
             <Stack.Screen name="ViewPush" component={ViewPush} />
         </Stack.Navigator>
@@ -71,16 +71,23 @@ const PushList = ({ navigation, route }) => {
     });
     pushArray.reverse();
 
+    const leftContent = <Text>Pull to activate</Text>;
+
+    const rightButtons = [
+        <TouchableHighlight>
+            <Text>Button 1</Text>
+        </TouchableHighlight>,
+        <TouchableHighlight>
+            <Text>Button 2</Text>
+        </TouchableHighlight>,
+    ];
+
     return (
         <SafeAreaView style={[themedStyles.container.base]}>
             <FlatList
                 ListHeaderComponent={() => (
                     <Text variant="displaySmall" style={{ marginBottom: 10 }}>
-                        {refreshing
-                            ? "List Loading..."
-                            : pushArray.length == 0
-                            ? "No History!"
-                            : "Push History"}
+                        {refreshing ? "List Loading..." : pushArray.length == 0 ? "No History!" : "Push History"}
                     </Text>
                 )}
                 data={pushArray}
@@ -88,12 +95,14 @@ const PushList = ({ navigation, route }) => {
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                     return (
-                        <PushListButton
-                            onPress={async () => {
-                                navigation.navigate("ViewPush", { pushId: item.id, pushData: item });
-                            }}
-                            push={item}
-                        />
+                        <Swipeable leftContent={leftContent} rightButtons={rightButtons}>
+                            <PushListButton
+                                onPress={async () => {
+                                    navigation.navigate("ViewPush", { pushId: item.id, pushData: item });
+                                }}
+                                push={item}
+                            />
+                        </Swipeable>
                     );
                 }}
             />
