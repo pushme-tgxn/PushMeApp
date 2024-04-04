@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/bootstrap.yaml
     secrets: inherit
     with:
-      command: eas build -p android --profile production --auto-submit --non-interactive --no-wait
+      command: eas build -p android --profile production --non-interactive --no-wait
     
   publish-update:
     name: Publish Expo App
